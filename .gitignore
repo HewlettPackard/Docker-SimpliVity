@@ -1,0 +1,5 @@
+.vault_pass
+ops/license.lic
+ops/group_vars/vault
+ops/*.svt2
+ops/ansible.log
