@@ -1,0 +1,103 @@
+version: "3"
+
+volumes:
+  {{prom_persistent_vol_name}}:
+    driver: vsphere
+    driver_opts:
+      size: {{prom_persistent_vol_size}}
+
+networks:
+  monitoring:
+
+services:
+  cadvisor:
+    image: google/cadvisor:{{ cadvisor_version }}
+    networks:
+      - monitoring
+    ports:
+      - 8080:8080
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    deploy:
+      mode: global
+      resources:
+        limits:
+          cpus: '0.20'
+          memory: 256M
+        reservations:
+          cpus: '0.10'
+          memory: 128M
+
+  node-exporter:
+    image: basi/node-exporter:{{ node_exporter_version }}
+    networks:
+      - monitoring
+    ports:
+      - 9100:9100
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+      - /etc/hostname:/etc/host_hostname:ro
+    environment:
+      - HOST_HOSTNAME=/etc/host_hostname
+    command: 
+      -collector.procfs=/host/proc
+      -collector.sysfs=/host/sys
+      -collector.textfile.directory=/etc/node-exporter
+      -collector.filesystem.ignored-mount-points="^/(sys|proc|dev|host|etc)($$|/)"
+    deploy:
+      mode: global
+      resources:
+        limits:
+          cpus: '0.20'
+          memory: 64M
+        reservations:
+          cpus: '0.10'
+          memory: 32M
+
+  prometheus:
+    image: prom/prometheus:{{ prometheus_version }}
+    ports:
+      - 9090:9090
+    networks:
+      - monitoring
+    volumes:
+      - {{prom_persistent_vol_name}}:/prometheus
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      -config.file=/etc/prometheus/prometheus.yml
+    deploy:
+      mode: replicated
+      placement:
+       constraints: [node.role == manager]
+      replicas: 1
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 1024M
+        reservations:
+          cpus: '0.50'
+          memory: 128M
+
+  grafana:
+    image: grafana/grafana:{{ grafana_version }}
+    networks:
+      - monitoring
+    ports:
+      - 3000:3000
+    deploy:
+      mode: replicated
+      placement:
+       constraints: [node.role == manager]
+      replicas: 1
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 64M
+        reservations:
+          cpus: '0.50'
+          memory: 32M
