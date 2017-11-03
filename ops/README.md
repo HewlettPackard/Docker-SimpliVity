@@ -53,7 +53,7 @@ More information about Simplivity can be found here: [https://www.hpe.com/us/en/
 
 The following software versions were used to test the playbooks that are described in later sections. Other version may work but have not been tested.
 
-- Ansible 2.2
+- Ansible 2.2 and 2.3
 - Docker EE 17.06
 - Red Hat Enterprise Linux 7.3 and 7.4
 - VMWare ESXi 6.5.0 and vCenter 6.5.0
@@ -137,9 +137,7 @@ For Express Containers with Docker: Ops Edition, the following section describes
 | nfs	| 	       |          |  2      | 
 | logger	| 	   |  2	      | 
 | **Total vCPU per node**|	**12** |**14**|	       **14**|
-| **Total vCPU**| 	   | **40**	
-| Available CPUs| 24 | 24	  | 24
-| Log Proc	| 48   | 	48	  | 48
+
 
 
 **Note:**  In the case of one ESX host failure, two nodes are enough to accommodate the amount of vCPU required.
@@ -359,9 +357,9 @@ In addition to the VM Template, you need another Virtual Machine where Ansible w
 # rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 # yum-config-manager --enable rhel-7-server-extras-rpms	
 ```
-5. Install Ansible. Please note that version 2.2 is the minimum required. The instructions on how to install Ansible are described in its official website: http://docs.ansible.com/ansible/intro_installation.html
+5. Install Ansible. The playbooks were tested with Ansible 2.2 and 2.3. Please note that the playbooks will not work with Ansible 2.4 due to an open defect https://github.com/ansible/ansible/issues/32000. Do not use Ansible 2.4 until this defect is fixed. To install the Ansible 2.3 use the following command:
 ```
-# yum install ansible
+# yum install ansible-2.3.2.0-2.el7
 ```
 6. Make a list of all the hostnames and IPs that will be in your system and update your `/etc/hosts` file accordingly. This includes your UCP nodes, DTR nodes, worker nodes, NFS server, logger server and load balancers.
 7. Install the following packages which are a mandatory requirement for the playbooks to function as expected. (Update pip if requested).
