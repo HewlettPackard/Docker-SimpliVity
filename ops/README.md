@@ -142,7 +142,7 @@ For Express Containers with Docker: Ops Edition, the following section describes
 | Log Proc	| 48   | 	48	  | 48
 
 
-**Note:**  In the case of one ESX host failure, two nodes are enough to accomodate the amount of vCPU required.
+**Note:**  In the case of one ESX host failure, two nodes are enough to accommodate the amount of vCPU required.
 
 
 
@@ -170,7 +170,7 @@ For Express Containers with Docker: Ops Edition, the following section describes
 | Available RAM	| 384	| 384| 	384
 
 
-**Note:** In the case of one ESX host failure, the two surviving hosts can accomodate the amount of RAM required for all VMs.
+**Note:** In the case of one ESX host failure, the two surviving hosts can accommodate the amount of RAM required for all VMs.
 
 
 
@@ -221,9 +221,10 @@ More information on how to download and install the driver can be found here: ht
 
 ## Create a VM template
 
-The very first step to our automated solution will be the creation of a VM Template that will be the base of all your nodes. In order to create a VM Template we will first create a Virtual Machine where the OS will be installed and then the Virtual Machine will be converted to a VM Template. Since the goal of the automation is get rid of as many repetitive tasks as possible, the VM Template will be created as lean as possible, so any additional software installs and/or system configuration will be done later by Ansible.
+The first step of the automated solution is the creation of a VM Template that you will use as the base for all your nodes. In order to create a VM Template you will first create a Virtual Machine with the OS installed and then convert the Virtual Machine to a VM Template. Since the goal of automation is to remove as many repetitive tasks as possible, the VM Template is created as lean as possible, with any additional software installs and/or system configuration performed subsequently using Ansible.
 
-It would be possible to automate the creation the template. However, as this is a one-off task, it is appropriate to do it manually. The steps to create a VM template manually are described below.
+It would be possible to automate the creation of the template. However, as this is a one-off task, it is appropriate to do it manually. The steps to create a VM template manually are described below.
+
 
 1. Log in to vCenter and create a new Virtual Machine. In the dialog box, shown in Figure 2, select `Typical` and press `Next`.  
 ![Create New Virtual Machine][createnewvm]  
@@ -345,7 +346,7 @@ Before converting the VM to a template, you will need to setup up access for the
 
 ## Create the Ansible node
 
-In addition to the VM Template, we need another Virtual Machine where Ansible will be installed. This node will act as the driver to automate the provisioning of the environment and it is essential that it is properly installed. The steps are as follows.
+In addition to the VM Template, you need another Virtual Machine where Ansible will be installed. This node will act as the driver to automate the provisioning of the environment and it is essential that it is properly installed. The steps are as follows:
 
 1. Create a Virtual Machine and install your preferred OS (in this example, and for the sake of simplicity, RHEL7 will be used). The rest of the instructions assume that, if you use a different OS, you understand the possible differences in syntax for the provided commands. If you use RHEL 7, select **Infrastructure Server** as the base environment and the **Guests Agents** add-on during the installation.
 2. Log in the root account and create an SSH key pair. Do not protect the key with a passphrase (unless you want to use ssh-agent).  
@@ -802,7 +803,7 @@ The provided dashboard is editable and extensible for those users who wish to ad
 
 
 ## Configure dummy VMs to backup Docker volumes
-The playbook [config_dummy_vms_for_docker_volumes_backup.yml][config_dummy_vms_for_docker_volumes_backup] ensures that you can backup Docker volumes that have been created using the vSphere plugin in SimpliVity. There is not a straight forward way to do this, so we need to use a workaround. Since all Docker volumes are going to be stored in the dockvols folder in the datastore(s), we need to create a ‘dummy’ VM per datastore. The `vmx`, `vmsd` and `vmkd` files from this VMs will have to be inside the `dockvols` folder, so when these VMs are backed up, the volumes are backed up as well. Obviously these VMs don’t need to take any resources and we can keep them powered off.
+The playbook [config_dummy_vms_for_docker_volumes_backup.yml][config_dummy_vms_for_docker_volumes_backup] ensures that you can backup Docker volumes that have been created using the vSphere plugin in SimpliVity. There is not a straight forward way to do this, so you need to use a workaround. Since all Docker volumes are going to be stored in the dockvols folder in the datastore(s), you need to create a ‘dummy’ VM per datastore. The `vmx`, `vmsd` and `vmkd` files from this VMs will have to be inside the `dockvols` folder, so when these VMs are backed up, the volumes are backed up as well. Obviously these VMs don’t need to take any resources and you can keep them powered off.
 
 
 ## Configure SimpliVity backups
