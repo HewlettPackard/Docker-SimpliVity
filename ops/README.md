@@ -140,9 +140,9 @@ For Express Containers with Docker: Ops Edition, the following section describes
 | **Total vCPU**| 	   | **40**	
 | Available CPUs| 24 | 24	  | 24
 | Log Proc	| 48   | 	48	  | 48
-| **Total Log Proc** (on two nodes) | | **96**	
 
 
+**Note:**  In the case of one ESX host failure, two nodes are enough to accomodate the amount of vCPU required.
 
 
 
@@ -168,9 +168,9 @@ For Express Containers with Docker: Ops Edition, the following section describes
 | **Total RAM required** (per node)| 	**92**	| **96**| 	**96**
 | **Total RAM required**| 	| 	**284**	
 | Available RAM	| 384	| 384| 	384
-| **Total Available RAM** (on two nodes)| | 		**768**	
 
 
+**Note:** In case one ESX host failure, the two surviving hosts can accomodate the amount of RAM required for all VMs.
 
 
 
