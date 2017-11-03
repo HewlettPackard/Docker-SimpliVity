@@ -170,7 +170,7 @@ For Express Containers with Docker: Ops Edition, the following section describes
 | Available RAM	| 384	| 384| 	384
 
 
-**Note:** In case one ESX host failure, the two surviving hosts can accomodate the amount of RAM required for all VMs.
+**Note:** In the case of one ESX host failure, the two surviving hosts can accomodate the amount of RAM required for all VMs.
 
 
 
@@ -418,6 +418,7 @@ On the Ansible node, retrieve the latest version of the playbooks using git.
 ```
 # git clone https://github.com/HewlettPackard/Docker-SimpliVity
 
+
 ```
 
 You now need to prepare the configuration to match your own environment, prior to deploying Docker EE and the rest of the nodes. To do so, you will need to edit and modify three different files:
@@ -434,7 +435,7 @@ You now need to prepare the configuration to match your own environment, prior t
 
 ## Editing the inventory
 
-Change to the directory that you previously cloned using git and edit the `vm_hosts` file.
+Change to the directory that you previously cloned using git and edit the `vm_hosts` file in the `ops` sub-directory.
 
 The nodes inside the inventory are organized in groups. The groups are defined by brackets and the group names are static so they must not be changed. Anything else (hostnames, specifications, IP addresses…) are meant to be amended to match the user needs. The groups are as follows:
 
