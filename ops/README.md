@@ -225,7 +225,7 @@ The very first step to our automated solution will be the creation of a VM Templ
 
 It would be possible to automate the creation the template. However, as this is a one-off task, it is appropriate to do it manually. The steps to create a VM template manually are described below.
 
-1. Log in to vCenter and create a new Virtual Machine. In the dialog box, shown in Figure 2, select ```Typical``` and press ```Next```.  
+1. Log in to vCenter and create a new Virtual Machine. In the dialog box, shown in Figure 2, select `Typical` and press `Next`.  
 ![Create New Virtual Machine][createnewvm]  
 **Figure 2.** Create New Virtual Machine  
   
@@ -353,7 +353,7 @@ In addition to the VM Template, we need another Virtual Machine where Ansible wi
 # ssh-keygen
 ```
 3. Configure the following yum repositories, rhel-7-server-rpms and rhel-7-server-extras-rpms as explained in the previous section.
-4. Configure the EPEL repository. See here for more information: http://fedoraproject.org/wiki/EPEL. Note that ```yum-config-manager``` comes with the Infrastructure Server base environment, if you did not select this environment you will have to install the ```yum-utils``` package.
+4. Configure the EPEL repository. See here for more information: http://fedoraproject.org/wiki/EPEL. Note that `yum-config-manager` comes with the Infrastructure Server base environment, if you did not select this environment you will have to install the `yum-utils` package.
 ```
 # rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 # yum-config-manager --enable rhel-7-server-extras-rpms	
@@ -362,7 +362,7 @@ In addition to the VM Template, we need another Virtual Machine where Ansible wi
 ```
 # yum install ansible
 ```
-6. Make a list of all the hostnames and IPs that will be in your system and update your ```/etc/hosts``` file accordingly. This includes your UCP nodes, DTR nodes, worker nodes, NFS server, logger server and load balancers.
+6. Make a list of all the hostnames and IPs that will be in your system and update your `/etc/hosts` file accordingly. This includes your UCP nodes, DTR nodes, worker nodes, NFS server, logger server and load balancers.
 7. Install the following packages which are a mandatory requirement for the playbooks to function as expected. (Update pip if requested).
 ```
 # yum install python-pyvmomi python-netaddr python2-jmespath python-pip gcc python-devel openssl-devel git
@@ -396,7 +396,9 @@ Now that the VM Template has the public key of the Ansible node, we’re ready t
 
 2. Shut down the VM
 
-```# shutdown –h now```
+```
+# shutdown –h now
+```
 
 3. Once the Virtual Machine is ready and turned off, convert it to a template as shown in Figure 18.
 ![Convert to template][converttotemplate]  
@@ -422,9 +424,9 @@ You now need to prepare the configuration to match your own environment, prior t
 
 
 
-- ```vm_hosts``` (the inventory file)
-- ```group_vars/vars``` (the group variables file)
-- ```group_vars/vault``` (the encrypted group variable file)
+- `vm_hosts` (the inventory file)
+- `group_vars/vars` (the group variables file)
+- `group_vars/vault` (the encrypted group variable file)
 
 
 
@@ -432,7 +434,7 @@ You now need to prepare the configuration to match your own environment, prior t
 
 ## Editing the inventory
 
-Change to the directory that you previously cloned using git and edit the ```vm\_hosts``` file.
+Change to the directory that you previously cloned using git and edit the `vm_hosts` file.
 
 The nodes inside the inventory are organized in groups. The groups are defined by brackets and the group names are static so they must not be changed. Anything else (hostnames, specifications, IP addresses…) are meant to be amended to match the user needs. The groups are as follows:
 
@@ -456,12 +458,12 @@ There are also a few special groups:
 
 Finally, you will find some variables defined for each group:
 
-- [ucp:vars]: A set of variables defined for all nodes in the [```ucp```] group.
-- [dtr:vars]: A set of variables defined for all nodes in the [```dtr```] group.
-- [worker:vars]: A set of variables defined for all nodes in the [```worker```] group.
-- [lbs:vars]: A set of variables defined for all nodes in the [```lbs```] group.
-- [nfs:vars]: A set of variables defined for all nodes in the [```nfs```] group.
-- [logger:vars]: A set of variables defined for all nodes in the [```logger```] group.
+- [ucp:vars]: A set of variables defined for all nodes in the [`ucp`] group.
+- [dtr:vars]: A set of variables defined for all nodes in the [`dtr`] group.
+- [worker:vars]: A set of variables defined for all nodes in the [`worker`] group.
+- [lbs:vars]: A set of variables defined for all nodes in the [`lbs`] group.
+- [nfs:vars]: A set of variables defined for all nodes in the [`nfs`] group.
+- [logger:vars]: A set of variables defined for all nodes in the [`logger`] group.
 
 If you wish to configure your nodes with different specifications rather than the ones defined by the group, it is possible to declare the same variables at the node level, overriding the group value. For instance, you could have one of your workers with higher specifications by doing:
 
@@ -477,7 +479,7 @@ disk2_size='200'
 node_policy='bronze'
 ```
 
-In  the example above, the ```worker03``` node would have 4 times more CPU and double the RAM compared to the rest of worker nodes.
+In  the example above, the `worker03` node would have 4 times more CPU and double the RAM compared to the rest of worker nodes.
 
 The different variables you can use are as described in Table 4 below. They are all mandatory unless if specified otherwise.
 
@@ -490,7 +492,7 @@ The different variables you can use are as described in Table 4 below. They are 
 | cpus         | Node/Group | Number of CPUs to assign to a VM or a group of VMs |
 | ram          | Node/Group | Amount of RAM in MB to assign to a VM or a group of VMs |
 | disk2\_usage | Node/Group | Size of the second disk in GB to attach to a VM or a group of VMs. This variable is only mandatory on Docker nodes (UCP, DTR, worker) and NFS node. It is not required for the logger node or the load balancers. |
-| node\_policy | Node/Group | Simplivity backup policy to assign to a VM or a group of VMs. The name has to match one of the backup policies defined in the ```group_vars/vars``` file described in the next section. |
+| node\_policy | Node/Group | Simplivity backup policy to assign to a VM or a group of VMs. The name has to match one of the backup policies defined in the `group_vars/vars` file described in the next section. |
 
 
 
@@ -498,7 +500,7 @@ The different variables you can use are as described in Table 4 below. They are 
 
 ## Editing the group variables
 
-Once the inventory is ready, the next step is to modify the group variables to match your environment. To do so, you need to edit the file ```group_vars/vars``` under the cloned directory containing the playbooks. The variables here can be defined in any order but for the sake of clarity they have been divided into sections.
+Once the inventory is ready, the next step is to modify the group variables to match your environment. To do so, you need to edit the file `group_vars/vars` under the cloned directory containing the playbooks. The variables here can be defined in any order but for the sake of clarity they have been divided into sections.
 
 ### VMware configuration
 
@@ -509,16 +511,16 @@ All VMware-related variables are mandatory and are described in Table 5.
 | Variable                 | Description                              |
 | ------------------------ | ---------------------------------------- |
 | vcenter\_hostname        | IP or hostname of the vCenter appliance  |
-| vcenter\_username        | Username to log in to the vCenter appliance. It might include a domain, for example, '[administrator@vsphere.local](mailto:administrator@vsphere.local)'. Note: The corresponding password is stored in a separate file (```group_vars/vault```) with the variable named ```vcenter_password```. |
+| vcenter\_username        | Username to log in to the vCenter appliance. It might include a domain, for example, '[administrator@vsphere.local](mailto:administrator@vsphere.local)'. Note: The corresponding password is stored in a separate file (`group_vars/vault`) with the variable named `vcenter_password`. |
 |vcenter_validate_certs    | ‘no’ |
 | datacenter               | Name of the datacenter where the environment will be provisioned |
-| vm\_username             | Username to log into the VMs. It needs to match the one from the VM Template, so unless you have created an user, you must use 'root'. Note: The corresponding password is stored in a separate file (```group_vars/vault```) with the variable named ```vm_password```.  |
+| vm\_username             | Username to log into the VMs. It needs to match the one from the VM Template, so unless you have created an user, you must use 'root'. Note: The corresponding password is stored in a separate file (`group_vars/vault`) with the variable named `vm_password`.  |
 | vm\_template             | Name of the VM Template to be used. Note that this is the name from a vCenter perspective, not the hostname |
-| folder\_name             | vCenter folder to deploy the VMs. If you do not wish to deploy in a particular folder, the value should be ```/```. **Note**: If you want to deploy in a specific folder, you need to create this folder in the inventory of the selected datacenter before starting the deployment. |
-| datastores               | List of datastores to be used, in list format, i.e. ['```Datastore1```','```Datastore2```'...]. Please note that from a Simplivity perspective, it is best practice to use just one Datastore. Using more than one will not provide any advantages in terms of reliability and will add additional complexity. This datastore must exist before you run the playbooks. |
-| disk2                    | UNIX name of the second disk for the Docker VMs. Typically ```/dev/sdb``` |
-| disk2\_part              | UNIX name of the partition of the second disk for the Docker VMs. Typically ```/dev/sdb1``` |
-| vsphere\_plugin\_version | Version of the vSphere plugin for Docker. The default is ```0.13``` which is the latest version at the time of writing this document. |
+| folder\_name             | vCenter folder to deploy the VMs. If you do not wish to deploy in a particular folder, the value should be `/`. **Note**: If you want to deploy in a specific folder, you need to create this folder in the inventory of the selected datacenter before starting the deployment. |
+| datastores               | List of datastores to be used, in list format, i.e. ['`Datastore1`','`Datastore2`'...]. Please note that from a Simplivity perspective, it is best practice to use just one Datastore. Using more than one will not provide any advantages in terms of reliability and will add additional complexity. This datastore must exist before you run the playbooks. |
+| disk2                    | UNIX name of the second disk for the Docker VMs. Typically `/dev/sdb` |
+| disk2\_part              | UNIX name of the partition of the second disk for the Docker VMs. Typically `/dev/sdb1` |
+| vsphere\_plugin\_version | Version of the vSphere plugin for Docker. The default is `0.13` which is the latest version at the time of writing this document. |
 
 
 
@@ -588,11 +590,11 @@ All network-related variables are mandatory and are described in Table 7.
 
 | Variable     | Description                              |
 | ------------ | ---------------------------------------- |
-| nic\_name    | Name of the device, for RHEL this is typically ```ens192``` and it is recommended to leave it as is. |
+| nic\_name    | Name of the device, for RHEL this is typically `ens192` and it is recommended to leave it as is. |
 | gateway      | IP address of the gateway to be used     |
-| dns          | List of DNS servers to be used, in list format, i.e. ['```10.10.173.1```','```10.10.173.2```'...] |
+| dns          | List of DNS servers to be used, in list format, i.e. ['`10.10.173.1`','`10.10.173.2`'...] |
 | domain\_name | Domain name for your Virtual Machines    |
-| ntp\_server  | List of NTP servers to be used, in list format, i.e. ['```1.2.3.4```','```0.us.pool.net.org```'...] |
+| ntp\_server  | List of NTP servers to be used, in list format, i.e. ['`1.2.3.4`','`0.us.pool.net.org`'...] |
 
 
 
@@ -603,13 +605,13 @@ All Docker-related variables are mandatory and are described in Table 8.
 
 | Variable      | Description                              |
 | ------------- | ---------------------------------------- |
-| docker_ee_url | Your ```docker_ee_url``` should be kept secret and you should define it in ```group_vars/vault```. The value for ```docker_ee_url``` is the URL documented at the following address: https://docs.docker.com/engine/installation/linux/docker-ee/rhel/. |
-| rhel_version  | Version of your RHEL OS, such as  ```7.3```. The playbooks were tested with RHEL 7.3. and RHEL 7.4.        |
-| dtr_version   | Version of the Docker DTR you wish to install. You can use a numeric version or ```latest``` for the most recent one. The playbooks where tested with 2.3.3. |
-| ucp_version   | Version of the Docker UCP you wish to install. You can use a numeric version or ```latest``` for the most recent one. The playbooks were tested with UCP 2.2.3. |
+| docker_ee_url | Your `docker_ee_url` should be kept secret and you should define it in `group_vars/vault`. The value for `docker_ee_url` is the URL documented at the following address: https://docs.docker.com/engine/installation/linux/docker-ee/rhel/. |
+| rhel_version  | Version of your RHEL OS, such as  `7.3`. The playbooks were tested with RHEL 7.3. and RHEL 7.4.        |
+| dtr_version   | Version of the Docker DTR you wish to install. You can use a numeric version or `latest` for the most recent one. The playbooks where tested with 2.3.3. |
+| ucp_version   | Version of the Docker UCP you wish to install. You can use a numeric version or `latest` for the most recent one. The playbooks were tested with UCP 2.2.3. |
 | images_folder | Directory in the NFS server that will be mounted in the DTR nodes and that will host your Docker images. |
 | license_file  | Full path to your Docker license file (it should be stored in your Ansible host). |
-| ucp_username  | Username of the administrator user for UCP and DTR, typically ```admin```. Note: The corresponding password is stored in a separate file (```group_vars/vault```) with the variable named ```ucp_password```.|
+| ucp_username  | Username of the administrator user for UCP and DTR, typically `admin`. Note: The corresponding password is stored in a separate file (`group_vars/vault`) with the variable named `ucp_password`.|
 
 
 
@@ -622,10 +624,10 @@ All Monitoring-related variables are described in Table 9. The variables determi
 
 | Variable                | Description                              |
 | ----------------------- | ---------------------------------------- |
-| cadvisor\_version       | ```v0.25.0``` |
-| node\_exporter\_version | ```v1.14.0``` |
-| prometheus\_version     | ```v1.7.1``` |
-| grafana\_version        | ```4.4.3``` |
+| cadvisor\_version       | `v0.25.0` |
+| node\_exporter\_version | `v1.14.0` |
+| prometheus\_version     | `v1.7.1` |
+| grafana\_version        | `4.4.3` |
 | prom_persistent_vol_name | The name of the volume which will be used to store the monitoring data. The volume is created using the vsphere docker volume plugin. |
 | prom_persistent_vol_size | The size of the volume which will hold the monitoring data. The exact syntax is dictated by the vSphere Docker Volume plugin. The default value is 10GB. |
 
@@ -637,7 +639,7 @@ All Logspout-related variables are described in Table 10.
 
 | Variable                | Description                              |
 | ----------------------- | ---------------------------------------- |
-| logspout_version       | ```‘master’``` |
+| logspout_version       | `‘master’` |
 
 
 ### Environment configuration
@@ -666,22 +668,24 @@ rhn_key: 'Red Hat Activation Key'
 ```
 
 
-```rhn_orgid``` and ```rhn_key``` are the credentials needed to subscribe the virtual machines with Red Hat Customer Portal. For more info regarding activation keys see the following URL: https://access.redhat.com/articles/1378093
+`rhn_orgid` and `rhn_key` are the credentials needed to subscribe the virtual machines with Red Hat Customer Portal. For more info regarding activation keys see the following URL: https://access.redhat.com/articles/1378093
 
 To encrypt the vault you need to run the following command:
 
-```# ansible-vault encrypt group_vars/vault```
+```
+# ansible-vault encrypt group_vars/vault
+```
 
 You will be prompted for a password that will decrypt the vault when required. You can update the values in your vault by running:
 ```
 # ansible-vault edit group_vars/vault
 ```
 
-For Ansible to be able to read the vault, you need to specify a file where the password is stored, for instance in a file called ```.vault_pass```. Once the file is created, take the following precautions to avoid illegitimate access to this file:
+For Ansible to be able to read the vault, you need to specify a file where the password is stored, for instance in a file called `.vault_pass`. Once the file is created, take the following precautions to avoid illegitimate access to this file:
 
-1. Change the permissions so only ```root``` can read it using  ```# chmod 600 .vault_pass```
+1. Change the permissions so only `root` can read it using  `# chmod 600 .vault_pass`
 	
-2. Add the file to your ```.gitignore``` file if you're pushing the set of playbooks to a git repository.
+2. Add the file to your `.gitignore` file if you're pushing the set of playbooks to a git repository.
 
 
 
@@ -690,7 +694,9 @@ For Ansible to be able to read the vault, you need to specify a file where the p
 
 At this point, the system is ready to be deployed. Go to the root folder and run the following command:
 
-```# ansible-playbook -i vm_hosts site.yml --vault-password-file .vault_pass```
+```
+# ansible-playbook -i vm_hosts site.yml --vault-password-file .vault_pass
+```
 
 The playbooks should run for 25-35 minutes depending on your server specifications and the size of your environment.
 
@@ -778,12 +784,12 @@ The playbook [install_worker_nodes.yml][install_worker_nodes] installs and confi
 ## Configuring monitoring
 The playbook [config_monitoring.yml][config_monitoring] configures a monitoring system for the Docker environment by making use of Grafana, Prometheus, cAdvisor and node-exporter Docker containers.
 
-**Note:** If you have your own monitoring solution, you can comment out the corresponding line in the main playbook ```site.yml```
+**Note:** If you have your own monitoring solution, you can comment out the corresponding line in the main playbook `site.yml`
 ```
 #- include: playbooks/config_monitoring.yml
 ```
 
-After running the playbook, you can browse (HTTP) to the UCP load balancer IP address or FQDN on port 3000 (using a URL like ```http://<ucp_lb>:3000```) and you will see the Grafana UI. The username and password are defaulted to ```admin```/```admin```. When you log in, you can pick up the Dashboard that was imported by the playbooks (Click the Dashboard icon and select Docker Swarm Monitor) and observe the ongoing monitoring, as shown in Figure 19.
+After running the playbook, you can browse (HTTP) to the UCP load balancer IP address or FQDN on port 3000 (using a URL like `http://<ucp_lb>:3000`) and you will see the Grafana UI. The username and password are defaulted to `admin`/`admin`. When you log in, you can pick up the Dashboard that was imported by the playbooks (Click the Dashboard icon and select Docker Swarm Monitor) and observe the ongoing monitoring, as shown in Figure 19.
 
 ![Grafana UI][grafana]
 **Figure 19.** Grafana UI
@@ -795,7 +801,7 @@ The provided dashboard is editable and extensible for those users who wish to ad
 
 
 ## Configure dummy VMs to backup Docker volumes
-The playbook [config_dummy_vms_for_docker_volumes_backup.yml][config_dummy_vms_for_docker_volumes_backup] ensures that you can backup Docker volumes that have been created using the vSphere plugin in SimpliVity. There is not a straight forward way to do this, so we need to use a workaround. Since all Docker volumes are going to be stored in the dockvols folder in the datastore(s), we need to create a ‘dummy’ VM per datastore. The ```vmx```, ```vmsd``` and ```vmkd``` files from this VMs will have to be inside the ```dockvols``` folder, so when these VMs are backed up, the volumes are backed up as well. Obviously these VMs don’t need to take any resources and we can keep them powered off.
+The playbook [config_dummy_vms_for_docker_volumes_backup.yml][config_dummy_vms_for_docker_volumes_backup] ensures that you can backup Docker volumes that have been created using the vSphere plugin in SimpliVity. There is not a straight forward way to do this, so we need to use a workaround. Since all Docker volumes are going to be stored in the dockvols folder in the datastore(s), we need to create a ‘dummy’ VM per datastore. The `vmx`, `vmsd` and `vmkd` files from this VMs will have to be inside the `dockvols` folder, so when these VMs are backed up, the volumes are backed up as well. Obviously these VMs don’t need to take any resources and we can keep them powered off.
 
 
 ## Configure SimpliVity backups
