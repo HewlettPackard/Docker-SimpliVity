@@ -100,7 +100,7 @@ In addition to the above, the playbooks set up:
 - Prometheus and Grafana monitoring tools
 - SimpliVity backup policy for data volumes and Docker images inside DTR
 
-These nodes can live in any of the hosts and they are not redundant. The Prometheus and Grafana services are each declared as Docker stacks containing one replica, so if they fail, Docker will ensure that they are restarted on a machine in the cluster. cAdvisor and node-exporter are declared as global services, so Docker will ensure that there is always one copy of each running on every machine in the cluster. The vSphere Docker volume plug-in stores data in a shared datastore that can be accessed from any machine in the cluster.
+These nodes can live in any of the hosts and they are not redundant. The Prometheus and Grafana services are declared in a Docker `stack` as replicated `services` with one replica each, so if they fail, Docker will ensure that they are restarted on one of the UCP VMs. cAdvisor and node-exporter are declared in the same stack as global services, so Docker will ensure that there is always one copy of each running on every machine in the cluster.  The vSphere Docker volume plug-in stores data in a shared datastore that can be accessed from any machine in the cluster.
 
 
 # Sizing considerations
