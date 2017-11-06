@@ -301,8 +301,8 @@ It would be possible to automate the creation of the template. However, as this 
 
 
 17. Click Done and wait for the install to finish. Reboot and log in into the system using the VM console.
-18.	The Red Hat packages required during the deployment of the solution come from two repositories: `rhel-7-server-rpms` and `rhel 7-server-extras-rpms`. The first repository can be found on the Red Hat DVD but the second cannot. There are two options, with both requiring a Red Hat Network account.
-  - Use Red Hat subscription manager to register your system. This is the easiest way and will automatically give you access to the official Red Hat repositories. It does require having a Red Hat Network account though, so if you don’t have one, you can use a different option. Use the `subscription-manager register` command as follows.
+18.	The Red Hat packages required during the deployment of the solution come from two repositories: `rhel-7-server-rpms` and `rhel 7-server-extras-rpms`. The first repository can be found on the Red Hat DVD but the second cannot. There are two options, with both options requiring a Red Hat Network account.
+  - **Option 1:** Use Red Hat subscription manager to register your system. This is the easiest way and will automatically give you access to the official Red Hat repositories. Use the `subscription-manager register` command as follows.
 ```
 # subscription-manager register --auto-attach
 ```
@@ -310,8 +310,8 @@ If you are behind a proxy, you must configure this before running the above comm
 ```
 # subscription-manager config --server.proxy_hostname=<proxy IP> --server.proxy_port=<proxy port>
 ```
-If you follow this “route”, the playbooks will automatically enable the “extras” repository on the VMs that need it.
-  - Use an internal repository. Instead of pulling the packages from Red Hat, you can create copies of the required repositories on a dedicated node. You can then configure the package manager to pull the packages from the dedicated node. Your `/etc/yum.repos.d/redhat.repo` could look as follows.
+If you use this option, the playbooks will automatically enable the “extras” repository on the VMs that need it.
+  - **Option 2:** Use an internal repository. Instead of pulling the packages from Red Hat, you can create copies of the required repositories on a dedicated node. You can then configure the package manager to pull the packages from the dedicated node. Your `/etc/yum.repos.d/redhat.repo` could look as follows.
 ```
 [RHEL7-Server]
 name=Red Hat Enterprise Linux $releasever - $basearch
