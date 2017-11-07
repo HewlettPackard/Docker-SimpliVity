@@ -53,8 +53,8 @@ More information about Simplivity can be found here: [https://www.hpe.com/us/en/
 
 The following software versions were used to test the playbooks that are described in later sections. Other version may work but have not been tested.
 
-- Ansible 2.2 and 2.3
-- Docker EE 17.06
+- Ansible 2.2 and 2.3. Please note that the playbooks will not work with Ansible 2.4 due to an open defect https://github.com/ansible/ansible/issues/32000. Do not use Ansible 2.4 until this defect is fixed.
+- Docker EE 17.06 (tested with UCP 2.2.3 and 2.2.4 and DTR 2.4.0)
 - Red Hat Enterprise Linux 7.3 and 7.4
 - VMWare ESXi 6.5.0 and vCenter 6.5.0
 - HPE SimpliVity OmniStack 3.7.1.60
@@ -918,6 +918,10 @@ If you navigate to `Settings > Security`, you should see the Image Scanning feat
 ![Image scanning in DTR][imagescanning]
 **Figure 26.** Image scanning in DTR
 
+If you navigate to Settings > Storage, you should see that DTR is configured to use shared NFS storage as shown in Figure 27.
+
+![DTR storage settings][DTRstorage]
+**Figure 27.** DTR storage settings
 
 # Security considerations
 In addition to having all logs centralized in a single place and the image scanning feature enabled for the DTR nodes, there are other guidelines that should be followed in order to keep your Docker environment as secure as possible. The HPE Reference Configuration paper for securing Docker on HPE Hardware places a special emphasis on securing Docker in DevOps environments and covers best practices in terms of Docker security. The document can be found here: http://h20195.www2.hpe.com/V2/GetDocument.aspx?docname=a00020437enw. Some newer Docker security features that were not covered in the reference configuration are outlined below.
@@ -1113,72 +1117,72 @@ The backup policy `clh-gold` is assigned to the special VM that is used to backu
 
 ## Manual backup
 
-Rather than waiting for an automated backup to take place, you can create a backup immediately. Right-click on the special VM, in this case  `clh-VM-in-dockervols-Docker_CLH`, select `All HPE SimpliVity Actions` and choose `Backup Virtual Machine` as shown in Figure 27.
+Rather than waiting for an automated backup to take place, you can create a backup immediately. Right-click on the special VM, in this case  `clh-VM-in-dockervols-Docker_CLH`, select `All HPE SimpliVity Actions` and choose `Backup Virtual Machine` as shown in Figure 28.
 
 
 ![Backup virtual machine][backupvirtualmachine]
-**Figure 27.** Backup virtual machine
+**Figure 28.** Backup virtual machine
 
-You can specify a backup name, in this case 'manual_backup_test_01', as shown in Figure 28.
+You can specify a backup name, in this case 'manual_backup_test_01', as shown in Figure 29.
 
 ![Backup virtual machine details][backupvmdetails]
 
-**Figure 28.** Backup virtual machine details
+**Figure 29.** Backup virtual machine details
 
 
 ## Restore
 
-Right-click on the special VM, in this case `clh-VM-in-dockervols-Docker_CLH` and on the `Configure` tab, select `HPE SimpliVity Search Backups` as shown in Figure 29.
+Right-click on the special VM, in this case `clh-VM-in-dockervols-Docker_CLH` and on the `Configure` tab, select `HPE SimpliVity Search Backups` as shown in Figure 30.
 
 ![Search backups][searchbackups]
-**Figure 29.** Search backups
+**Figure 30.** Search backups
 
 You can narrow the search based on the time of the backup. If you are restoring from an automatic backup, the name will be the timestamp of the backup. If you are restoring from a manual backup, the name will be the one you specified earlier when creating the backup, in this case `manual_backup_test_01`.
 
-Right-click on the backup you wish to restore, as shown in Figure 30, and select 'Restore Virtual Machine'.
+Right-click on the backup you wish to restore, as shown in Figure 31, and select 'Restore Virtual Machine'.
 
 ![Restore virtual machine][restorevm]
-**Figure 30.** Restore virtual machine
+**Figure 31.** Restore virtual machine
 
 
-In the details screen, shown in Figure 31, you can choose a name for the new virtual machine and specify the datastore.
+In the details screen, shown in Figure 32, you can choose a name for the new virtual machine and specify the datastore.
 
 ![Restore virtual machine details][restorevmdetails]
 
-**Figure 31.** Restore virtual machine details
+**Figure 32.** Restore virtual machine details
 
 The name of the new virtual machine will default to a combination of the special VM name and a timestamp, in this instance `clh-VM-in-dockervols-Docker_CLH-2017-10-26-09h47m00s`. The datastore should be the one specified in the `datastores` array from the `group_vars/vars` file. Click `OK` to restore the virtual machine.
 
 
-Once the virtual machine has been restored, navigate to the datastore and locate the new VM in the file browser, as shown in Figure 32.
+Once the virtual machine has been restored, navigate to the datastore and locate the new VM in the file browser, as shown in Figure 33.
 
 
 ![Browse to restored virtual machine][browserestoredvm]
-**Figure 32.** Browse to restored virtual machine
+**Figure 33.** Browse to restored virtual machine
 
 
-Navigate to the folder named `1111111-1111-1111-1111-...` as shown in Figure 33. You will see files with names based on the Docker volume name that you used at the start, in this instance `test_01.vmdk` and `test_01-478...f1f.vmdf` 
+Navigate to the folder named `1111111-1111-1111-1111-...` as shown in Figure 34. You will see files with names based on the Docker volume name that you used at the start, in this instance `test_01.vmdk` and `test_01-478...f1f.vmdf` 
 
 ![Locate vmdk and vmdf files][vmdkfiles]
-**Figure 33.** Locate vmdk and vmdf files
+**Figure 34.** Locate vmdk and vmdf files
 
 
-You need to move these two files to the `dockvols` sub-directory named `1111111-1111-1111-1111-...` in the same datastore. Right click on the `.vmdk` file and choose `Move to...` as shown in Figure 34.
+You need to move these two files to the `dockvols` sub-directory named `1111111-1111-1111-1111-...` in the same datastore. Right click on the `.vmdk` file and choose `Move to...` as shown in Figure 35.
 
 ![Move files][moveto]
-**Figure 34.** Move files
+**Figure 35.** Move files
 
 
-Set the destination folder to the `dockvols` sub-directory named `1111111-1111-1111-1111-...` as shown in Figure 35.
+Set the destination folder to the `dockvols` sub-directory named `1111111-1111-1111-1111-...` as shown in Figure 36.
 
 ![Move to destination][destination]
 
-**Figure 35.** Move to destination
+**Figure 36.** Move to destination
 
-It is only necessary to move the `.vmdk` file as the `.vmdf` file will automatically follow. The `dockvols` sub-directory named `1111111-1111-1111-1111-...` should now contain both files as shown in Figure 36.
+It is only necessary to move the `.vmdk` file as the `.vmdf` file will automatically follow. The `dockvols` sub-directory named `1111111-1111-1111-1111-...` should now contain both files as shown in Figure 37.
 
 ![Files moved to destination][moved]
-**Figure 36.** Files moved to destination
+**Figure 37.** Files moved to destination
 
 
 
@@ -1208,12 +1212,12 @@ The data you entered in the text file before performing the backup and deleting 
 
 Lifecycle management with respect to this solution refers to the maintenance and management of software and hardware of various components within that build up the solution stack. Lifecycle management is required to keep the solution up-to date and ensure that latest versions of the software are running in to provide optimal performance, security and fix any existing defects within the product.
 
-In this section, we will cover life cycle management of the different components that are used in this solution. The architectural diagram of the solution in Figure 27 shows the software and hardware stacks that make up the solution. Each stack is shown in a different color.
+In this section, we will cover life cycle management of the different components that are used in this solution. The architectural diagram of the solution in Figure 38 shows the software and hardware stacks that make up the solution. Each stack is shown in a different color.
 
 
 ![Solution stack][solutionstack]
 
-**Figure 37.** Solution stack
+**Figure 38.** Solution stack
 
 
 Based on the diagram above, lifecycle of the following stacks need to be maintained and managed.
@@ -1375,10 +1379,10 @@ This solution is built using Red Hat Enterprise Linux (see Table 19) as the base
 
 Each release of Docker Enterprise Edition contains three technology components – UCP, DTR and the Docker Daemon or Engine. It is imperative that the components belonging to the same version are deployed or upgraded together – see Table 20. 
 
-A banner will be displayed on the UI when an update is available for UCP or DTR. The admin can start the upgrade process by clicking the link shown in Figure 38.
+A banner will be displayed on the UI when an update is available for UCP or DTR. The admin can start the upgrade process by clicking the link shown in Figure 39.
 
 ![Docker update notification][dockerupdate]
-**Figure 38.** Docker update notification
+**Figure 39.** Docker update notification
 
 
 **Table 20.** Docker EE components
@@ -1439,11 +1443,11 @@ Prometheus and Grafana monitoring tools (see Table 21) run as containers within 
 
 ## High-Level dependency map
 
-Based on the lifecycle management details provided above, Figure 39 is a consolidated diagram that shows the dependencies between the various components in the solution stack. Bi-directional arrows between components indicate that the two components have an interoperability dependence. Before upgrading a component to a newer version, you must ensure that the new version of that component is compatible the current version of any dependent components.
+Based on the lifecycle management details provided above, Figure 40 is a consolidated diagram that shows the dependencies between the various components in the solution stack. Bi-directional arrows between components indicate that the two components have an interoperability dependence. Before upgrading a component to a newer version, you must ensure that the new version of that component is compatible the current version of any dependent components.
 
 ![High-level dependency map][dependencymap]
 
-**Figure 39.** High-level dependency map
+**Figure 40.** High-level dependency map
 
 
 [simplivity-ops-simple-architecture]: </ops/images/simplivity-ops-simple-architecture.png> "Figure 1. Solution Architecture"
@@ -1476,22 +1480,23 @@ Based on the lifecycle management details provided above, Figure 39 is a consoli
 [dtrauth]: </ops/images/dtrauth.png> "Figure 24. DTR authentication screen"
 [dtrrepos]: </ops/images/dtrrepos.png> "Figure 25. DTR repositories"
 [imagescanning]: </ops/images/imagescanning.png> "Figure 26. Image scanning in DTR"
+[DTRstorage]: </ops/images/DTRstorage.png> "Figure 27. DTR storage settings"
 
-[backupvirtualmachine]: </ops/images/backupvirtualmachine.png> "Figure 27. Backup virtual machine"
-[backupvmdetails]: </ops/images/backupvmdetails.png> "Figure 28. Backup virtual machine details"
-[searchbackups]: </ops/images/searchbackups.png> "Figure 29. Search backups"
-[restorevm]: </ops/images/restorevm.png> "Figure 30. Restore virtual machine"
-[restorevmdetails]: </ops/images/restorevmdetails.png> "Figure 31. Restore virtual machine details"
-[browserestoredvm]: </ops/images/browserestoredvm.png> "Figure 32. Browse to restored virtual machine"
-[vmdkfiles]: </ops/images/vmdkfiles.png> "Figure 33. Locate vmdk and vmdf files"
-[moveto]: </ops/images/moveto.png> "Figure 34. Move files"
-[destination]: </ops/images/destination.png> "Figure 35. Move to destination"
-[moved]: </ops/images/moved.png> "Figure 36. Files moved to destination"
+[backupvirtualmachine]: </ops/images/backupvirtualmachine.png> "Figure 28. Backup virtual machine"
+[backupvmdetails]: </ops/images/backupvmdetails.png> "Figure 29. Backup virtual machine details"
+[searchbackups]: </ops/images/searchbackups.png> "Figure 30. Search backups"
+[restorevm]: </ops/images/restorevm.png> "Figure 31. Restore virtual machine"
+[restorevmdetails]: </ops/images/restorevmdetails.png> "Figure 32. Restore virtual machine details"
+[browserestoredvm]: </ops/images/browserestoredvm.png> "Figure 33. Browse to restored virtual machine"
+[vmdkfiles]: </ops/images/vmdkfiles.png> "Figure 34. Locate vmdk and vmdf files"
+[moveto]: </ops/images/moveto.png> "Figure 35. Move files"
+[destination]: </ops/images/destination.png> "Figure 36. Move to destination"
+[moved]: </ops/images/moved.png> "Figure 37. Files moved to destination"
 
 
-[solutionstack]: </ops/images/solutionstack.png> "Figure 37. Solution stack"
-[dockerupdate]: </ops/images/dockerupdate.png> "Figure 38. Docker update notification"
-[dependencymap]: </ops/images/dependencymap.png> "Figure 39. High-level dependency map"
+[solutionstack]: </ops/images/solutionstack.png> "Figure 38. Solution stack"
+[dockerupdate]: </ops/images/dockerupdate.png> "Figure 39. Docker update notification"
+[dependencymap]: </ops/images/dependencymap.png> "Figure 40. High-level dependency map"
 
 
 [create_vms]: </playbooks/create_vms.yml>
