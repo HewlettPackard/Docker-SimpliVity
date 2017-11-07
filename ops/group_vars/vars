@@ -10,7 +10,7 @@ folder_name: '/clh'
 datastores: ['Docker_CLH']
 disk2: '/dev/sdb'
 disk2_part: '/dev/sdb1'
-vsphere_plugin_version: '0.13' # was 0.12
+vsphere_plugin_version: '0.17' # was 0.12
 
 # Simplivity configuration
 simplivity_username: 'Administrator@vsphere.local'
@@ -40,8 +40,8 @@ ntp_servers: [' 10.12.2.1','0.us.pool.net.org','1.us.pool.net.org']
 # Docker configuration
 # docker_ee_url: is defined in group_vars/vault, should be kept secret
 rhel_version: '7.4'
-dtr_version: 'latest'
-ucp_version: 'latest'
+dtr_version: '2.4.0'
+ucp_version: '2.2.4'
 images_folder: '/docker-images'
 license_file: '/root/clh/ops/license.lic'
 ucp_username: 'admin'
