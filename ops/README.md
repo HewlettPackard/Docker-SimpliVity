@@ -1,8 +1,8 @@
 # Introduction
 
-Express Containers with Docker is a complete solution from Hewlett Packard Enterprise that includes all the hardware, software, professional services, and support you need to deploy an operational containers-as-a-service (CaaS) platform, allowing you to get up and running quickly and efficiently. The solution takes the HPE hyperconverged infrastructure and combines it with Docker’s enterprise-grade container platform, popular open source tools, along with deployment and advisory services from HPE Pointnext.
+Express Containers with Docker Enterprise Edition is a complete solution from Hewlett Packard Enterprise that includes all the hardware, software, professional services, and support you need to deploy a containers-as-a-service (CaaS) platform, allowing you to get up and running quickly and efficiently. The solution takes the HPE hyperconverged infrastructure and combines it with Docker’s enterprise-grade container platform, popular open source tools, along with deployment and advisory services from HPE Pointnext.
 
-Express Containers with Docker is ideal for customers either migrating legacy applications to containers, transitioning to a container DevOps development model or needing a hybrid environment to support container and non-containerized applications on a common VM platform.  Express Containers with Docker provides a solution for both IT development and IT operations, and comes in two versions.  The version for IT developers (Express Containers with Docker: Dev Edition) addresses the need to provide a cloud-like container development environment with built-in container tooling.  The version for IT operations (Express Containers with Docker: Ops Edition) addresses the need to have a production ready environment that is very easy to deploy and manage.  
+Express Containers with Docker EE is ideal for customers migrating legacy applications to containers, transitioning to a container DevOps development model or needing a hybrid environment to support container and non-containerized applications on a common VM platform.  Express Containers with Docker EE provides a solution for both IT development and IT operations, and comes in two versions.  The version for IT developers (Express Containers with Docker: Dev Edition) addresses the need to provide a cloud-like container development environment with built-in container tooling.  The version for IT operations (Express Containers with Docker EE: Ops Edition) addresses the need to have a production ready environment that is very easy to deploy and manage.  
 
 This document describes the best practices for deploying and operating the Express Containers with Docker: Ops Edition.   It describes how to automate the provisioning of the environment using a set of Ansible playbooks. It also outlines a set of manual steps to harden, secure and audit the overall status of the system. A corresponding document focused on setting up Express Containers with Docker: Dev Edition is also available. TODO.
 
@@ -23,7 +23,7 @@ More information about Ansible can be found here: [http://docs.ansible.com](http
 
 ## About Docker Enterprise Edition
 
-Docker Enterprise Edition (EE) is a containers-as-a-service (CaaS) platform for IT that manages and secures diverse applications across disparate infrastructure, both on-premises and in the cloud. Docker EE provides integrated container management and security from development to production. Enterprise-ready capabilities like multi-architecture orchestration and secure software supply chain give IT teams the ability to manage and secure containers without breaking the developer experience.
+Docker Enterprise Edition (EE) is the leading containers-as-a-service (CaaS) platform for IT that manages and secures diverse applications across disparate infrastructure, both on-premises and in the cloud. Docker EE provides integrated container management and security from development to production. Enterprise-ready capabilities like multi-architecture orchestration and secure software supply chain give IT teams the ability to manage and secure containers without breaking the developer experience.
 
 Docker EE provides
 
@@ -38,7 +38,7 @@ More information about Docker Enterprise Edition can be found here: [https://www
 
 ## About Simplivity
 
-Simplivity is an enterprise-grade hyper-converged platform uniting best-in-class data services with the world's bestselling server.
+Simplivity is an enterprise-grade hyper-converged platform uniting best-in-class data services with the world's best-selling server.
 
 Rapid proliferation of applications and the increasing cost of maintaining legacy infrastructure causes significant IT challenges for many organizations. With HPE SimpliVity, you can streamline and enable IT operations at a fraction of the cost of traditional and public cloud solutions by combining your IT infrastructure and advanced data services into a single, integrated solution. HPE SimpliVity is a powerful, simple, and efficient hyperconverged platform that joins best-in-class data services with the world’s best-selling server and offers the industry’s most complete guarantee.
 
@@ -51,7 +51,7 @@ More information about Simplivity can be found here: [https://www.hpe.com/us/en/
 
 ## Required Versions
 
-The following software versions were used to test the playbooks that are described in later sections. Other version may work but have not been tested.
+The following software versions were used to implement the playbooks that are described in later sections. Other version may work but have not been tested.
 
 - Ansible 2.2 and 2.3. Please note that the playbooks will not work with Ansible 2.4 due to an open defect https://github.com/ansible/ansible/issues/32000. Do not use Ansible 2.4 until this defect is fixed.
 - Docker EE 17.06 (tested with UCP 2.2.3 and 2.2.4 and DTR 2.4.0)
@@ -62,11 +62,11 @@ The following software versions were used to test the playbooks that are describ
 
 # Architecture
 
-The Operations environment is comprised of three HPE SimpliVity 380 Gen10 servers. Since the SimpliVity technology relies on VMware virtualization, the servers are managed using vCenter. The load among the three hosts will be shared as per Figure 1.
+The Operations environment is comprised of three HPE SimpliVity 380 Gen10 servers. HPE recommends dual socket SimpliVity systems with at least 14 CPU cores per socket (28 total cores per system) for optimal performance and support during HA failover scenario. Since the SimpliVity technology relies on VMware virtualization, the servers are managed using vCenter. The load among the three hosts will be shared as per Figure 1.
 
-Uptime is paramount for any users implementing Docker containers in business critical environments. Express Containers offers various levels of high availability (HA) to support continuous availability. All containers and Docker services implemented in containers are protected by Docker’s swarm mode. Swarm mode can protect against individual hardware, network, and container failures based on the user’s declarative model. 
+Uptime is paramount for any users implementing Docker containers in business critical environments. Express Containers offers various levels of high availability (HA) to support continuous availability. All containers including the Docker system containers are protected by Docker’s swarm mode. Swarm mode can protect against individual hardware, network, and container failures based on the user’s declarative model. 
 
-Express Containers with Docker also deploys load balancers in the system to help with container traffic management. There are three load balancer VMs – UPC load balancer, DTR load balancer, and Docker worker node load balancer. Since these load balancers exist in VMs, they have some degree of HA but will likely incur some downtime during the restoration of these VMs due to a planned or unplanned outage. For optimal HA configuration, the user should consider implementing a HA load balancer architecture using the Virtual Router Redundancy Protocol (VRRP). For more information see http://www.haproxy.com/solutions/high-availability/. 
+Express Containers with Docker also deploys load balancers in the system to help with container traffic management. There are three load balancer VMs – UCP load balancer, DTR load balancer, and Docker worker node load balancer. Since these load balancers exist in VMs, they have some degree of HA but may incur some downtime during the restoration of these VMs due to a planned or unplanned outage. For optimal HA configuration, the user should consider implementing a HA load balancer architecture using the Virtual Router Redundancy Protocol (VRRP). For more information see http://www.haproxy.com/solutions/high-availability/. 
 
 
 
@@ -74,16 +74,16 @@ Express Containers with Docker also deploys load balancers in the system to help
 ![Solution Architecture][simplivity-ops-simple-architecture]
 **Figure 1.** Solution Architecture
 
-The Ansible playbooks can be modified to fit your environment and your high availability (HA) needs. By default, the Ansible Playbooks will set up a 3 node environment.  HPE and Docker recommend a minimal starter configuration of 3 physical nodes for running Docker in production.  The distribution of the Docker and non-Docker modules over the 3 physical nodes via virtual machines (VMs) is as follows:
+The Ansible playbooks can be modified to fit your environment and your high availability (HA) needs. By default, the Ansible Playbooks will set up a 3 node environment.  HPE and Docker recommend a minimal starter configuration of 3 physical nodes for running Docker in production. This is the minimal configuration that Docker recommends for cluster HA. The distribution of the Docker and non-Docker modules over the 3 physical nodes via virtual machines (VMs) is as follows:
 
 - 3 Docker Universal Control Plane (UCP) VM nodes for HA and cluster management
 - 3 Docker Trusted Registry (DTR) VM nodes for HA of the container registry
 - 3 worker VM nodes for container workloads
-- Docker UCP load balancer VM to ensure access to UCP in the event of a node failure
-- Docker DTR load balancer VM to ensure access to DTR in the event of a node failure
-- Docker Swarm Worker node VM load balancer
-- Logging server VM for central logging 
-- NFS server VM for storage Docker DTR images
+- 1 Docker UCP load balancer VM to ensure access to UCP in the event of a node failure
+- 1 Docker DTR load balancer VM to ensure access to DTR in the event of a node failure
+- 1 Docker Swarm Worker node VM load balancer
+- 1 Logging server VM for central logging 
+- 1 NFS server VM for storage Docker DTR images
 
 These nodes are installed on VMs, spread across three SimpliVity servers. Each server will consist of:
 
@@ -91,16 +91,15 @@ These nodes are installed on VMs, spread across three SimpliVity servers. Each s
 - At least one DTR node, but ideally 3 or 5, spread across the 3 SimpliVity servers
 - At least one worker node, but ideally 3 or 5, spread across the 3 SimpliVity servers
 
-In addition to the above, the playbooks set up:
+In addition to the above, the playbooks also set up:
 
-- 3 load balancers, one for each set of nodes (one Worker load balancer, one DTR load balancer and one UCP load balancer)
-- 1 central logging server 
-- 1 NFS server
 - Docker persistent storage driver from VMware
 - Prometheus and Grafana monitoring tools
-- SimpliVity backup policy for data volumes and Docker images inside DTR
+- SimpliVity backup policy for data volumes and for the NFS storage used by DTR for storing Docker images
 
-These nodes can live in any of the hosts and they are not redundant. The Prometheus and Grafana services are declared in a Docker `stack` as replicated `services` with one replica each, so if they fail, Docker will ensure that they are restarted on one of the UCP VMs. cAdvisor and node-exporter are declared in the same stack as global services, so Docker will ensure that there is always one copy of each running on every machine in the cluster.  The vSphere Docker volume plug-in stores data in a shared datastore that can be accessed from any machine in the cluster.
+These nodes can live in any of the hosts and they are not redundant. The Prometheus and Grafana services are declared in a Docker `stack` as replicated `services` with one replica each, so if they fail, Docker EE will ensure that they are restarted on one of the UCP VMs. cAdvisor and node-exporter are declared in the same stack as global services, so Docker EE will ensure that there is always one copy of each running on every machine in the cluster.  The vSphere Docker volume plug-in stores data in a shared datastore that can be accessed from any machine in the cluster.
+
+![Docker Load Balancing][dockerlb]
 
 
 # Sizing considerations
@@ -196,21 +195,24 @@ You will need assemble the information required to assign values to each and eve
 |DNS|	You will need to know the IP addresses of your DNS server. In addition, all the VMs you configure in the inventory should have their names registered in DNS. In addition, you will need the domain name to use for configuring the virtual machines (such as example.com)
 |NTP Services|	You need time services configured in your environment. The solution being deployed (including Docker) uses certificates and certificates are time sensitive. You will need the IP addresses of your time servers (NTP).
 |RHEL Subscription	|A RHEL subscription is required to pull extra packages that are not on the DVD.|
-|Docker Prerequisites|	You will need a URL for the official Docker EE software download and a license file.  Refer to the Docker documentation to learn more about this URL and the licensing requirements here: https://docs.docker.com/engine/installation/linux/docker-ee/rhel/ Learn how to download the Docker EE license key here: https://success.docker.com/KBase/How_do_I_download_my_Docker_license_key 
+|Docker Prerequisites|	You will need a URL for the official Docker EE software download and a license file.  Refer to the Docker documentation to learn more about this URL and the licensing requirements here: https://docs.docker.com/engine/installation/linux/docker-ee/rhel/ in the section entitled "Docker EE repository URL"
+
 |Proxy	|The playbooks pull the Docker packages from the Internet. If you environment accesses the Internet through a proxy, you will need the details of the proxy including the fully qualified domain name and the port number.
 
 
 
 ## Install vSphere Docker Volume Service driver on all ESXi hosts
 
-This is a one-off manual step. In order to be able to use Docker volumes using the vSphere driver, you must first install the latest release of the vSphere Docker Volume Service (vDVS) driver, which is available as a vSphere Installation Bundle (VIB). To perform this operation, login to each of the ESXi hosts in turn and then download and install the latest release of vDVS driver.
+vSphere Docker Volume Service technology enables stateful containers to access the storage volumes provided by SimpliVity. This is a one-off manual step. In order to be able to use Docker volumes using the vSphere driver, you must first install the latest release of the vSphere Docker Volume Service (vDVS) driver, which is available as a vSphere Installation Bundle (VIB). To perform this operation, login to each of the ESXi hosts in turn and then download and install the latest release of vDVS driver.
 
 ```
 # esxcli software vib install -v /tmp/vmware-esx-vmdkops-<version>.vib --no-sig-check
 ```
 
-More information on how to download and install the driver can be found here: https://vmware.github.io/docker-volume-vsphere/documentation/install.html#vib-installation-through-esxclilocalcli 
+More information on how to download and install the driver can be found on the Docker Store at https://store.docker.com/plugins/vsphere-docker-volume-service
 
+
+**Note:** You cannot mount the same persistent volume created through vSphere Docker Volume Service (vDVS) on containers running on two different hosts at the same time.
 
 
 
@@ -311,7 +313,7 @@ If you are behind a proxy, you must configure this before running the above comm
 ```
 # subscription-manager config --server.proxy_hostname=<proxy IP> --server.proxy_port=<proxy port>
 ```
-If you use this option, the playbooks will automatically enable the “extras” repository on the VMs that need it.
+If you use this option, the playbooks will automatically enable the `extras` repository on the VMs that need it.
   - **Option 2:** Use an internal repository. Instead of pulling the packages from Red Hat, you can create copies of the required repositories on a dedicated node. You can then configure the package manager to pull the packages from the dedicated node. Your `/etc/yum.repos.d/redhat.repo` could look as follows.
 ```
 [RHEL7-Server]
@@ -348,7 +350,7 @@ Before converting the VM to a template, you will need to setup up access for the
 In addition to the VM Template, you need another Virtual Machine where Ansible will be installed. This node will act as the driver to automate the provisioning of the environment and it is essential that it is properly installed. The steps are as follows:
 
 1. Create a Virtual Machine and install your preferred OS (in this example, and for the sake of simplicity, RHEL7 will be used). The rest of the instructions assume that, if you use a different OS, you understand the possible differences in syntax for the provided commands. If you use RHEL 7, select **Infrastructure Server** as the base environment and the **Guests Agents** add-on during the installation.
-2. Log in the root account and create an SSH key pair. Do not protect the key with a passphrase (unless you want to use ssh-agent).  
+2. Log in to the root account and create an SSH key pair. Do not protect the key with a passphrase (unless you want to use ssh-agent).  
 ```
 # ssh-keygen
 ```
@@ -417,9 +419,16 @@ This completes the creation of the VM Template.
 On the Ansible node, retrieve the latest version of the playbooks using git.
 ```
 # git clone https://github.com/HewlettPackard/Docker-SimpliVity
-
-
 ```
+Change to the directory which you just cloned:
+```# cd ~/Docker-SimplVity```
+
+Change to the `ops` directory
+```# cd ops```
+
+
+**Note:** File names are relative to the `ops` directory. For example `vm_hosts` is located in `~/Docker-SimpliVity/ops` and `group_vars/vars` relates to `~/Docker-SimpliVity/ops/groups_vars/vars`.
+
 
 You now need to prepare the configuration to match your own environment, prior to deploying Docker EE and the rest of the nodes. To do so, you will need to edit and modify three different files:
 
@@ -429,11 +438,13 @@ You now need to prepare the configuration to match your own environment, prior t
 - `group_vars/vars` (the group variables file)
 - `group_vars/vault` (the encrypted group variable file)
 
-
+You should work from the root account for the configuration steps and later when you run the playbooks.
 
 
 
 ## Editing the inventory
+
+The inventory is the file named `vm_hosts` in the `~Docker-SimpliVity/ops` directory. You need to edit this file to describe the configuration you want to deploy.
 
 Change to the directory that you previously cloned using git and edit the `vm_hosts` file in the `ops` sub-directory.
 
@@ -458,7 +469,7 @@ There are also a few special groups:
 - [vms:children]: A group of groups including all the Virtual Machines involved apart from the local host.
 
 Finally, you will find some variables defined for each group:
-
+- [vms:vars]: A set of variables defined for all VMs. Currently only the size of the boot disk is defined here.
 - [ucp:vars]: A set of variables defined for all nodes in the [`ucp`] group.
 - [dtr:vars]: A set of variables defined for all nodes in the [`dtr`] group.
 - [worker:vars]: A set of variables defined for all nodes in the [`worker`] group.
@@ -501,7 +512,7 @@ The different variables you can use are as described in Table 4 below. They are 
 
 ## Editing the group variables
 
-Once the inventory is ready, the next step is to modify the group variables to match your environment. To do so, you need to edit the file `group_vars/vars` under the cloned directory containing the playbooks. The variables here can be defined in any order but for the sake of clarity they have been divided into sections.
+Once the inventory is ready, the next step is to modify the group variables to match your environment. To do so, you need to edit the file `group_vars/vars`. The variables here can be defined in any order but for the sake of clarity they have been divided into sections.
 
 ### VMware configuration
 
@@ -521,7 +532,7 @@ All VMware-related variables are mandatory and are described in Table 5.
 | datastores               | List of datastores to be used, in list format, i.e. ['`Datastore1`','`Datastore2`'...]. Please note that from a Simplivity perspective, it is best practice to use just one Datastore. Using more than one will not provide any advantages in terms of reliability and will add additional complexity. This datastore must exist before you run the playbooks. |
 | disk2                    | UNIX name of the second disk for the Docker VMs. Typically `/dev/sdb` |
 | disk2\_part              | UNIX name of the partition of the second disk for the Docker VMs. Typically `/dev/sdb1` |
-| vsphere\_plugin\_version | Version of the vSphere plugin for Docker. The default is `0.13` which is the latest version at the time of writing this document. |
+| vsphere\_plugin\_version | Version of the vSphere plugin for Docker. The default is 0.18 which is the latest version at the time of writing this document. The version of the plugin should match the version of the vSphere Installation Bundle (VIB) that you installed on the ESXi servers. |
 
 
 
@@ -606,12 +617,12 @@ All Docker-related variables are mandatory and are described in Table 8.
 
 | Variable      | Description                              |
 | ------------- | ---------------------------------------- |
-| docker_ee_url | Your `docker_ee_url` should be kept secret and you should define it in `group_vars/vault`. The value for `docker_ee_url` is the URL documented at the following address: https://docs.docker.com/engine/installation/linux/docker-ee/rhel/. |
+| docker_ee_url | Note: This is a private link to your Docker EE subscription. This should be kept secret and defined in `group_vars/vault`. The value for `docker_ee_url` is the URL documented at the following address: https://docs.docker.com/engine/installation/linux/docker-ee/rhel/. |
 | rhel_version  | Version of your RHEL OS, such as  `7.3`. The playbooks were tested with RHEL 7.3. and RHEL 7.4.        |
-| dtr_version   | Version of the Docker DTR you wish to install. You can use a numeric version or `latest` for the most recent one. The playbooks where tested with 2.3.3. |
-| ucp_version   | Version of the Docker UCP you wish to install. You can use a numeric version or `latest` for the most recent one. The playbooks were tested with UCP 2.2.3. |
+| dtr_version   | Version of the Docker DTR you wish to install. You can use a numeric version or `latest` for the most recent one. The playbooks were tested with 2.3.3. and 2.4.0.|
+| ucp_version   | Version of the Docker UCP you wish to install. You can use a numeric version or `latest` for the most recent one. The playbooks were tested with UCP 2.2.3. and 2.2.4. |
 | images_folder | Directory in the NFS server that will be mounted in the DTR nodes and that will host your Docker images. |
-| license_file  | Full path to your Docker license file (it should be stored in your Ansible host). |
+| license_file  | Full path to your Docker EE license file (it should be stored in your Ansible host). |
 | ucp_username  | Username of the administrator user for UCP and DTR, typically `admin`. Note: The corresponding password is stored in a separate file (`group_vars/vault`) with the variable named `ucp_password`.|
 
 
@@ -640,7 +651,7 @@ All Logspout-related variables are described in Table 10.
 
 | Variable                | Description                              |
 | ----------------------- | ---------------------------------------- |
-| logspout_version       | `‘master’` |
+| logspout_version       | `‘master’` <br>More details on Logspout are available later in this document.|
 
 
 ### Environment configuration
@@ -736,7 +747,7 @@ The playbook [config\_networking.yml][config_networking] will configure the netw
 The playbook [distribute\_keys.yml][distribute_keys] distributes public keys between all nodes, to allow each node to password-less login to every other node. As this is not essential and can be regarded as a security risk (a worker node probably should not be able to log in to a UCP node, for instance), this playbook is commented out in site.yml by default and must be explicitly uncommented to enable this functionality.
 
 ## Register the VMs with Red Hat
-The playbook [config\_subscription.yml][config_subscription] registers and subscribes all virtual machines to the Red Hat Customer Portal. This is only needed if you pull packages from Red Hat.
+The playbook [config\_subscription.yml][config_subscription] registers and subscribes all virtual machines to the Red Hat Customer Portal. This is only needed if you pull packages from Red Hat. This playbook is commented out by default but you should uncomment it to make sure each VM registers with the Red Hat portal. It is commented out so that you can test the deployment first without having to unregister all the VMs from the Red Hat Customer Portal between each test. If you are using an internal repository, as described in the paragraph "Create a VM template", you can keep this playbook commented out.
 
 ## Install HAProxy
 The playbook [install\_haproxy.yml][install_haproxy] installs and configures the HAProxy package in the load balancer nodes. HAProxy is the chosen tool to implement load balancing between UCP nodes, DTR nodes and worker nodes.
@@ -1029,7 +1040,7 @@ For details on the impact of a VM failure, see Table 14.
 |Docker volumes	|Applicable (someone deletes file in the datastore)	|||		
 |User applications	|Depends on application (service or standalone container)|||			
 
-# Container backup and restore
+# Docker volume backup and restore
 
 In order to restore a Docker volume, you need to restore a special VM  that has been deployed for the sole purpose of backing up Docker volumes. There is one such VM for each datastore defined in the `datastores` array in the `group_vars/vars` file. By default, a single datastore is specified in the playbooks:
 
@@ -1451,6 +1462,7 @@ Based on the lifecycle management details provided above, Figure 40 is a consoli
 
 
 [simplivity-ops-simple-architecture]: </ops/images/simplivity-ops-simple-architecture.png> "Figure 1. Solution Architecture"
+[dockerlb]: </ops/images/dockerlb.png>
 [provisioning]: </ops/images/provisioning.png> "Provisioning Steps"
 [createnewvm]: </ops/images/createnewvirtualmachine.png> "Figure 2. Create New Virtual Machine"
 [vmnamelocation]: </ops/images/vmnamelocation.png> "Figure 3. Specify name and location for the virtual machine" 
