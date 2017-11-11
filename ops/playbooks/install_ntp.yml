@@ -25,23 +25,22 @@
   environment: "{{ env }}"
 
   tasks:
-    - name: Install NTP
-      yum:
-        name: ntp
-        state: latest
 
-    - name: Update ntp.conf
+    - name: Update chrony.conf
       template:
-        src: ../templates/ntp.conf.j2
-        dest: /etc/ntp.conf
+        src: ../templates/chrony.conf.j2
+        dest: /etc/chrony.conf
         owner: root
         group: root
         mode: 0644        
-      notify: Enable and restart NTP service
+      notify: Enable and restart chrony service
+
+    - name: use timedatectl
+      command: timedatectl set-ntp true
 
   handlers:
-    - name: Enable and restart NTP service
+    - name: Enable and restart chrony service
       systemd:
-        name: ntpd
+        name: chronyd
         enabled: yes
         state: restarted
