@@ -1010,23 +1010,23 @@ For details of the impact of a host failure, see Table 12.
 
 ## VM Failure
 
-For details on the impact of a VM failure, see Table 14.
+For details on the impact of a single VM failure, for example, if it cannot boot or is deleted by accident, see Table 13.
 
-**Table 14.** VM failure
+**Table 13.** VM failure
 
 |Component	|Technology	|Duration	|Consequence	|Impact   |
 |:-----------|:-----------|:-----------|:---------------|:---------|
-|UCP Load Balancer	|Manual recovery	|Minutes	|Service unavailable	|Recovery procedure required (restore from backup)|
-|Workers Load Balancer	|Manual recovery	|Minutes	|Service unavailable	|Recovery procedure required (restore from backup)|
-|DTR Load Balancer	|Manual recovery	|Minutes	|Service unavailable	|Recovery procedure required (restore from backup)|
-|Central Logging	|Manual recovery	|Minutes	|Service unavailable	|Recovery procedure required (restore from backup)|
-|NFS	|Manual recovery	|Minutes	|DTR push/pull unavailable	|Recovery procedure required (restore from backup)|
-|UCP service	|Protected by UCP scale out design	|Seconds	|	|Recovery procedure required|
-|DTR service	|Protected by DTR scale out design	|Seconds	|	|Recovery procedure required|
+|UCP load balancer	|Manual recovery	|Minutes	|Service unavailable	|Recovery procedure required (restore from SimpliVity backup)|
+|Workers load balancer	|Manual recovery	|Minutes	|Service unavailable	|Recovery procedure required (restore from SimpliVity backup)|
+|DTR load balancer	|Manual recovery	|Minutes	|Service unavailable	|Recovery procedure required (restore from SimpliVity backup)|
+|Central logging VM	|Manual recovery	|Minutes	|Service unavailable <BR>Logs may be lost	|Recovery procedure required (restore from backup)|
+|NFS VM	|Manual recovery	|Minutes	|DTR push/pull unavailable	|Recovery procedure required - see https://docs.docker.com/datacenter/dtr/2.4/guides/admin/backups-and-disaster-recovery/)|
+|UCP VM	|UCP services are protected by UCP scale out design	|Seconds	|Transparent except for clients connected to the faulty VM. If monitoring tasks are running on the faulty VM (Grafana or Prometheus) they will be automatically restarted on another UCP VM	|Temporarily remove the faulty VM from the UCP load balancer. <br>If a UCP VM is corrupted or unhealthy, the best way to recover is to deploy a new UCP VM. Do not restore from a SimpliVity backup.|
+|DTR VM	|DTR services are protected by DTR scale out design	|Seconds	|Transparent except for client connections using the DTR services when the VM fails	|Temporarily remove the faulty VM from the DTR load balancer.<br>If a DTR VM is corrupted or unhealthy, the best way to recover is to deploy a new DTR replica. Do not restore from a SimpliVity backup.|
 |Monitoring	|Protected by Docker service (replicas)	|	|New replica	
-|Resource plane	|Manual recovery	|Minutes	|Reduced capacity|	
-|Docker volumes	|Applicable (someone deletes file in the datastore)	|||		
-|User applications	|Depends on application (service or standalone container)|||			
+|Resource plane<br>(worker node)	|Docker swarm scale out design	|	|Reduced capacity<br>Standalone containers may be lost.  Required number of replicas for services will be restarted on the other worker nodes.|	Temporarily remove the faulty VM from the DTR load balancer.<br>A corrupted worker node should be removed from the swarm and a new worker VM should be deployed.
+
+		
 
 # Docker volume backup and restore
 
