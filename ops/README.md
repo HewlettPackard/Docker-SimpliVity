@@ -1047,7 +1047,7 @@ For example, based on the default values in the scripts, the VM name would be `c
 
 ## Create a Docker volume
 
-After the initial deployment,  a single Docker volume will have been created for Prometheus using the vSphere driver. 
+A single Docker volume will have been created for Prometheus using the vSphere driver as part of the initial deployment. To see this volume, use the `docker volume ls` command and limit the results to those volumes created using the vSphere driver.
 
 ```
 [root@clh-ucp01 ~]# docker volume ls | grep vsphere
@@ -1203,6 +1203,15 @@ You can verify that the volume contains the correct data by spinning up a contai
 </pre>
 
 The data you entered in the text file before performing the backup and deleting the volume is available once again after restoring the volume.
+
+
+
+# Disaster Recovery
+
+In order to protect your installation from disasters, you need to take regular backups of the swarm, UCP and DTR. In the event where half or more manager nodes are lost and cannot be recovered to a healthy state, the system is considered to have lost quorum and can only be restored through the manual procedure described in the Docker documentation. 
+
+For more information, see https://docs.docker.com/datacenter/ucp/2.2/guides/admin/backups-and-disaster-recovery/.
+
 
 
 # Solution Lifecycle Management
@@ -1378,7 +1387,7 @@ This solution is built using Red Hat Enterprise Linux (see Table 19) as the base
 
 Each release of Docker Enterprise Edition contains three technology components – UCP, DTR and the Docker Daemon or Engine. It is imperative that the components belonging to the same version are deployed or upgraded together – see Table 20. 
 
-A banner will be displayed on the UI when an update is available for UCP or DTR. The admin can start the upgrade process by clicking the link shown in Figure 39.
+A banner will be displayed on the UI, as shown in Figure 39, when an update is available for UCP or DTR. You can start the upgrade process by clicking on the banner.
 
 ![Docker update notification][dockerupdate]
 **Figure 39.** Docker update notification
