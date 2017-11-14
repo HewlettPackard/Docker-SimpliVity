@@ -1,10 +1,10 @@
 # Introduction
 
-Express Containers with Docker Enterprise Edition is a complete solution from Hewlett Packard Enterprise that includes all the hardware, software, professional services, and support you need to deploy a containers-as-a-service (CaaS) platform, allowing you to get up and running quickly and efficiently. The solution takes the HPE hyperconverged infrastructure and combines it with Docker’s enterprise-grade container platform, popular open source tools, along with deployment and advisory services from HPE Pointnext.
+Express Containers with Docker Enterprise Edition (EE) is a complete solution from Hewlett Packard Enterprise that includes all the hardware, software, professional services, and support you need to deploy a containers-as-a-service (CaaS) platform, allowing you to get up and running quickly and efficiently. The solution takes the HPE hyperconverged infrastructure and combines it with Docker’s enterprise-grade container platform, popular open source tools, along with deployment and advisory services from HPE Pointnext.
 
-Express Containers with Docker EE is ideal for customers migrating legacy applications to containers, transitioning to a container DevOps development model or needing a hybrid environment to support container and non-containerized applications on a common VM platform.  Express Containers with Docker EE provides a solution for both IT development and IT operations, and comes in two versions.  The version for IT developers (Express Containers with Docker: Dev Edition) addresses the need to provide a cloud-like container development environment with built-in container tooling.  The version for IT operations (Express Containers with Docker EE: Ops Edition) addresses the need to have a production ready environment that is very easy to deploy and manage.  
+Express Containers with Docker EE is ideal for customers migrating legacy applications to containers, transitioning to a container DevOps development model or needing a hybrid environment to support container and non-containerized applications on a common VM platform. Express Containers with Docker EE provides a solution for both IT development and IT operations, and comes in two versions. The version for IT developers (Express Containers with Docker EE: Dev Edition) addresses the need to provide a cloud-like container development environment with built-in container tooling. The version for IT operations (Express Containers with Docker EE: Ops Edition) addresses the need to have a production ready environment that is very easy to deploy and manage.
 
-This document describes the best practices for deploying and operating the Express Containers with Docker: Ops Edition.   It describes how to automate the provisioning of the environment using a set of Ansible playbooks. It also outlines a set of manual steps to harden, secure and audit the overall status of the system. A corresponding document focused on setting up Express Containers with Docker: Dev Edition is also available. TODO.
+This document describes the best practices for deploying and operating the Express Containers with Docker EE: Ops Edition. It describes how to automate the provisioning of the environment using a set of Ansible playbooks. It also outlines a set of manual steps to harden, secure and audit the overall status of the system. A corresponding document focused on setting up Express Containers with Docker EE: Dev Edition will also be available.
 
 
 **Note**
@@ -18,12 +18,13 @@ Ansible is an open-source automation engine that automates software provisioning
 As with most configuration management software, Ansible has two types of server: the controlling machine and the nodes. A single controlling machine orchestrates the nodes by deploying modules to the nodes over SSH. The modules are temporarily stored on the nodes and communicate with the controlling machine through a JSON protocol over the standard output. When Ansible is not managing nodes, it does not consume resources because no daemons or programs are executing for Ansible in the background. Ansible uses one or more inventory files to manage the configuration of the multiple nodes in the system.
 
 In contrast with other popular configuration management software such as Chef, Puppet, and CFEngine, Ansible uses an agentless architecture. With an agent-based architecture, nodes must have a locally installed daemon that communicates with a controlling machine. With an agentless architecture, nodes are not required to install and run background daemons to connect with a controlling machine. This type of architecture reduces the overhead on the network by preventing the nodes from polling the controlling machine.
+
 More information about Ansible can be found here: [http://docs.ansible.com](http://docs.ansible.com)
 
 
 ## About Docker Enterprise Edition
 
-Docker Enterprise Edition (EE) is the leading containers-as-a-service (CaaS) platform for IT that manages and secures diverse applications across disparate infrastructure, both on-premises and in the cloud. Docker EE provides integrated container management and security from development to production. Enterprise-ready capabilities like multi-architecture orchestration and secure software supply chain give IT teams the ability to manage and secure containers without breaking the developer experience.
+Docker Enterprise Edition (EE) is the leading enterprise containers-as-a-service (CaaS) software platform for IT that manages and secures diverse applications across disparate infrastructure, both on-premises and in the cloud. Docker EE provides integrated container management and security from development to production. Enterprise-ready capabilities like multi-architecture orchestration and secure software supply chain give IT teams the ability to manage and secure containers without breaking the developer experience.
 
 Docker EE provides
 
@@ -46,7 +47,7 @@ More information about Simplivity can be found here: [https://www.hpe.com/us/en/
 
 **Target Audience:** This document is primarily aimed at technical individuals working in the Operations side of the pipeline, such as system administrators and infrastructure engineers, but anybody with an interest in automating the provisioning of virtual servers and containers may find this document useful.
 	
-**Assumptions:** The present document assumes a minimum understanding in concepts such as virtualization and containerization and also some knowledge around Linux and VMWare technologies.
+**Assumptions:** The present document assumes a minimum understanding in concepts such as virtualization and containerization and also some knowledge around Linux and VMware technologies.
 
 
 ## Required Versions
@@ -66,7 +67,7 @@ The Operations environment is comprised of three HPE SimpliVity 380 Gen10 server
 
 Uptime is paramount for any users implementing Docker containers in business critical environments. Express Containers offers various levels of high availability (HA) to support continuous availability. All containers including the Docker system containers are protected by Docker’s swarm mode. Swarm mode can protect against individual hardware, network, and container failures based on the user’s declarative model. 
 
-Express Containers with Docker also deploys load balancers in the system to help with container traffic management. There are three load balancer VMs – UCP load balancer, DTR load balancer, and Docker worker node load balancer. Since these load balancers exist in VMs, they have some degree of HA but may incur some downtime during the restoration of these VMs due to a planned or unplanned outage. For optimal HA configuration, the user should consider implementing a HA load balancer architecture using the Virtual Router Redundancy Protocol (VRRP). For more information see http://www.haproxy.com/solutions/high-availability/. 
+Express Containers with Docker EE also deploys load balancers in the system to help with container traffic management. There are three load balancer VMs – UCP load balancer, DTR load balancer, and Docker worker node load balancer. Since these load balancers exist in VMs, they have some degree of HA but may incur some downtime during the restoration of these VMs due to a planned or unplanned outage. For optimal HA configuration, the user should consider implementing a HA load balancer architecture using the Virtual Router Redundancy Protocol (VRRP). For more information see http://www.haproxy.com/solutions/high-availability/. 
 
 
 
@@ -176,14 +177,14 @@ For Express Containers with Docker: Ops Edition, the following section describes
 
 # Provisioning the operations environment
 
-This section describes in detail how to provision the environment described previously in the architecture section. The figure below shows the high level steps this guide will take.
+This section describes in detail how to provision the environment described previously in the architecture section. This section describes in detail how to provision the environment described previously in the architecture section. The high level steps this guide will take are shown in Figure 3.
 
 ![Provisioning steps][provisioning]
 
 
 ## Verify Prerequisites
 
-You will need assemble the information required to assign values to each and every variable used by the playbooks before you start deployment. The variables are fully documented in the following sections “Editing the group variables” and “Editing the vault”. A summary of the information required is presented in Table 3.
+You must assemble the information required to assign values to each and every variable used by the playbooks, before you start deployment. The variables are fully documented in the following sections “Editing the group variables” and “Editing the vault”. A summary of the information required is presented in Table 3.
 
 **Table 3.** Summary of information required
 
@@ -199,6 +200,12 @@ You will need assemble the information required to assign values to each and eve
 
 |Proxy	|The playbooks pull the Docker packages from the Internet. If you environment accesses the Internet through a proxy, you will need the details of the proxy including the fully qualified domain name and the port number.
 
+
+## Enable vSphere High Availability
+You must enable vSphere High Availability (HA) to support virtual machine failover during an HA event such as a host failure. Sufficient CPU and memory resources must be reserved across the system so that all VMs on the affected host(s) can fall over to remaining available hosts in the system. You configure an Admission Control Policy (ACP) to specify the percentage CPU and memory to reserve on all the hosts in the cluster to support HA functionality. 
+
+More information on enabling vSphere HA and configuring Admission Control Policy is available in the HPE SimpliVity documentation. Log in to the HPE Support Center at https://www.hpe.com/us/en/support.html and search for “HPE SimpliVity 380”. The administration guide is listed when you select the User document type.
+**Note: ** You should not use the default Admission Control Policy. Instead, you should calculate the memory and CPU requirements that are specific to your environment.
 
 
 ## Install vSphere Docker Volume Service driver on all ESXi hosts
@@ -249,7 +256,7 @@ It would be possible to automate the creation of the template. However, as this 
 ![Choose operating system][chooseos]  
 **Figure 6.** Choose operating system
 
-6. Pick the network to attach to your template as shown in Figure 7. In this example we're only using one NIC but depending on how you plan to architect your environment you might want to add more than one.
+6. Pick the network to attach to your template as shown in Figure 7. In this example there is only one NIC but depending on how you plan to architect your environment you might want to add more than one.
 ![Create network connections][createnetwork]  
 **Figure 7.** Create network connections
 
@@ -305,6 +312,7 @@ It would be possible to automate the creation of the template. However, as this 
 
 17. Click Done and wait for the install to finish. Reboot and log in into the system using the VM console.
 18.	The Red Hat packages required during the deployment of the solution come from two repositories: `rhel-7-server-rpms` and `rhel 7-server-extras-rpms`. The first repository can be found on the Red Hat DVD but the second cannot. There are two options, with both options requiring a Red Hat Network account.
+
   - **Option 1:** Use Red Hat subscription manager to register your system. This is the easiest way and will automatically give you access to the official Red Hat repositories. Use the `subscription-manager register` command as follows.
 ```
 # subscription-manager register --auto-attach
@@ -314,6 +322,7 @@ If you are behind a proxy, you must configure this before running the above comm
 # subscription-manager config --server.proxy_hostname=<proxy IP> --server.proxy_port=<proxy port>
 ```
 If you use this option, the playbooks will automatically enable the `extras` repository on the VMs that need it.
+
   - **Option 2:** Use an internal repository. Instead of pulling the packages from Red Hat, you can create copies of the required repositories on a dedicated node. You can then configure the package manager to pull the packages from the dedicated node. Your `/etc/yum.repos.d/redhat.repo` could look as follows.
 ```
 [RHEL7-Server]
@@ -446,7 +455,6 @@ You should work from the root account for the configuration steps and later when
 
 The inventory is the file named `vm_hosts` in the `~Docker-SimpliVity/ops` directory. You need to edit this file to describe the configuration you want to deploy.
 
-Change to the directory that you previously cloned using git and edit the `vm_hosts` file in the `ops` sub-directory.
 
 The nodes inside the inventory are organized in groups. The groups are defined by brackets and the group names are static so they must not be changed. Anything else (hostnames, specifications, IP addresses…) are meant to be amended to match the user needs. The groups are as follows:
 
@@ -622,7 +630,7 @@ All Docker-related variables are mandatory and are described in Table 8.
 | dtr_version   | Version of the Docker DTR you wish to install. You can use a numeric version or `latest` for the most recent one. The playbooks were tested with 2.3.3. and 2.4.0.|
 | ucp_version   | Version of the Docker UCP you wish to install. You can use a numeric version or `latest` for the most recent one. The playbooks were tested with UCP 2.2.3. and 2.2.4. |
 | images_folder | Directory in the NFS server that will be mounted in the DTR nodes and that will host your Docker images. |
-| license_file  | Full path to your Docker EE license file (it should be stored in your Ansible host). |
+| license_file  | Full path to your Docker EE license file (it should be stored in your Ansible host).<br>License file is available from the Docker Store |
 | ucp_username  | Username of the administrator user for UCP and DTR, typically `admin`. Note: The corresponding password is stored in a separate file (`group_vars/vault`) with the variable named `ucp_password`.|
 
 
@@ -667,7 +675,7 @@ All Environment-related variables should be here. All of them are described in t
 
 Once your group variables file is ready, the next step is to create a vault file to match your environment. The vault file is essentially the same thing than the group variables but it will contain all sensitive variables and will be encrypted.
 
-To create a vault we'll create a new file group\_vars/vault and we'll add the following entries:
+There is a sample vault file named `group_vars/vault.sample` that you can use as a model for your vault file. To create a vault, you create a new file `group_vars/vault` and add entries similar to:
 
 ```
 ---
@@ -716,7 +724,7 @@ The playbooks should run for 25-35 minutes depending on your server specificatio
 
 ## Post Deployment
 
-The playbooks are meant to deploy a new environment. You should only use them for deployment purposes. 
+The playbooks are intended to be used to deploy a new environment. You should only use them for Day 0 deployment purposes. 
 
 
 
@@ -754,7 +762,7 @@ The playbook [config\_subscription.yml][config_subscription] registers and subsc
 The playbook [install\_haproxy.yml][install_haproxy] installs and configures the HAProxy package in the load balancer nodes. HAProxy is the chosen tool to implement load balancing between UCP nodes, DTR nodes and worker nodes.
 
 ## Install NTP
-The playbook [install\_ntp.yml][install_ntp] installs and configures the NTP package in all Virtual Machines in order to have a synchronized clock across the environment. It will use the server or servers specified in the ntp_servers variable in the group variables file.
+The playbook [install\_ntp.yml][install_ntp] configures the chrony package in all Virtual Machines in order to have a synchronized clock across the environment. It will use the server or servers specified in the ntp_servers variable in the group variables file.
 
 ## Install Docker Enterprise Edition
 The playbook [install\_docker.yml][install_docker] installs Docker along with all its dependencies.
@@ -886,7 +894,7 @@ When you specify the placement of the VM, you should ensure that you follow thes
 When DRS is enabled, it controls the placement of the VMs and as a result, the placement you have specified in the vm_hosts inventory is ignored. Instead, you use DRS rules to make sure that the UCP and DTR VMs are distributed across three nodes for the reasons explained earlier. 
 
 
-**Note:** If you do not specify DRS rules to determine the placement, DRS will automatically move the VMs that report the “SimpliVity VM Data Access Not Optimized” warning to a node with a replica of the VM which may break the earlier placement guideline.
+**Warning:** If you do not specify DRS rules to determine the placement, DRS will automatically move the VMs that report the “SimpliVity VM Data Access Not Optimized” warning to a node with a replica of the VM which may break the earlier placement guideline.
 
 
 
@@ -941,9 +949,9 @@ In addition to having all logs centralized in a single place and the image scann
 
 
 ## Prevent tags from being overwritten
-By default, users with access to push to a repository, can push the images to a repository with the same tag multiple times. As an example, a user pushes an image to `library/wordpress:latest`, and later another user can push a different image with the same name and tag but different functionality. This might make it difficult to trace back the image to the build that generated it.
-
+By default, an image tag can be overwritten by a user with the correct access rights. As an example, an image such as `library/wordpress:latest` can be pushed and tagged by different users, yet have different functionality. This might make it difficult to trace back the image to the build that generated it.
 Docker DTR can prevent this from happening with the immutable tags feature that can be configured on a per repository basis. Once an image is pushed with a tag, that particular tag cannot be overwritten.
+
 
 More information about immutable tags can be found here: 
 https://docs.docker.com/datacenter/dtr/2.3/guides/user/manage-images/prevent-tags-from-being-overwritten/ 
@@ -953,7 +961,7 @@ https://docs.docker.com/datacenter/dtr/2.3/guides/user/manage-images/prevent-tag
 ## Isolate swarm nodes to a specific team
 With Docker EE Advanced, you can enable physical isolation of resources by organizing nodes into collections and granting Scheduler access for different users. To control access to nodes, move them to dedicated collections where you can grant access to specific users, teams, and organizations.
 
-More information about this subject can be found here: https://beta.docs.docker.com/datacenter/ucp/2.2/guides/admin/manage-users/isolate-nodes-between-teams/.
+More information about this subject can be found here: : https://docs.docker.com/datacenter/ucp/2.2/guides/access-control/isolate-volumes-between-teams/.
 
 
 # Central Logging
@@ -976,48 +984,27 @@ Operators can SSH to the central logging VM to locate the logs in the `/var/log/
 
 # HA considerations
 
-## Service Level Protection 
-
-The matrix in Table 12 outlines the HA and service level protection for all the critical containers and services within this solution.   
-
-**Table 12.** Service level protection matrix
-
-| |	Host HW or network failure protection|  Application or service failure protection | 
-|---------|-----------|---------|
-|Docker Worker Node | Requests will be serviced by 2 of 3 remaining Docker worker on other 2 nodes.  Restart of failed Docker worker on other physical node not required.| Requests will be serviced by 2 of 3 remaining Docker worker on other 2 nodes.  Restart of failed Docker worker on other physical node not required. |
-|Docker UCP service | Requests will be serviced by 2 of 3 remaining UCP services on other 2 nodes.  Restart of failed UCP on other physical node not required. | Requests will be serviced by 2 of 3 remaining UCP services on other 2 nodes.  Restart of failed UCP on other physical node not required.|
-|Docker DTR service |	Requests will be serviced by 2 of 3 remaining DTR services on other 2 nodes.  Restart of failed DTR on other physical node not required.	| Requests will be serviced by 2 of 3 remaining DTR services on other 2 nodes.  Restart of failed DTR on other physical node not required.|
-|Application container	| UCP restarts this app container on one of two remaining worker nodes|
-|Prometheus load exporter service||
-|Prometheus cAdvisor service||
-|Prometheus container||
-|Grafana container ||
-|Logging service VM||
-|NFS server VM|VMware restarts NFS VM on one of two remaining nodes||
-|UCP Load Balancer VM (HA Proxy)	|VMware restarts UCP Load Balancer on one of two remaining nodes|
-|DTR Load Balancer VM (HA Proxy)||
-|Worker Load Balancer VM (HA Proxy)||
 
 
 ## Host failure
 
-For details of the impact of a host failure, see Table 13.
+For details of the impact of a host failure, see Table 12.
 
-**Table 13.** Host failure
+**Table 12.** Host failure
 
 |Component	|Technology	|Duration	|Consequence	|Impact   |
 |:-----------|:-----------|:-----------|:---------------|:---------|
-|UCP Load Balancer	|Protected by VMware Cluster HA	|Minutes	|VM is failed-over	|No access to service during failover|
-|Workers Load Balancer	|Protected by VMware Cluster HA	|Minutes	|VM is failed-over	|No access to service during failover
-|DTR Load Balancer	|Protected by VMware Cluster HA	|Minutes	|VM is failed-over	|No access to service during failover
-|Central Logging	|Protected by VMware Cluster HA	|Minutes	|VM is failed-over	|The logs will be available in central logging but may not reach Logspout|
+|UCP load balancer	|Protected by VMware Cluster HA	|Minutes	|VM is failed-over	|No access to service during failover|
+|Workers load balancer	|Protected by VMware Cluster HA	|Minutes	|VM is failed-over	|No access to service during failover
+|DTR load balancer	|Protected by VMware Cluster HA	|Minutes	|VM is failed-over	|No access to service during failover
+|Central logging	|Protected by VMware Cluster HA	|Minutes	|VM is failed-over	|Some logs may be lost|
 |NFS	|Protected by VMware Cluster HA	|Minutes	|VM is failed-over	|No push/pull of images.|
-|UCP service	|Protected by UCP scale out design	|Seconds	|Potentially new leader elected	|
-|DTR service	|Protected by DTR scale out design	|Seconds	|DTR continues to be operational	|
-|Monitoring	|Protected by Docker service (replicas)	|Seconds	|Grafana/Prometheus relocated	|Transparent due to routing mesh|
-|Resource plane	|Protected by Docker scale out design|		|Less capacity	
+|UCP service	|Protected by UCP scale out design	|Seconds	|Potentially new leader elected	|Clients are disconnected. Clients should reconnect to the UCP service running on the other nodes|
+|DTR service	|Protected by DTR scale out design	|Seconds	|DTR continues to be operational	|Clients are disconnected. Clients should reconnect to the DTR service running on the other nodes|
+|Monitoring	|Protected by Docker service (replicas)	|Seconds	|Grafana/Prometheus relocated	|Services are restarted on the surviving UCP nodes.|
+|Resource plane <br>(worker nodes) |Protected by Docker scale out design|	Seconds	|Less capacity|	Containers that were deployed as replicated services are restarted on the remaining worker nodes.|
 |Docker volumes	|SimpliVity		|    |At least 1 replica will remain	|Possible performance degradation if container is scheduled on node with no local replica|
-|User applications	|Depends on application (service or standalone container)	|||
+|User applications	|Depends on application (service or standalone container)	|||If applications have been deployed as stacks or services, Docker swarm will make sure the number of required replicas is maintained|
 
 
 
