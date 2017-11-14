@@ -1462,6 +1462,113 @@ Based on the lifecycle management details provided above, Figure 42 is a consoli
 **Figure 42.** High-level dependency map
 
 
+
+
+# Appendix A
+This is a recommended BOM for the 3 nodes Express Containers for Docker EE: Ops Edition.  Please verify with your HPE account team to ensure these are the latest BOM SKUs.
+
+**Table 21.** BOM for each SimpliVity node. Dual Socket – 14 cores per Socket, 5x1.92TB value flash
+
+|Product #|	Product Description	|Qty
+|Q8D81A	|HPE SimpliVity 380 Gen10 Node	|1
+|826856-B21|2.2GHz Xeon Gold 5120 processor (1 chip, 14 cores)	|1
+|826856-L21|2.2GHz Xeon Gold 5120 processor (1 chip, 14 cores)	|1
+|Q8D85A	HPE|SimpliVity 240G 12 DIMM FIO Kit|	2
+|Q8D91A	HPE|SimpliVity 380 SM Val Kit	|1
+|804331-B21|Smart Array P408i-a SR Gen10 (8 Internal Lanes/2GB Cache) 12G SAS Modular Controller	|1
+|826703-B21|HPE DL380 Gen10 Sys Insght Dsply Kit	|1
+|665243-B21|HPE Ethernet 10Gb 2P 560FLR-SFP+ Adptr (SFP+ connector)|1
+|864279-B21|HPE TPM 2.0 Gen10 Kit	|1
+|865414-B21|800W Flex Slot Platinum Hot Plug Low Halogen Power Supply Kit	|2
+|733664-B21|HP 2U Cable Management Arm for Easy Install Rail Kit	|1
+|867809-B21|HPE Gen10 2U Bezel Kit	|1
+|758959-B22|HP Legacy FIO Mode Setting	|1
+|874543-B21|HPE 1U Gen10 SFF Easy Install Rail Kit	|1
+||	**BD505A - HPE iLO Adv incl 3yr TSU	**
+|BD505A|	1-Svr Lic (HPE)|	1
+|Q8A60A	|HPE OmniStack 8-14c 2P Small SW	|1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
 [simplivity-ops-simple-architecture]: </ops/images/simplivity-ops-simple-architecture.png> "Figure 1. Solution Architecture"
 [dockerlb]: </ops/images/dockerlb.png> "Figure 2. Load balancer architecture"
 [provisioning]: </ops/images/provisioning.png> "figure 3. Provisioning Steps"
