@@ -1470,7 +1470,7 @@ This is a recommended BOM for the 3 nodes Express Containers for Docker EE: Ops 
 **Table 21.** BOM for each SimpliVity node. Dual Socket – 14 cores per Socket, 5x1.92TB value flash
 
 |Product #|	Product Description	|Qty
-|:------|:--------:|:--------:|
+|:------|:--------|:--------:|
 |Q8D81A	|HPE SimpliVity 380 Gen10 Node	|1
 |826856-B21|2.2GHz Xeon Gold 5120 processor (1 chip, 14 cores)	|1
 |826856-L21|2.2GHz Xeon Gold 5120 processor (1 chip, 14 cores)	|1
