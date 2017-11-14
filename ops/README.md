@@ -101,7 +101,7 @@ In addition to the above, the playbooks also set up:
 These nodes can live in any of the hosts and they are not redundant. The Prometheus and Grafana services are declared in a Docker `stack` as replicated `services` with one replica each, so if they fail, Docker EE will ensure that they are restarted on one of the UCP VMs. cAdvisor and node-exporter are declared in the same stack as global services, so Docker EE will ensure that there is always one copy of each running on every machine in the cluster.  The vSphere Docker volume plug-in stores data in a shared datastore that can be accessed from any machine in the cluster.
 
 ![Docker Load Balancing][dockerlb]
-
+**Figure 2.** Load balancer architecture
 
 # Sizing considerations
 
@@ -180,7 +180,7 @@ For Express Containers with Docker: Ops Edition, the following section describes
 This section describes in detail how to provision the environment described previously in the architecture section. This section describes in detail how to provision the environment described previously in the architecture section. The high level steps this guide will take are shown in Figure 3.
 
 ![Provisioning steps][provisioning]
-
+**Figure 3.** Provisioning steps
 
 ## Verify Prerequisites
 
@@ -234,47 +234,47 @@ The first step of the automated solution is the creation of a VM Template that y
 It would be possible to automate the creation of the template. However, as this is a one-off task, it is appropriate to do it manually. The steps to create a VM template manually are described below.
 
 
-1. Log in to vCenter and create a new Virtual Machine. In the dialog box, shown in Figure 2, select `Typical` and press `Next`.  
+1. Log in to vCenter and create a new Virtual Machine. In the dialog box, shown in Figure 4, select `Typical` and press `Next`.  
 ![Create New Virtual Machine][createnewvm]  
-**Figure 2.** Create New Virtual Machine  
+**Figure 4.** Create New Virtual Machine  
   
-2. Specify the name and location for your template, as shown in Figure 3.  
+2. Specify the name and location for your template, as shown in Figure 5.  
 ![Specify name and location for the virtual machine][vmnamelocation]  
-**Figure 3.** Specify name and location for the virtual machine  
+**Figure 5.** Specify name and location for the virtual machine  
   
-3. Choose the host/cluster on which you want to run this virtual machine, as shown in Figure 4.
+3. Choose the host/cluster on which you want to run this virtual machine, as shown in Figure 6.
 ![Choose host / cluster][choosehost]  
-**Figure 4.** Choose host / cluster 
+**Figure 6.** Choose host / cluster 
 
 
-4. Choose a datastore where the template files will be stored, as shown in Figure 5.
+4. Choose a datastore where the template files will be stored, as shown in Figure 7.
 ![Select storage for template files][selectstorage]  
-**Figure 5.** Select storage for template files
+**Figure 7.** Select storage for template files
 
 
-5. Choose the OS as shown in Figure 6, in this case Linux, RHEL7 64bit.
+5. Choose the OS as shown in Figure 8, in this case Linux, RHEL7 64bit.
 ![Choose operating system][chooseos]  
-**Figure 6.** Choose operating system
+**Figure 8.** Choose operating system
 
-6. Pick the network to attach to your template as shown in Figure 7. In this example there is only one NIC but depending on how you plan to architect your environment you might want to add more than one.
+6. Pick the network to attach to your template as shown in Figure 9. In this example there is only one NIC but depending on how you plan to architect your environment you might want to add more than one.
 ![Create network connections][createnetwork]  
-**Figure 7.** Create network connections
+**Figure 9.** Create network connections
 
 
-7. Create a primary disk as shown in Figure 8. The chosen size in this case is 50GB but 20GB should be typically enough.
+7. Create a primary disk as shown in Figure 10. The chosen size in this case is 50GB but 20GB should be typically enough.
 ![Create primary disk][createprimarydisk]  
-**Figure 8.** Create primary disk
+**Figure 10.** Create primary disk
 
 
-8. Confirm that the settings are right and press Finish as shown in Figure 9.
+8. Confirm that the settings are right and press Finish as shown in Figure 11.
 ![Confirm settings][confirmsettings]  
-**Figure 9.** Confirm settings
+**Figure 11.** Confirm settings
 
 
 
-9. The next step is to virtually insert the RHEL7 DVD, using the Settings of the newly created VM as shown in Figure 10. Select your ISO file in the Datastore ISO File Device Type and make sure that the “Connect at power on” checkbox is checked.  
+9. The next step is to virtually insert the RHEL7 DVD, using the Settings of the newly created VM as shown in Figure 12. Select your ISO file in the Datastore ISO File Device Type and make sure that the “Connect at power on” checkbox is checked.  
 ![Virtual machine properties][vmprops]  
-**Figure 10.** Virtual machine properties
+**Figure 12.** Virtual machine properties
 
 
 
