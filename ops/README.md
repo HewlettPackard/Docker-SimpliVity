@@ -645,7 +645,8 @@ All Monitoring-related variables are described in Table 9. The variables determi
 
 ### Logspout configuration
 
-All Logspout-related variables are described in Table 10.
+
+Logspout is a log router for Docker containers that runs inside Docker. It attaches to all containers on a host, then routes their logs to the central logging VM. All Logspout-related variables are described in Table 10.
 
 **Table 10.** Logspout variables
 
@@ -813,7 +814,7 @@ The provided dashboard is editable and extensible for those users who wish to ad
 
 
 ## Configure dummy VMs to backup Docker volumes
-The playbook [config_dummy_vms_for_docker_volumes_backup.yml][config_dummy_vms_for_docker_volumes_backup] ensures that you can backup Docker volumes that have been created using the vSphere plugin in SimpliVity. There is not a straight forward way to do this, so you need to use a workaround. Since all Docker volumes are going to be stored in the dockvols folder in the datastore(s), you need to create a ‘dummy’ VM per datastore. The `vmx`, `vmsd` and `vmkd` files from this VMs will have to be inside the `dockvols` folder, so when these VMs are backed up, the volumes are backed up as well. Obviously these VMs don’t need to take any resources and you can keep them powered off.
+The playbook [config_dummy_vms_for_docker_volumes_backup.yml][config_dummy_vms_for_docker_volumes_backup] ensures that you can backup Docker volumes that have been created using the vSphere plugin (vDVS) in SimpliVity. There is not a straight forward way to do this, so you need to use a workaround. Since all Docker volumes are going to be stored in the dockvols folder in the datastore(s), you need to create a ‘dummy’ VM per datastore. The `vmx`, `vmsd` and `vmkd` files from this VMs will have to be inside the `dockvols` folder, so when these VMs are backed up, the volumes are backed up as well. Obviously these VMs don’t need to take any resources and you can keep them powered off.
 
 
 ## Configure SimpliVity backups
@@ -942,7 +943,7 @@ In addition to having all logs centralized in a single place and the image scann
 ## Prevent tags from being overwritten
 By default, users with access to push to a repository, can push the images to a repository with the same tag multiple times. As an example, a user pushes an image to `library/wordpress:latest`, and later another user can push a different image with the same name and tag but different functionality. This might make it difficult to trace back the image to the build that generated it.
 
-To prevent this from happening you can configure a repository to be immutable. Once you push a tag, DTR won’t allow anyone else to push another tag with the same name.
+Docker DTR can prevent this from happening with the immutable tags feature that can be configured on a per repository basis. Once an image is pushed with a tag, that particular tag cannot be overwritten.
 
 More information about immutable tags can be found here: 
 https://docs.docker.com/datacenter/dtr/2.3/guides/user/manage-images/prevent-tags-from-being-overwritten/ 
