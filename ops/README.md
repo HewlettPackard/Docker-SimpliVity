@@ -278,35 +278,35 @@ It would be possible to automate the creation of the template. However, as this 
 
 
 
-10. Finally, you can optionally remove the Floppy Disk, as shown in Figure 11, as this is not required for the VM.
+10. Finally, you can optionally remove the Floppy Disk, as shown in Figure 13, as this is not required for the VM.
 ![Remove Floppy drive][removefloppy]  
-**Figure 11.** Remove Floppy drive
+**Figure 13.** Remove Floppy drive
 
-11. Power on the server and open the console to install the OS. On the welcome screen, as shown in Figure 12, pick your language and press `Continue`.
+11. Power on the server and open the console to install the OS. On the welcome screen, as shown in Figure 14, pick your language and press `Continue`.
 ![Welcome screen][welcomescreen]  
-**Figure 12.** Welcome screen
+**Figure 14.** Welcome screen
 
-12. The installation summary screen will appear, as shown in Figure 13.
+12. The installation summary screen will appear, as shown in Figure 15.
 ![Installation summary][installsummary]  
-**Figure 13.** Installation summary
+**Figure 15.** Installation summary
 
-13. Scroll down and click on Installation Destination, as shown in Figure 14.
+13. Scroll down and click on Installation Destination, as shown in Figure 16.
 ![Installation destination][installdestination]  
-**Figure 14.** Installation destination
+**Figure 16.** Installation destination
 
-14. Select your installation drive, as shown in Figure 15, and click Done.
+14. Select your installation drive, as shown in Figure 17, and click Done.
 ![Select installation drive][installdrive]  
-**Figure 15.** Select installation drive
+**Figure 17.** Select installation drive
 
 
-15. Click Begin Installation, using all the other default settings, and wait for the configuration of user settings dialog, shown in Figure 16.
+15. Click Begin Installation, using all the other default settings, and wait for the configuration of user settings dialog, shown in Figure 18.
 ![Configure user settings][configuser]  
-**Figure 16.** Configure user settings
+**Figure 18.** Configure user settings
 
 
-16. Select a root password, as shown in Figure 17.
+16. Select a root password, as shown in Figure 19.
 ![Set root password][setrootpwd]  
-**Figure 17.** Set root password
+**Figure 19.** Set root password
 
 
 
@@ -411,9 +411,9 @@ Now that the VM Template has the public key of the Ansible node, we’re ready t
 # shutdown –h now
 ```
 
-3. Once the Virtual Machine is ready and turned off, convert it to a template as shown in Figure 18.
+3. Once the Virtual Machine is ready and turned off, convert it to a template as shown in Figure 20.
 ![Convert to template][converttotemplate]  
-**Figure 18** Convert to template  
+**Figure 20** Convert to template  
 
 This completes the creation of the VM Template.
 
@@ -623,6 +623,8 @@ All network-related variables are mandatory and are described in Table 7.
 
 All Docker-related variables are mandatory and are described in Table 8.
 
+**Table 8.** Docker variables
+
 | Variable      | Description                              |
 | ------------- | ---------------------------------------- |
 | docker_ee_url | Note: This is a private link to your Docker EE subscription. This should be kept secret and defined in `group_vars/vault`. The value for `docker_ee_url` is the URL documented at the following address: https://docs.docker.com/engine/installation/linux/docker-ee/rhel/. |
@@ -665,7 +667,9 @@ Logspout is a log router for Docker containers that runs inside Docker. It attac
 
 ### Environment configuration
 
-All Environment-related variables should be here. All of them are described in the Table 7 below.
+All Environment-related variables should be here. All of them are described in the Table 11 below.
+
+**Table 11.** Environment variables
 
 | Variable | Description                              |
 | -------- | ---------------------------------------- |
@@ -810,10 +814,10 @@ The playbook [config_monitoring.yml][config_monitoring] configures a monitoring 
 #- include: playbooks/config_monitoring.yml
 ```
 
-After running the playbook, you can browse (HTTP) to the UCP load balancer IP address or FQDN on port 3000 (using a URL like `http://<ucp_lb>:3000`) and you will see the Grafana UI. The username and password are defaulted to `admin`/`admin`. When you log in, you can pick up the Dashboard that was imported by the playbooks (Click the Dashboard icon and select Docker Swarm Monitor) and observe the ongoing monitoring, as shown in Figure 19.
+After running the playbook, you can browse (HTTP) to the UCP load balancer IP address or FQDN on port 3000 (using a URL like `http://<ucp_lb>:3000`) and you will see the Grafana UI. The username and password are defaulted to `admin`/`admin`. When you log in, you can pick up the Dashboard that was imported by the playbooks (Click the Dashboard icon and select Docker Swarm Monitor) and observe the ongoing monitoring, as shown in Figure 21.
 
 ![Grafana UI][grafana]
-**Figure 19.** Grafana UI
+**Figure 21.** Grafana UI
 
 
 The deployed Grafana dashboard includes cluster-wide metrics, node-specific metrics, and container-specific metrics.  Monitored resources include disk I/O, memory, CPU utilization, network traffic, etc.  The dashboard also highlights any containers configured with memory limits and the current memory utilization rate based on those limits.  All of these metrics are provided via the node-exporter (responsible for OS and host metrics) and cAdvisor (responsible for container-specific metrics) instances running in the swarm.  For more information about these tools and the metrics they expose, see the documentation links in their respective GitHub repositories: https://github.com/prometheus/node_exporter and https://github.com/google/cadvisor. 
@@ -900,48 +904,48 @@ When DRS is enabled, it controls the placement of the VMs and as a result, the p
 
 
 # Accessing the UCP UI
-Once the playbooks have run and completed successfully, the Docker UCP UI should be available by browsing to the UCP load balancer or any of the nodes via HTTPS. The authentication screen will appear as shown in Figure 20:
+Once the playbooks have run and completed successfully, the Docker UCP UI should be available by browsing to the UCP load balancer or any of the nodes via HTTPS. The authentication screen will appear as shown in Figure 22:
 
 ![UCP authentication screen][ucpauth]
-**Figure 20.** UCP authentication screen
+**Figure 22.** UCP authentication screen
 
-Enter your credentials and the dashboard will be displayed as shown in Figure 21:
+Enter your credentials and the dashboard will be displayed as shown in Figure 23:
 
 ![UCP dashboard][ucpdash]
-**Figure 21.** UCP dashboard
+**Figure 23.** UCP dashboard
 
-You should see all the nodes information in your Docker environment by clicking on `Nodes`, as shown in Figure 22:
+You should see all the nodes information in your Docker environment by clicking on `Nodes`, as shown in Figure 24:
 
 ![Nodes information][nodesinfo]
-**Figure 22.** Nodes information
+**Figure 24.** Nodes information
 
 
-Click on `Services` to see the monitoring services that were installed during the playbooks execution, as shown in Figure 23:
+Click on `Services` to see the monitoring services that were installed during the playbooks execution, as shown in Figure 25:
 
 ![Services information][servicesinfo]
-**Figure 23.** Services information
+**Figure 25.** Services information
 
 # Accessing the DTR UI
-The Docker DTR UI should be available by browsing to the DTR load balancer or any of the nodes via HTTPS. The authentication screen will appear as shown in Figure 24:
+The Docker DTR UI should be available by browsing to the DTR load balancer or any of the nodes via HTTPS. The authentication screen will appear as shown in Figure 26:
 
 ![DTR authentication screen][dtrauth]
-**Figure 24.** DTR authentication screen
+**Figure 26.** DTR authentication screen
 
 
-Enter your UCP credentials and you should see the empty list of repositories as shown in Figure 25:
+Enter your UCP credentials and you should see the empty list of repositories as shown in Figure 27:
 
 ![DTR repositories][dtrrepos]
-**Figure 25.** DTR repositories
+**Figure 27.** DTR repositories
 
-If you navigate to `Settings > Security`, you should see the Image Scanning feature already enabled as shown in Figure 26. (Note that you need an Advanced license to have access to this feature).
+If you navigate to `Settings > Security`, you should see the Image Scanning feature already enabled as shown in Figure 28. (Note that you need an Advanced license to have access to this feature).
 
 ![Image scanning in DTR][imagescanning]
-**Figure 26.** Image scanning in DTR
+**Figure 28.** Image scanning in DTR
 
-If you navigate to Settings > Storage, you should see that DTR is configured to use shared NFS storage as shown in Figure 27.
+If you navigate to Settings > Storage, you should see that DTR is configured to use shared NFS storage as shown in Figure 29.
 
 ![DTR storage settings][DTRstorage]
-**Figure 27.** DTR storage settings
+**Figure 29.** DTR storage settings
 
 # Security considerations
 In addition to having all logs centralized in a single place and the image scanning feature enabled for the DTR nodes, there are other guidelines that should be followed in order to keep your Docker environment as secure as possible. The HPE Reference Configuration paper for securing Docker on HPE Hardware places a special emphasis on securing Docker in DevOps environments and covers best practices in terms of Docker security. The document can be found here: http://h20195.www2.hpe.com/V2/GetDocument.aspx?docname=a00020437enw. Some newer Docker security features that were not covered in the reference configuration are outlined below.
@@ -1116,72 +1120,72 @@ The backup policy `clh-gold` is assigned to the special VM that is used to backu
 
 ## Manual backup
 
-Rather than waiting for an automated backup to take place, you can create a backup immediately. Right-click on the special VM, in this case  `clh-VM-in-dockervols-Docker_CLH`, select `All HPE SimpliVity Actions` and choose `Backup Virtual Machine` as shown in Figure 28.
+Rather than waiting for an automated backup to take place, you can create a backup immediately. Right-click on the special VM, in this case  `clh-VM-in-dockervols-Docker_CLH`, select `All HPE SimpliVity Actions` and choose `Backup Virtual Machine` as shown in Figure 30.
 
 
 ![Backup virtual machine][backupvirtualmachine]
-**Figure 28.** Backup virtual machine
+**Figure 30.** Backup virtual machine
 
-You can specify a backup name, in this case 'manual_backup_test_01', as shown in Figure 29.
+You can specify a backup name, in this case 'manual_backup_test_01', as shown in Figure 31.
 
 ![Backup virtual machine details][backupvmdetails]
 
-**Figure 29.** Backup virtual machine details
+**Figure 31.** Backup virtual machine details
 
 
 ## Restore
 
-Right-click on the special VM, in this case `clh-VM-in-dockervols-Docker_CLH` and on the `Configure` tab, select `HPE SimpliVity Search Backups` as shown in Figure 30.
+Right-click on the special VM, in this case `clh-VM-in-dockervols-Docker_CLH` and on the `Configure` tab, select `HPE SimpliVity Search Backups` as shown in Figure 32.
 
 ![Search backups][searchbackups]
-**Figure 30.** Search backups
+**Figure 32.** Search backups
 
 You can narrow the search based on the time of the backup. If you are restoring from an automatic backup, the name will be the timestamp of the backup. If you are restoring from a manual backup, the name will be the one you specified earlier when creating the backup, in this case `manual_backup_test_01`.
 
-Right-click on the backup you wish to restore, as shown in Figure 31, and select 'Restore Virtual Machine'.
+Right-click on the backup you wish to restore, as shown in Figure 33, and select 'Restore Virtual Machine'.
 
 ![Restore virtual machine][restorevm]
-**Figure 31.** Restore virtual machine
+**Figure 33.** Restore virtual machine
 
 
-In the details screen, shown in Figure 32, you can choose a name for the new virtual machine and specify the datastore.
+In the details screen, shown in Figure 34, you can choose a name for the new virtual machine and specify the datastore.
 
 ![Restore virtual machine details][restorevmdetails]
 
-**Figure 32.** Restore virtual machine details
+**Figure 34.** Restore virtual machine details
 
 The name of the new virtual machine will default to a combination of the special VM name and a timestamp, in this instance `clh-VM-in-dockervols-Docker_CLH-2017-10-26-09h47m00s`. The datastore should be the one specified in the `datastores` array from the `group_vars/vars` file. Click `OK` to restore the virtual machine.
 
 
-Once the virtual machine has been restored, navigate to the datastore and locate the new VM in the file browser, as shown in Figure 33.
+Once the virtual machine has been restored, navigate to the datastore and locate the new VM in the file browser, as shown in Figure 35.
 
 
 ![Browse to restored virtual machine][browserestoredvm]
-**Figure 33.** Browse to restored virtual machine
+**Figure 35.** Browse to restored virtual machine
 
 
-Navigate to the folder named `1111111-1111-1111-1111-...` as shown in Figure 34. You will see files with names based on the Docker volume name that you used at the start, in this instance `test_01.vmdk` and `test_01-478...f1f.vmdf` 
+Navigate to the folder named `1111111-1111-1111-1111-...` as shown in Figure 36. You will see files with names based on the Docker volume name that you used at the start, in this instance `test_01.vmdk` and `test_01-478...f1f.vmdf` 
 
 ![Locate vmdk and vmdf files][vmdkfiles]
-**Figure 34.** Locate vmdk and vmdf files
+**Figure 36.** Locate vmdk and vmdf files
 
 
-You need to move these two files to the `dockvols` sub-directory named `1111111-1111-1111-1111-...` in the same datastore. Right click on the `.vmdk` file and choose `Move to...` as shown in Figure 35.
+You need to move these two files to the `dockvols` sub-directory named `1111111-1111-1111-1111-...` in the same datastore. Right click on the `.vmdk` file and choose `Move to...` as shown in Figure 37.
 
 ![Move files][moveto]
-**Figure 35.** Move files
+**Figure 37.** Move files
 
 
-Set the destination folder to the `dockvols` sub-directory named `1111111-1111-1111-1111-...` as shown in Figure 36.
+Set the destination folder to the `dockvols` sub-directory named `1111111-1111-1111-1111-...` as shown in Figure 38.
 
 ![Move to destination][destination]
 
-**Figure 36.** Move to destination
+**Figure 38.** Move to destination
 
-It is only necessary to move the `.vmdk` file as the `.vmdf` file will automatically follow. The `dockvols` sub-directory named `1111111-1111-1111-1111-...` should now contain both files as shown in Figure 37.
+It is only necessary to move the `.vmdk` file as the `.vmdf` file will automatically follow. The `dockvols` sub-directory named `1111111-1111-1111-1111-...` should now contain both files as shown in Figure 39.
 
 ![Files moved to destination][moved]
-**Figure 37.** Files moved to destination
+**Figure 39.** Files moved to destination
 
 
 
@@ -1220,12 +1224,12 @@ For more information, see https://docs.docker.com/datacenter/ucp/2.2/guides/admi
 
 Lifecycle management with respect to this solution refers to the maintenance and management of software and hardware of various components within that build up the solution stack. Lifecycle management is required to keep the solution up-to date and ensure that latest versions of the software are running in to provide optimal performance, security and fix any existing defects within the product.
 
-In this section, we will cover life cycle management of the different components that are used in this solution. The architectural diagram of the solution in Figure 38 shows the software and hardware stacks that make up the solution. Each stack is shown in a different color.
+In this section, we will cover life cycle management of the different components that are used in this solution. The architectural diagram of the solution in Figure 40 shows the software and hardware stacks that make up the solution. Each stack is shown in a different color.
 
 
 ![Solution stack][solutionstack]
 
-**Figure 38.** Solution stack
+**Figure 40.** Solution stack
 
 
 Based on the diagram above, lifecycle of the following stacks need to be maintained and managed.
@@ -1242,11 +1246,11 @@ The general practice and recommendation is to follow a bottom-up approach for up
 
 ## SimpliVity environment
 
-The SimpliVity environment is made up of proprietary SimpliVity software, VMware software and HPE firmware. There are interdependencies between the various components that need to be accounted and are provided in the table below. The components in Table 15 are part of the SimpliVity environment that require lifecycle management.
+The SimpliVity environment is made up of proprietary SimpliVity software, VMware software and HPE firmware. There are interdependencies between the various components that need to be accounted and are provided in the table below. The components in Table 14 are part of the SimpliVity environment that require lifecycle management.
 
 In general, ensure that the software bits for the Arbiter and vSphere extension corresponding to an OmniStack release are used.
 
-**Table 15.** SimpliVity components
+**Table 14.** SimpliVity components
 
 <table>
   <tr>
@@ -1277,11 +1281,11 @@ In general, ensure that the software bits for the Arbiter and vSphere extension 
 
 ## VMware Components 
 
-The SimpliVity solution used in this deployment guide is built on VMware vSphere. VMware ESXi and vCenter (see Table 16) are the two components from VMware that are leveraged by the SimpliVity software.
+The SimpliVity solution used in this deployment guide is built on VMware vSphere. VMware ESXi and vCenter (see Table 15) are the two components from VMware that are leveraged by the SimpliVity software.
 
 The VMware ESXi and vCenter versions must be compatible with each other and with the HPE OmniStack version that is running on the SimpliVity systems.
 
-**Table 16.** VMware components
+**Table 15.** VMware components
 
 <table>
   <tr>
@@ -1308,9 +1312,9 @@ The VMware ESXi and vCenter versions must be compatible with each other and with
 
 ## HPE Server Software
 
-SimpliVity servers are based on HPE server platforms and require compatible firmware version to function with HPE OmniStack Software, as shown in Table 17.
+SimpliVity servers are based on HPE server platforms and require compatible firmware version to function with HPE OmniStack Software, as shown in Table 16.
 
-**Table 17.** HPE server components
+**Table 16.** HPE server components
 
 <table>
   <tr>
@@ -1332,11 +1336,11 @@ SimpliVity servers are based on HPE server platforms and require compatible firm
 
 ## vSphere Docker Volume Service Plug-in
 
-vSphere Docker Volume service plug-in is part of an open source project by VMware that enables running stateful containers by providing persistent docker volumes leveraging existing storage technology from VMware. There are two parts to the plug-in, namely, client software and server software (see Table 18). Every version of the plug-in that is released includes both pieces of software and it is imperative that the version number installed on the client side and server side are the same.
+vSphere Docker Volume service plug-in is part of an open source project by VMware that enables running stateful containers by providing persistent docker volumes leveraging existing storage technology from VMware. There are two parts to the plug-in, namely, client software and server software (see Table 17). Every version of the plug-in that is released includes both pieces of software and it is imperative that the version number installed on the client side and server side are the same.
 
 When updating the Docker Volume service plug-in, ensure the ESXi version you are running is supported and that the client software is compatible with the operating system.
 
-**Table 18.**	 vSphere Docker Volume service components
+**Table 17.**	 vSphere Docker Volume service components
 
 <table>
   <tr>
@@ -1363,9 +1367,9 @@ When updating the Docker Volume service plug-in, ensure the ESXi version you are
 
 ## Red Hat Enterprise Linux operating system
 
-This solution is built using Red Hat Enterprise Linux (see Table 19) as the base operating system.  When upgrading the operating system on the VMs, first verify that the OS version is compatible to run Docker EE by looking at the Docker OS compatibility metric.
+This solution is built using Red Hat Enterprise Linux (see Table 18) as the base operating system.  When upgrading the operating system on the VMs, first verify that the OS version is compatible to run Docker EE by looking at the Docker OS compatibility metric.
 
-**Table 19.** Operating system
+**Table 18.** Operating system
 
 <table>
   <tr>
@@ -1385,15 +1389,15 @@ This solution is built using Red Hat Enterprise Linux (see Table 19) as the base
 
 ## Docker EE Environment
 
-Each release of Docker Enterprise Edition contains three technology components – UCP, DTR and the Docker Daemon or Engine. It is imperative that the components belonging to the same version are deployed or upgraded together – see Table 20. 
+Each release of Docker Enterprise Edition contains three technology components – UCP, DTR and the Docker Daemon or Engine. It is imperative that the components belonging to the same version are deployed or upgraded together – see Table 19. 
 
-A banner will be displayed on the UI, as shown in Figure 39, when an update is available for UCP or DTR. You can start the upgrade process by clicking on the banner.
+A banner will be displayed on the UI, as shown in Figure 41, when an update is available for UCP or DTR. You can start the upgrade process by clicking on the banner.
 
 ![Docker update notification][dockerupdate]
-**Figure 39.** Docker update notification
+**Figure 41.** Docker update notification
 
 
-**Table 20.** Docker EE components
+**Table 19.** Docker EE components
 
 
 <table>
@@ -1424,9 +1428,9 @@ A banner will be displayed on the UI, as shown in Figure 39, when an update is a
 
 ## Monitoring Tools
 
-Prometheus and Grafana monitoring tools (see Table 21) run as containers within the Docker environment. Newer versions of these tools can be deployed by pulling the Docker images from Docker Hub. Verify that the version of Prometheus that is being used is compatible with the version of Docker EE.
+Prometheus and Grafana monitoring tools (see Table 20) run as containers within the Docker environment. Newer versions of these tools can be deployed by pulling the Docker images from Docker Hub. Verify that the version of Prometheus that is being used is compatible with the version of Docker EE.
 
-**Table 21.** Monitoring tools
+**Table 20.** Monitoring tools
 
 <table>
   <tr>
@@ -1451,61 +1455,61 @@ Prometheus and Grafana monitoring tools (see Table 21) run as containers within 
 
 ## High-Level dependency map
 
-Based on the lifecycle management details provided above, Figure 40 is a consolidated diagram that shows the dependencies between the various components in the solution stack. Bi-directional arrows between components indicate that the two components have an interoperability dependence. Before upgrading a component to a newer version, you must ensure that the new version of that component is compatible the current version of any dependent components.
+Based on the lifecycle management details provided above, Figure 42 is a consolidated diagram that shows the dependencies between the various components in the solution stack. Bi-directional arrows between components indicate that the two components have an interoperability dependence. Before upgrading a component to a newer version, you must ensure that the new version of that component is compatible the current version of any dependent components.
 
 ![High-level dependency map][dependencymap]
 
-**Figure 40.** High-level dependency map
+**Figure 42.** High-level dependency map
 
 
 [simplivity-ops-simple-architecture]: </ops/images/simplivity-ops-simple-architecture.png> "Figure 1. Solution Architecture"
-[dockerlb]: </ops/images/dockerlb.png>
-[provisioning]: </ops/images/provisioning.png> "Provisioning Steps"
-[createnewvm]: </ops/images/createnewvirtualmachine.png> "Figure 2. Create New Virtual Machine"
-[vmnamelocation]: </ops/images/vmnamelocation.png> "Figure 3. Specify name and location for the virtual machine" 
-[choosehost]: </ops/images/choosehost.png> "Figure 4. Choose host / cluster"
-[selectstorage]: </ops/images/selectstorage.png> "Figure 5. Select storage for template files"
-[chooseos]: </ops/images/chooseos.png> "Figure 6. Choose operating system"
-[createnetwork]: </ops/images/createnetwork.png> "Figure 7. Create network connections"
-[createprimarydisk]: </ops/images/createprimarydisk.png> "Figure 8. Create primary disk"
-[confirmsettings]: </ops/images/confirmsettings.png> "Figure 9. Confirm settings"
-[vmprops]: </ops/images/vmprops.png> "Figure 10. Virtual machine properties"
-[removefloppy]: </ops/images/removefloppy.png> "Figure 11. Remove Floppy drive"
-[welcomescreen]: </ops/images/welcomescreen.png> "Figure 12. Welcome screen"
-[installsummary]: </ops/images/installsummary.png> "Figure 13. Installation summary"
-[installdestination]: </ops/images/installdestination.png> "Figure 14. Installation destination"
-[installdrive]: </ops/images/installdrive.png> "Figure 15. Select installation drive"
-[configuser]: </ops/images/configuser.png> "Figure 16. Configure user settings"
-[setrootpwd]: </ops/images/setrootpwd.png> "Figure 17. Set root password"
+[dockerlb]: </ops/images/dockerlb.png> "Figure 2. Load balancer architecture"
+[provisioning]: </ops/images/provisioning.png> "figure 3. Provisioning Steps"
+[createnewvm]: </ops/images/createnewvirtualmachine.png> "Figure 4. Create New Virtual Machine"
+[vmnamelocation]: </ops/images/vmnamelocation.png> "Figure 5. Specify name and location for the virtual machine" 
+[choosehost]: </ops/images/choosehost.png> "Figure 6. Choose host / cluster"
+[selectstorage]: </ops/images/selectstorage.png> "Figure 7. Select storage for template files"
+[chooseos]: </ops/images/chooseos.png> "Figure 8. Choose operating system"
+[createnetwork]: </ops/images/createnetwork.png> "Figure 9. Create network connections"
+[createprimarydisk]: </ops/images/createprimarydisk.png> "Figure 10. Create primary disk"
+[confirmsettings]: </ops/images/confirmsettings.png> "Figure 11. Confirm settings"
+[vmprops]: </ops/images/vmprops.png> "Figure 12. Virtual machine properties"
+[removefloppy]: </ops/images/removefloppy.png> "Figure 13. Remove Floppy drive"
+[welcomescreen]: </ops/images/welcomescreen.png> "Figure 14. Welcome screen"
+[installsummary]: </ops/images/installsummary.png> "Figure 15. Installation summary"
+[installdestination]: </ops/images/installdestination.png> "Figure 16. Installation destination"
+[installdrive]: </ops/images/installdrive.png> "Figure 17. Select installation drive"
+[configuser]: </ops/images/configuser.png> "Figure 18. Configure user settings"
+[setrootpwd]: </ops/images/setrootpwd.png> "Figure 19. Set root password"
 
 
 
-[converttotemplate]: </ops/images/converttotemplate.png> "Figure 18. Convert to template"
-[grafana]: </ops/images/grafana.png> "Figure 19. Grafana UI"
-[ucpauth]: </ops/images/ucpauth.png> "Figure 20. UCP authentication screen"
-[ucpdash]: </ops/images/ucpdash.png> "Figure 21. UCP dashboard"
-[nodesinfo]: </ops/images/nodesinfo.png> "Figure 22. Nodes information"
-[servicesinfo]: </ops/images/servicesinfo.png> "Figure 23. Services information"
-[dtrauth]: </ops/images/dtrauth.png> "Figure 24. DTR authentication screen"
-[dtrrepos]: </ops/images/dtrrepos.png> "Figure 25. DTR repositories"
-[imagescanning]: </ops/images/imagescanning.png> "Figure 26. Image scanning in DTR"
-[DTRstorage]: </ops/images/DTRstorage.png> "Figure 27. DTR storage settings"
+[converttotemplate]: </ops/images/converttotemplate.png> "Figure 20. Convert to template"
+[grafana]: </ops/images/grafana.png> "Figure 21. Grafana UI"
+[ucpauth]: </ops/images/ucpauth.png> "Figure 22. UCP authentication screen"
+[ucpdash]: </ops/images/ucpdash.png> "Figure 23. UCP dashboard"
+[nodesinfo]: </ops/images/nodesinfo.png> "Figure 24. Nodes information"
+[servicesinfo]: </ops/images/servicesinfo.png> "Figure 25. Services information"
+[dtrauth]: </ops/images/dtrauth.png> "Figure 26. DTR authentication screen"
+[dtrrepos]: </ops/images/dtrrepos.png> "Figure 27. DTR repositories"
+[imagescanning]: </ops/images/imagescanning.png> "Figure 28. Image scanning in DTR"
+[DTRstorage]: </ops/images/DTRstorage.png> "Figure 29. DTR storage settings"
 
-[backupvirtualmachine]: </ops/images/backupvirtualmachine.png> "Figure 28. Backup virtual machine"
-[backupvmdetails]: </ops/images/backupvmdetails.png> "Figure 29. Backup virtual machine details"
-[searchbackups]: </ops/images/searchbackups.png> "Figure 30. Search backups"
-[restorevm]: </ops/images/restorevm.png> "Figure 31. Restore virtual machine"
-[restorevmdetails]: </ops/images/restorevmdetails.png> "Figure 32. Restore virtual machine details"
-[browserestoredvm]: </ops/images/browserestoredvm.png> "Figure 33. Browse to restored virtual machine"
-[vmdkfiles]: </ops/images/vmdkfiles.png> "Figure 34. Locate vmdk and vmdf files"
-[moveto]: </ops/images/moveto.png> "Figure 35. Move files"
-[destination]: </ops/images/destination.png> "Figure 36. Move to destination"
-[moved]: </ops/images/moved.png> "Figure 37. Files moved to destination"
+[backupvirtualmachine]: </ops/images/backupvirtualmachine.png> "Figure 30. Backup virtual machine"
+[backupvmdetails]: </ops/images/backupvmdetails.png> "Figure 31. Backup virtual machine details"
+[searchbackups]: </ops/images/searchbackups.png> "Figure 32. Search backups"
+[restorevm]: </ops/images/restorevm.png> "Figure 33. Restore virtual machine"
+[restorevmdetails]: </ops/images/restorevmdetails.png> "Figure 34. Restore virtual machine details"
+[browserestoredvm]: </ops/images/browserestoredvm.png> "Figure 35. Browse to restored virtual machine"
+[vmdkfiles]: </ops/images/vmdkfiles.png> "Figure 36. Locate vmdk and vmdf files"
+[moveto]: </ops/images/moveto.png> "Figure 37. Move files"
+[destination]: </ops/images/destination.png> "Figure 38. Move to destination"
+[moved]: </ops/images/moved.png> "Figure 39. Files moved to destination"
 
 
-[solutionstack]: </ops/images/solutionstack.png> "Figure 38. Solution stack"
-[dockerupdate]: </ops/images/dockerupdate.png> "Figure 39. Docker update notification"
-[dependencymap]: </ops/images/dependencymap.png> "Figure 40. High-level dependency map"
+[solutionstack]: </ops/images/solutionstack.png> "Figure 40. Solution stack"
+[dockerupdate]: </ops/images/dockerupdate.png> "Figure 41. Docker update notification"
+[dependencymap]: </ops/images/dependencymap.png> "Figure 42. High-level dependency map"
 
 
 [create_vms]: </playbooks/create_vms.yml>
