@@ -1485,7 +1485,7 @@ This is a recommended BOM for the 3 nodes Express Containers for Docker EE: Ops 
 |867809-B21|HPE Gen10 2U Bezel Kit	|1
 |758959-B22|HP Legacy FIO Mode Setting	|1
 |874543-B21|HPE 1U Gen10 SFF Easy Install Rail Kit	|1
-||	**BD505A - HPE iLO Adv incl 3yr TSU	**
+||	BD505A - HPE iLO Adv incl 3yr TSU
 |BD505A|	1-Svr Lic (HPE)|	1
 |Q8A60A	|HPE OmniStack 8-14c 2P Small SW	|1
 
