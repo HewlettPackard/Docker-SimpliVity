@@ -205,7 +205,7 @@ You must enable vSphere High Availability (HA) to support virtual machine failov
 
 More information on enabling vSphere HA and configuring Admission Control Policy is available in the HPE SimpliVity documentation. Log in to the HPE Support Center at https://www.hpe.com/us/en/support.html and search for “HPE SimpliVity 380”. The administration guide is listed when you select the User document type.
 
-**Note: ** You should not use the default Admission Control Policy. Instead, you should calculate the memory and CPU requirements that are specific to your environment.
+**Note:** You should not use the default Admission Control Policy. Instead, you should calculate the memory and CPU requirements that are specific to your environment.
 
 
 ## Install vSphere Docker Volume Service driver on all ESXi hosts
