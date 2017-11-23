@@ -197,7 +197,6 @@ You must assemble the information required to assign values to each and every va
 |NTP Services|	You need time services configured in your environment. The solution being deployed (including Docker) uses certificates and certificates are time sensitive. You will need the IP addresses of your time servers (NTP).
 |RHEL Subscription	|A RHEL subscription is required to pull extra packages that are not on the DVD.|
 |Docker Prerequisites|	You will need a URL for the official Docker EE software download and a license file.  Refer to the Docker documentation to learn more about this URL and the licensing requirements here: https://docs.docker.com/engine/installation/linux/docker-ee/rhel/ in the section entitled "Docker EE repository URL"
-
 |Proxy	|The playbooks pull the Docker packages from the Internet. If you environment accesses the Internet through a proxy, you will need the details of the proxy including the fully qualified domain name and the port number.
 
 
@@ -205,6 +204,7 @@ You must assemble the information required to assign values to each and every va
 You must enable vSphere High Availability (HA) to support virtual machine failover during an HA event such as a host failure. Sufficient CPU and memory resources must be reserved across the system so that all VMs on the affected host(s) can fall over to remaining available hosts in the system. You configure an Admission Control Policy (ACP) to specify the percentage CPU and memory to reserve on all the hosts in the cluster to support HA functionality. 
 
 More information on enabling vSphere HA and configuring Admission Control Policy is available in the HPE SimpliVity documentation. Log in to the HPE Support Center at https://www.hpe.com/us/en/support.html and search for “HPE SimpliVity 380”. The administration guide is listed when you select the User document type.
+
 **Note: ** You should not use the default Admission Control Policy. Instead, you should calculate the memory and CPU requirements that are specific to your environment.
 
 
@@ -1494,7 +1494,7 @@ This is a recommended BOM for the 3 nodes Express Containers for Docker EE: Ops 
 
 [simplivity-ops-simple-architecture]: </ops/images/simplivity-ops-simple-architecture.png> "Figure 1. Solution Architecture"
 [dockerlb]: </ops/images/dockerlb.png> "Figure 2. Load balancer architecture"
-[provisioning]: </ops/images/provisioning.png> "figure 3. Provisioning Steps"
+[provisioning]: </ops/images/provisioning.png> "Figure 3. Provisioning steps"
 [createnewvm]: </ops/images/createnewvirtualmachine.png> "Figure 4. Create New Virtual Machine"
 [vmnamelocation]: </ops/images/vmnamelocation.png> "Figure 5. Specify name and location for the virtual machine" 
 [choosehost]: </ops/images/choosehost.png> "Figure 6. Choose host / cluster"
