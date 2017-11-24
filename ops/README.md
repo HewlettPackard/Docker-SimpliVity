@@ -343,7 +343,7 @@ The following articles explain how you can create a local mirror of the Red Hat 
 https://access.redhat.com/solutions/23016  
 https://access.redhat.com/solutions/7227
 
-Before converting the VM to a template, you will need to setup up access for the Ansible host to configure the individual VMs. This is explained in the next section. 
+Before converting the VM to a template, you will need to setup access for the Ansible host to configure the individual VMs. This is explained in the next section. 
 
 
 
@@ -1542,22 +1542,22 @@ This is a recommended BOM for the 3 nodes Express Containers for Docker EE: Ops 
 [dependencymap]: </ops/images/dependencymap.png> "Figure 42. High-level dependency map"
 
 
-[create_vms]: </playbooks/create_vms.yml>
-[config_networking]: </playbooks/config_networking.yml>
-[distribute_keys]: </playbooks/distribute_keys.yml>
-[config_subscription]: </playbooks/config_subscription.yml>
-[install_haproxy]: </playbooks/install_haproxy.yml>
-[install_ntp]: </playbooks/install_ntp.yml>
-[install_docker]: </playbooks/install_docker.yml>
-[install_rsyslog]: </playbooks/install_rsyslog.yml>
-[config_docker_lvs]: </playbooks/config_docker_lvs.yml>
-[docker_post_config]: </playbooks/docker_post_config.yml>
-[install_nfs_server]: </playbooks/install_nfs_server.yml>
-[install_nfs_clients]: </playbooks/install_nfs_clients.yml>
-[install_ucp_nodes]: </playbooks/install_ucp_nodes.yml>
-[install_dtr_nodes]: </playbooks/install_dtr_nodes.yml>
-[install_worker_nodes]: </playbooks/install_worker_nodes.yml>
-[config_monitoring]: </playbooks/config_monitoring.yml>
-[config_dummy_vms_for_docker_volumes_backup]: </playbooks/config_dummy_vms_for_docker_volumes_backup.yml>
-[config_simplivity_backups]: </playbooks/config_simplivity_backups.yml>
+[create_vms]: </ops/playbooks/create_vms.yml>
+[config_networking]: </ops/playbooks/config_networking.yml>
+[distribute_keys]: </ops/playbooks/distribute_keys.yml>
+[config_subscription]: </ops/playbooks/config_subscription.yml>
+[install_haproxy]: </ops/playbooks/install_haproxy.yml>
+[install_ntp]: </ops/playbooks/install_ntp.yml>
+[install_docker]: </ops/playbooks/install_docker.yml>
+[install_rsyslog]: </ops/playbooks/install_rsyslog.yml>
+[config_docker_lvs]: </ops/playbooks/config_docker_lvs.yml>
+[docker_post_config]: </ops/playbooks/docker_post_config.yml>
+[install_nfs_server]: </ops/playbooks/install_nfs_server.yml>
+[install_nfs_clients]: </ops/playbooks/install_nfs_clients.yml>
+[install_ucp_nodes]: </ops/playbooks/install_ucp_nodes.yml>
+[install_dtr_nodes]: </ops/playbooks/install_dtr_nodes.yml>
+[install_worker_nodes]: </ops/playbooks/install_worker_nodes.yml>
+[config_monitoring]: </ops/playbooks/config_monitoring.yml>
+[config_dummy_vms_for_docker_volumes_backup]: </ops/playbooks/config_dummy_vms_for_docker_volumes_backup.yml>
+[config_simplivity_backups]: </ops/playbooks/config_simplivity_backups.yml>
 
