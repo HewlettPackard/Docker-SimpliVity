@@ -145,9 +145,9 @@ For HPE Express Containers with Docker EE: Ops Edition, the following tables des
 
 
 
-**Table 2.** Memory allocation
+**Table 2.** Memory allocation (GB)
 
-| RAM | simply01 | simply02 | simply03 |
+| RAM (GB) | simply01 | simply02 | simply03 |
 |:------|:--------:|:--------:|:--------:|
 | ucp1  |	8      |          |	         |
 | ucp2  |          |8         |          |
