@@ -540,7 +540,7 @@ All VMware-related variables are mandatory and are described in Table 5.
 | datastores               | List of datastores to be used, in list format, i.e. ['`Datastore1`','`Datastore2`'...]. Please note that from a Simplivity perspective, it is a best practice to use only one Datastore. Using more than one will not provide any advantages in terms of reliability and will add additional complexity. This datastore must exist before you run the playbooks. |
 | disk2                    | UNIX® name of the second disk for the Docker VMs. Typically `/dev/sdb` |
 | disk2\_part              | UNIX name of the partition of the second disk for the Docker VMs. Typically `/dev/sdb1` |
-| vsphere\_plugin\_version | Version of the vSphere plugin for Docker. The default is 0.18 which is the latest version at the time of writing this document. The version of the plugin should match the version of the vSphere Installation Bundle (VIB) that you installed on the ESXi servers. |
+| vsphere\_plugin\_version | Version of the vSphere plugin for Docker. The default is 0.19 which is the latest version at the time of writing this document. The version of the plugin should match the version of the vSphere Installation Bundle (VIB) that you installed on the ESXi servers. |
 
 
 
