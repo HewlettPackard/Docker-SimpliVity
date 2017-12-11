@@ -10,7 +10,7 @@ folder_name: '/clh'
 datastores: ['Docker_CLH']
 disk2: '/dev/sdb'
 disk2_part: '/dev/sdb1'
-vsphere_plugin_version: '0.17' # was 0.12
+vsphere_plugin_version: '0.19' # was 0.17
 
 # Simplivity configuration
 simplivity_username: 'Administrator@vsphere.local'
