@@ -1,0 +1,45 @@
+###
+# Copyright (2017) Hewlett Packard Enterprise Development LP
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# You may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+###
+---
+- hosts: worker
+  gather_facts: false
+  become_user: root
+  become: true
+
+  vars_files:
+    - ../group_vars/vars
+
+  environment: "{{ env }}"
+
+  tasks:
+    - name: Open required ports for Workers
+      command: firewall-cmd --permanent --zone=public --add-port=443/tcp --add-port=2377/tcp --add-port=4789/tcp --add-port=4789/udp --add-port=7946/tcp --add-port=7946/udp --add-port=12376/tcp
+
+    - name: Reload firewalld configuration
+      command: firewall-cmd --reload
+
+    - name: Get worker token
+      include_vars:
+        file: /tmp/worker_token
+        name: add_worker
+
+    - name: Check if node already belongs to the swarm
+      shell: docker info | grep "Swarm{{':'}} inactive" | wc -l
+      register: swarm_inactive
+
+    - name: Add Worker nodes to the swarm
+      command: "{{ add_worker.token }}"
+      when: swarm_inactive.stdout == "1"

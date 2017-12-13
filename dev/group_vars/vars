@@ -1,0 +1,67 @@
+---
+# VMware information
+vcenter_hostname: 'dhvc.am2.cloudra.local'
+vcenter_username: 'administrator@vsphere.local'
+vcenter_validate_certs: no
+datacenter: 'PCE-DC'
+vm_username: 'root'
+vm_template: 'nm-template'
+folder_name: '/nm'
+datastores: ['docker_share_data1','docker_share_data2']
+disk2: '/dev/sdb'
+disk2_part: '/dev/sdb1'
+vsphere_plugin_version: '0.19' # was 0.12
+
+# Simplivity information
+simplivity_username: 'David.Pintor@DEMO'
+omnistack_ovc: ['10.20.4.166']
+backup_policies:
+ - name: 'dp-bronze'
+   days: 'All'
+   start_time: '11:30'
+   frequency: '1440'
+   retention: '45360'
+ - name: 'dp-gold'
+   days: 'All'
+   start_time: '00:00'
+   frequency: '60'
+   retention: '45360'
+dummy_vm_prefix: 'dummyVM'
+docker_volumes_policy: 'dp-gold'
+
+# Networking
+nic_name: 'ens192'
+gateway: '10.10.172.1'
+dns: ['10.10.173.1']
+domain_name: 'am2.cloudra.local'
+ntp_servers: [' 10.12.2.1','0.us.pool.net.org','1.us.pool.net.org']
+
+# Docker settings
+#docker_ee_url: 'https://storebits.docker.com/ee/rhel/sub-11f3b7bb-6f60-4b0b-9c9b-fd9ad9b8f3ab'
+docker_ee_url: 'https://storebits.docker.com/ee/rhel/sub-59bd1dc7-18a8-41c6-ab4a-493d915b4495'
+rhel_version: '7.3'
+dtr_version: '2.4.0'
+ucp_version: '2.2.4'
+images_folder: '/docker-images'
+license_file: '/root/ansible-docker-ucp/license.lic'
+ucp_username: 'admin'
+
+# Docker Variables
+compose_vers: '1.16.1'
+compose_url: 'http://github.com/docker/compose/releases/download/{{ compose_vers }}/docker-compose-{{ ansible_system }}-{{ ansible_architecture }}'
+
+
+# Play-with-Docker Variables
+pwd_path: '/root/play-with-docker'
+pwd_duration: '24h'
+
+# Comment out proxy settings if not required
+env:
+  http_proxy: 'http://10.12.7.21:8080'
+  https_proxy: 'http://10.12.7.21:8080'
+  #https_proxy: 'https://15.184.4.2:8080'
+  #https_proxy: 'https://15.184.4.2:8080'
+  #http_proxy: 'proxy.am2.hpelabs.net:8080'
+  #https_proxy: 'proxy.am2.hpelabs.net:8080'
+  no_proxy: 'localhost,am2.cloudra.local,10.10.174.'
+  foo: 'bar' # Don't comment to avoid annoying messages when not using the proxy 

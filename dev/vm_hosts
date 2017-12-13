@@ -1,0 +1,115 @@
+## UCP
+[ucp_main]
+nm-ucp01 ip_addr='10.10.174.92/22' esxi_host='dh01.am2.cloudra.local'
+
+[ucp]
+nm-ucp01 ip_addr='10.10.174.92/22' esxi_host='dh01.am2.cloudra.local'
+#dp-ucp-02 ip_addr='10.10.174.75/22' esxi_host='dh01.am2.cloudra.local'
+#dp-ucp-03 ip_addr='10.10.174.76/22' esxi_host='dh01.am2.cloudra.local'
+
+[ucp:vars]
+cpus='4'
+ram='8192'
+disk2_size='200'
+node_policy='dp-bronze'
+
+# DTR
+[dtr_main]
+nm-dtr01 ip_addr='10.10.174.93/22' esxi_host='dh01.am2.cloudra.local'
+
+[dtr]
+nm-dtr01 ip_addr='10.10.174.93/22' esxi_host='dh01.am2.cloudra.local'
+#dp-dtr-02 ip_addr='10.10.174.72/22' esxi_host='dh01.am2.cloudra.local'
+#dp-dtr-03 ip_addr='10.10.174.73/22' cpus='6' esxi_host='dh01.am2.cloudra.local'
+
+[dtr:vars]
+cpus='4' 
+ram='16384' 
+disk2_size='200'
+node_policy='dp-gold'
+
+## WORKER
+[worker]
+nm-worker01 ip_addr='10.10.174.98/22' esxi_host='dh01.am2.cloudra.local'
+nm-worker02 ip_addr='10.10.174.99/22' esxi_host='dh02.am2.cloudra.local'
+#nm-worker-03 ip_addr='10.10.174.79/22' esxi_host='dh01.am2.cloudra.local'
+
+## Cloudbees
+[cloudbees]
+nm-worker02 ip_addr='10.10.174.99/22' esxi_host='dh02.am2.cloudra.local'
+
+## Play With Docker or PWD
+[playwithdocker]
+nm-ucp01 ip_addr='10.10.174.92/22' esxi_host='dh01.am2.cloudra.local'
+
+[worker:vars]
+cpus='4'
+ram='16384'
+disk2_size='200'
+node_policy='dp-bronze'
+
+## LOAD BALANCERS
+[ucp_lb]
+nm-ucp ip_addr='10.10.174.94/22' esxi_host='dh01.am2.cloudra.local'
+
+[dtr_lb]
+nm-dtr ip_addr='10.10.174.95/22' esxi_host='dh01.am2.cloudra.local'
+
+[worker_lb]
+nm-worker ip_addr='10.10.174.96/22' esxi_host='dh01.am2.cloudra.local'
+
+[lbs]
+nm-ucp ip_addr='10.10.174.94/22' esxi_host='dh01.am2.cloudra.local'
+nm-dtr ip_addr='10.10.174.95/22' esxi_host='dh01.am2.cloudra.local'
+nm-worker ip_addr='10.10.174.96/22' esxi_host='dh01.am2.cloudra.local'
+
+[lbs:vars]
+cpus='2'
+ram='4096'
+node_policy='dp-bronze'
+
+[docker:children]
+ucp
+dtr
+worker
+elk
+
+[nfs]
+nm-nfs ip_addr='10.10.174.97/22' esxi_host='dh02.am2.cloudra.local'
+
+[nfs:vars]
+cpus='2'
+ram='4096'
+disk2_size='200'
+node_policy='dp-gold'
+
+[logger]
+nm-logger ip_addr='10.10.174.100/22' esxi_host='dh02.am2.cloudra.local'
+
+[logger:vars]
+cpus='2'
+ram='4096'
+disk2_size='200'
+node_policy='dp-gold'
+
+[elk]
+nm-elk ip_addr='10.10.174.101/22' ip_addr_only='10.10.174.101' esxi_host='dh02.am2.cloudra.local'
+
+[elk:vars]
+cpus='2'
+ram='16384'
+disk2_size='200'
+node_policy='dp-gold'
+
+[vms:children]
+ucp
+dtr
+worker
+lbs
+nfs
+logger
+elk
+
+# Local 
+[local]
+localhost ansible_connection=local

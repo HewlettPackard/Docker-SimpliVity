@@ -1,0 +1,36 @@
+version: '3.2'
+services:
+    haproxy:
+        container_name: haproxy
+        image: haproxy
+        ports:
+            - "80:8080"
+        volumes:
+            - ./haproxy:/usr/local/etc/haproxy
+
+    pwd:
+        container_name: pwd
+        image: "franela/play-with-docker"
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+            - sessions:/pwd
+        environment:
+            GOOGLE_RECAPTCHA_DISABLED: "true"
+            DIND_IMAGE: "franela/dind"
+            # Configure Session Timer
+            EXPIRY: "{{ pwd_duration | default('4h') }}"
+
+    l2:
+        container_name: l2
+        image: "franela/play-with-docker:l2"
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+            - networks:/pwd
+        ports:
+            - "8022:22"
+            - "8053:53"
+        #    - "443:443"
+
+volumes:
+    sessions:
+    networks:
