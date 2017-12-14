@@ -34,7 +34,7 @@
     - name: Copy config file
       copy: src={{ item }} dest=/root
       with_fileglob:
-         - /root/ansible-docker-ucp/files/elk/*
+         - /root/Docker-SimpliVity/dev/files/elk/*
 
     # Installing elk stack
     - name: Installing docker compose

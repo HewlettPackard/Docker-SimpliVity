@@ -43,7 +43,7 @@ rhel_version: '7.3'
 dtr_version: '2.4.0'
 ucp_version: '2.2.4'
 images_folder: '/docker-images'
-license_file: '/root/ansible-docker-ucp/license.lic'
+license_file: '/root/Docker-SimpliVity/dev/license.lic'
 ucp_username: 'admin'
 
 # Docker Variables
