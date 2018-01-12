@@ -1085,7 +1085,7 @@ When updating the Docker Volume service plug-in, ensure the ESXi version you are
     <td>1</td>
 	<td>Server Software</td>
 	<td>1. VMware ESXi<br>2. Docker EE</td>
-    <td rowspan=2><a href="http://vmware.github.io/docker-volume-vsphere/documentation/index.html">vSphere Docker Volume Service on GitHub</a></td>
+    <td rowspan=2><a href="http://vmware.github.io/vsphere-storage-for-docker/documentation/index.html">vSphere Docker Volume Service on GitHub</a></td>
   </tr>
   <tr>
     <td>2</td>
