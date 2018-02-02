@@ -4,9 +4,9 @@ Documentation=https://docs.docker.com
 After=network-online.target firewalld.service
 
 [Service]
-#Added for poxy
-Environment="HTTP_PROXY=http://proxy.am2.hpelabs.net:8080/"
-Environment="HTTPS_PROXY=https://proxy.am2.hpelabs.net:8080/"
+#Added for proxy
+#Environment="HTTP_PROXY=http://<your-proxy-server>:8080/"
+#Environment="HTTPS_PROXY=https://<your-proxy-server>:8080/"
 Type=notify
 # the default is not to use systemd for cgroups because the delegate issues still
 # exists and systemd currently does not support the cgroup feature set required
