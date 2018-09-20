@@ -14,8 +14,14 @@
 # limitations under the License.
 ### 
 ---
-- hosts:  localhost vms
-  serial: 3
+
+###################################################################################
+#
+# play1: Perform some rudimentary sanity check first
+#
+###################################################################################
+- hosts:  all_vms
+  name: Config Backup - Perform Rudimentary Sanity Check (VMs)
   connection: local
   gather_facts: false
 
@@ -25,190 +31,334 @@
 
   vars:
     ovc: "{{ omnistack_ovc | random }}"
-    sleep_interval: 5
+    sleep_interval: 2
 
   environment: "{{ env }}"
 
   tasks:
-    # This task should use the uri module but not sure how to use the parameters in it
-    - name: Get Simplivity token
-      shell: curl -k https://simplivity@{{ ovc }}/api/oauth/token -d grant_type=password -d username='{{ simplivity_username }}' -d password='{{ simplivity_password }}' | python -mjson.tool | grep access_token | awk -F'"' '{ print $4 }'
-      register: token
-      when: inventory_hostname in groups.local
 
-    # This one doesnt work
-    #- name: Get Simplivity token
-    #  uri:
-    #    url: "https://simplivity@{{ ovc }}/api/oauth/token"
-    #    headers:
-    #      Content-Type: application/vnd.simplivity.v1+json
-    #    method: GET
-    #    body: {"grant_type": "password","username": "{{ simplivity_username }}","password": "{{ simplivity_password }}"}
-    #    status_code: 200
-    #    body_format: json
-    #    force_basic_auth: yes
-    #    validate_certs: no
-    #  when: inventory_hostname in groups.local
+  #
+  #   - we accept nodes without a backup policy, which means, we don;t backup the VM
+  #   - but we don't accept nodes specifying a backup policy which is not defined in "backup_policies"
+  #
 
-    - name: sleep
-      command: sleep '{{ sleep_interval }}'
+  - fail: msg="backup_policies is not definedi, aborting..."
+    when: backup_policies is not defined
 
-    - name: Retrieve current backup policies
+  - set_fact: node_policy_match="{{ backup_policies | json_query ( q ) }}"
+    vars:
+       q: "[?name=='{{ node_policy }}'].name"
+    when: node_policy is defined
+
+  - fail: msg="Backup policy {{ node_policy }} not found in {{ backup_policies }}"
+    when: node_policy is defined and node_policy_match | length <= 0
+
+  - debug: msg="No backup policy specified for {{ inventory_hostname }} "
+    when: node_policy is not defined
+
+###################################################################################
+#
+# Play2: Perform sanity check on localhost (docker_volume backups)
+#
+###################################################################################
+- hosts: localhost
+  name: Config Backup - Perform Rudimentary Sanity Check (Docker Volumes)
+  connection: local
+  gather_facts: false
+
+  vars_files:
+    - ../group_vars/vars
+    - ../group_vars/vault
+
+  vars:
+    ovc: "{{ omnistack_ovc | random }}"
+    sleep_interval: 2
+
+  environment: "{{ env }}"
+
+  tasks:
+
+  - fail: msg="backup_policies is not definedi, aborting..."
+    when: backup_policies is not defined
+
+  - fail: msg="docker_volumes_policy is not defined, aborting..."
+    when: docker_volumes_policy is not defined
+
+  - set_fact: node_policy_match="{{ backup_policies | json_query ( q ) }}"
+    vars:
+       q: "[?name=='{{ docker_volumes_policy }}'].name"
+
+  - fail: msg="Backup policy for Docker volumes {{ docker_volumes_policy  }} not found in {{ backup_policies }}"
+    when: node_policy_match | length <= 0
+
+###################################################################################
+#
+# Play3: Create all Backup Policies,  populate them with the specified rules
+#
+###################################################################################
+
+- hosts: localhost
+  name: Config Backup - Create Backup policies
+  connection: local
+  gather_facts: false
+
+  vars_files:
+    - ../group_vars/vars
+    - ../group_vars/vault
+
+  vars:
+    ovc: "{{ omnistack_ovc | random }}"
+    sleep_interval: 2
+
+  environment: "{{ env }}"
+
+  tasks:
+
+  - name: Retrieve an auth token 
+    include_tasks: includes/svt_get_auth_token.yml
+
+  #
+  # Create backup policies 
+  #
+
+  - name: Create backup policy
+    uri:
+      url: "https://{{ ovc }}/api/policies"
+      headers:
+        Content-Type: application/vnd.simplivity.v1+json
+        Authorization: Bearer {{ svtapitoken.json.access_token }}
+      method: POST
+      body: {"name":"{{ item.name }}"}
+      status_code: 202,400
+      body_format: json
+      force_basic_auth: yes
+      validate_certs: no
+    register: res
+    with_items:
+      - "{{ backup_policies }}"
+
+  - include_tasks: includes/svt_wait_for_tasks.yml tasks="{{ res.results }}"
+
+  - name: Get policy IDs
+    uri:
+      url: "https://{{ ovc }}/api/policies?fields=id,name"
+      headers:
+        Content-Type: application/vnd.simplivity.v1+json
+        Authorization: Bearer {{ svtapitoken.json.access_token }}
+      method: GET
+      body_format: json
+      force_basic_auth: yes
+      validate_certs: no
+    register: policy_ids
+
+  - name: sleep
+    command: sleep '{{ sleep_interval }}'
+
+  - name: Configure backup rules
+    uri:
+      url: "https://{{ ovc }}/api/policies/{{ policy_ids | json_query(q) }}/rules?replace_all_rules=true"
+      headers:
+        Content-Type: application/vnd.simplivity.v1.4+json
+        Accept: application/json
+        Authorization: Bearer {{ svtapitoken.json.access_token }}
+      method: POST
+      body: '[{"days":"{{ item.days }}","start_time":"{{ item.start_time }}","frequency":"{{ item.frequency }}","retention":"{{ item.retention }}"}]'
+      status_code: 202
+      body_format: json
+      force_basic_auth: yes
+      validate_certs: no
+    with_items: "{{ backup_policies }}"
+    loop_control:
+      pause: 2
+    vars:
+      q: "json.policies[?name=='{{ item.name }}'].id | [0]"
+
+###################################################################################
+#
+# Play4: Assign backup policy to VM (this is done on the VM)
+#
+###################################################################################
+- hosts:  all_vms
+  name: Config Backup - Assign Backup policies
+  connection: local
+  gather_facts: false
+
+  vars_files:
+    - ../group_vars/vars
+    - ../group_vars/vault
+
+  vars:
+    ovc: "{{ omnistack_ovc | random }}"
+    sleep_interval: 2
+
+  environment: "{{ env }}"
+
+  tasks:
+
+  - block: # when node_policy is defined
+
+    - name: Retrieve an auth token
+      include_tasks: includes/svt_get_auth_token.yml
+
+  #
+  # Get the backup policy ID, abort if not found
+  #
+    - name: Get Backup Policy ID
       uri:
-        url: "https://{{ ovc }}/api/policies"
+        url: "https://{{ ovc }}/api/policies?fields=id,name"
         headers:
           Content-Type: application/vnd.simplivity.v1+json
-          Authorization: Bearer {{ token.stdout }}
+          Authorization: Bearer {{ svtapitoken.json.access_token }}
         method: GET
-        status_code: 200
         body_format: json
         force_basic_auth: yes
         validate_certs: no
-      when: inventory_hostname in groups.local
-      register: current_policies
-
-    - name: sleep
-      command: sleep '{{ sleep_interval }}'
-
-    - name: Extract existing policies names
-      set_fact: current_policies_names="{{ current_policies | json_query(q) }}"
+      delegate_to: localhost
+      register: policy_ids
+    - set_fact: policy_id="{{ policy_ids | json_query(q) }}"
       vars:
-        q: "json.policies[].name"
-      when: inventory_hostname in groups.local
+        q: "json.policies[?name=='{{ node_policy }}'].id "
+    - fail: msg="Backup Policy ID for {{ node_policy  }} cannot be determined. Aborting"
+      when: policy_id | count <= 0
 
-    - name: Extract policies names to be added
-      set_fact: backup_policies_names='{{ backup_policies_names|default([])+[item.name] }}'
-      with_items: "{{ backup_policies }}"
-      when: inventory_hostname in groups.local
-
-    - name: Set list of nonexistent policies to be added
-      set_fact: new_policies_names="{{ backup_policies_names | difference(current_policies_names) }}"
-      when: inventory_hostname in groups.local
-
-    - name: Create backup policies
+  #
+  # Get the VM ID, abort if not found
+  #
+    - name: Get VM ID
       uri:
-        url: "https://{{ ovc }}/api/policies"
+        url: "https://{{ ovc }}/api/virtual_machines"
         headers:
           Content-Type: application/vnd.simplivity.v1+json
-          Authorization: Bearer {{ token.stdout }}
+          Authorization: Bearer {{ svtapitoken.json.access_token }}
+        method: GET
+        body_format: json
+        force_basic_auth: yes
+        validate_certs: no
+      delegate_to: localhost
+      register: vm_ids
+    - set_fact: vm_id="{{ vm_ids | json_query(q) }}"
+      vars:
+        q: "json.virtual_machines[?name=='{{ inventory_hostname }}' && state=='ALIVE'].id "
+    - fail: msg="VM ID for {{ inventory_hostname }} cannot be determined. Aborting"
+      when: vm_id | count <= 0
+
+    - name: Assign backup policy to VM
+      uri:
+        url: "https://{{ ovc }}/api/virtual_machines/{{ vm_id[0] }}/set_policy"
+        headers:
+          Content-Type: application/vnd.simplivity.v1+json
+          Authorization: Bearer {{ svtapitoken.json.access_token }}
         method: POST
-        body: {"name":"{{ item }}"}
+        body: {"policy_id":"{{ policy_id[0] }}"}
         status_code: 202
         body_format: json
         force_basic_auth: yes
         validate_certs: no
-      with_items: "{{ new_policies_names }}"
-      loop_control:
-        pause: 10
-      when: inventory_hostname in groups.local
-      register: create_output
+      delegate_to: localhost
+      register: res
 
-    - name: Get policy IDs
+    - include_tasks: includes/svt_wait_for_tasks.yml tasks="{{ [ res ] }}"
+
+    when: node_policy is defined
+
+###################################################################################
+#
+# Assign backup policy to Dummy VMs
+#
+###################################################################################
+- hosts: localhost
+  name: Config Backup - Assign Backup Policies (Dummy VMs)
+  connection: local
+  gather_facts: false
+
+  vars_files:
+    - ../group_vars/vars
+    - ../group_vars/vault
+
+  vars:
+    ovc: "{{ omnistack_ovc | random }}"
+    sleep_interval: 2
+
+  environment: "{{ env }}"
+
+  tasks:
+
+    - include_tasks: includes/svt_get_auth_token.yml
+
+    - name: Build the list of Dummy VM names
+      set_fact: dummy_vms="{{ dummy_vms | default([]) + [ prefix+'-in-dockvols-'+item  ] }}"
+      vars: 
+        prefix: "{{ dummy_vm_prefix }}"
+      with_items:
+        - "{{ datastores }}"
+
+    #
+    # Get the backup policy ID, abort if not found
+    #
+    - name: Get Backup Policy ID
       uri:
-        url: "https://{{ ovc }}/api/policies"
+        url: "https://{{ ovc }}/api/policies?fields=id,name"
         headers:
           Content-Type: application/vnd.simplivity.v1+json
-          Authorization: Bearer {{ token.stdout }}
+          Authorization: Bearer {{ svtapitoken.json.access_token }}
         method: GET
         body_format: json
         force_basic_auth: yes
         validate_certs: no
       register: policy_ids
-      when: inventory_hostname in groups.local
+    - set_fact: policy_id="{{ policy_ids | json_query(q) }}"
+      vars:
+        q: "json.policies[?name=='{{ docker_volumes_policy }}'].id "
+    - fail: msg="Backup Policy ID for {{ docker_volumes_policy   }} cannot be determined. Aborting"
+      when: policy_id | count <= 0
 
-    - name: sleep
-      command: sleep '{{ sleep_interval }}'
-
-    - name: Create backup rules
-      uri:
-        url: "https://{{ ovc }}/api/policies/{{ policy_ids | json_query(q) }}/rules"
-        headers:
-          Content-Type: application/vnd.simplivity.v1+json
-          Authorization: Bearer {{ token.stdout }}
-        method: POST
-        body: {"days":"{{ item.days }}","start_time":"{{ item.start_time }}","frequency":"{{ item.frequency }}","retention":"{{ item.retention }}"}
-        status_code: 202
-        body_format: json
-        force_basic_auth: yes
-        validate_certs: no
-      with_items: "{{ backup_policies }}"
-      loop_control:
-        pause: 10
-      vars: 
-        q: "json.policies[?name=='{{ item.name }}'].id | [0]"
-      when: inventory_hostname in groups.local and new_policies_names | length > 0
-
-    - name: sleep
-      command: sleep '{{ sleep_interval }}'
-
-    - name: Get VMs information
+    #
+    # Get All VM IDs
+    #
+    - name: Get Dummy VMs IDs
       uri:
         url: "https://{{ ovc }}/api/virtual_machines"
         headers:
           Content-Type: application/vnd.simplivity.v1+json
-          Authorization: Bearer {{ token.stdout }}
+          Authorization: Bearer {{ svtapitoken.json.access_token }}
         method: GET
         body_format: json
         force_basic_auth: yes
         validate_certs: no
       register: vm_ids
-      when: inventory_hostname in groups.local
 
-    - name: sleep
-      command: sleep '{{ sleep_interval }}'
-
-    - name: Assign backup policies to VMs
-      uri:
-        url: "https://{{ ovc }}/api/virtual_machines/{{ hostvars[groups['local'][0]]['vm_ids'] | json_query(q_vms) }}/set_policy"
-        headers:
-          Content-Type: application/vnd.simplivity.v1+json
-          Authorization: Bearer {{ hostvars[groups['local'][0]]['token']['stdout'] }}
-        method: POST
-        body: {"policy_id":"{{ hostvars[groups['local'][0]]['policy_ids'] | json_query(q_policies) }}"}
-        status_code: 202
-        body_format: json
-        force_basic_auth: yes
-        validate_certs: no
+    - set_fact:
+        dummy_vms_ids: "{{ dummy_vms_ids | default([]) +  vm_ids | json_query (q)  }}"
       vars:
-        q_policies: "json.policies[?name=='{{ node_policy }}'].id | [0]"
-        q_vms: "json.virtual_machines[?name=='{{ inventory_hostname }}' && state=='ALIVE'].id | [0]"
-      delegate_to: localhost
-      when: inventory_hostname not in groups.local
+        - q: "json.virtual_machines[?name=='{{ item }}' && state=='ALIVE'].{id: id, name: name, state: state}"
+      with_items:
+        - "{{ dummy_vms }}"
 
-    - name: sleep
-      command: sleep '{{ sleep_interval }}'
-
-    - name: Set dummy VM names in one string
-      set_fact: dummy_vms_string="{{ dummy_vm_prefix }}-in-dockvols-{{ datastores | join(','+dummy_vm_prefix+'-in-dockvols-') }}"
-      #set_fact: dummy_vms_string="{{ dummy_vm_prefix }}-{{ datastores | join(','+dummy_vm_prefix+'-in-dockvols-') }}"
-      when: inventory_hostname in groups.local
-
-    - name: Convert to list 
-      set_fact: dummy_vms="{{ dummy_vms_string.split(',') }}"
-      when: inventory_hostname in groups.local
-
+    #
+    # Assign Backup policy to each dummy VM that we have found
+    #
     - name: Assign backup policies to Docker volumes
       uri:
-        url: "https://{{ ovc }}/api/virtual_machines/{{ hostvars[groups['local'][0]]['vm_ids'] | json_query(q_vms) }}/set_policy"
+        url: "https://{{ ovc }}/api/virtual_machines/{{ item.id }}/set_policy"
         headers:
           Content-Type: application/vnd.simplivity.v1+json
-          Authorization: Bearer {{ hostvars[groups['local'][0]]['token']['stdout'] }}
+          Authorization: Bearer {{ svtapitoken.json.access_token }}
         method: POST
-        body: {"policy_id":"{{ hostvars[groups['local'][0]]['policy_ids'] | json_query(q_policies) }}"}
+        body: {"policy_id":"{{ policy_id[0] }}"}
         status_code: 202
         body_format: json
         force_basic_auth: yes
         validate_certs: no
-      vars:
-        q_policies: "json.policies[?name=='{{ docker_volumes_policy }}'].id | [0]"
-        q_vms: "json.virtual_machines[?name=='{{ item }}' && state=='ALIVE'].id | [0]"
-      delegate_to: localhost
-      when: inventory_hostname in groups.local
-      with_items: "{{ dummy_vms }}"
+      with_items: "{{ dummy_vms_ids }}"
+      register: res
       loop_control:
-        pause: 10
+        pause: 2
+ 
+    - include_tasks: includes/svt_wait_for_tasks.yml tasks="{{ res.results }}" 
 
-    - name: sleep
-      command: sleep '{{ sleep_interval }}'
-
-
+    #
+    # Fail if we could not find all the Dummy VM
+    # 
+    - fail:
+        msg: "Dummy VMs are missing {{ dummy_vms_ids | count }} of {{ dummy_vms | count }} found"
+      when: dummy_vms_ids | count != dummy_vms | count      

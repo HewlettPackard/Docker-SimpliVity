@@ -27,9 +27,14 @@
   tasks:
 
     - name: Check for partitions on disk
-      shell: parted -s {{ disk2 }} print 1
-      register: partPresent
-      failed_when: partPresent.rc is not defined
+      parted:
+        state: info
+        device: "{{ disk2 }}"
+        number: 1
+      register: DiskInfo
+
+    - set_fact:
+        partPresent: "{{ DiskInfo.partitions[0] is defined }}"
 
     - name: Create partition on second disk
       parted:
@@ -41,14 +46,13 @@
         number: 1
         part_start: 0%
         part_end: 100%
-      when: partPresent.rc != 0
-#      ignore_errors: yes
+      when: partPresent == false
         
     - name: Create Docker VG
       lvg:
         vg: docker
         pvs: "{{ disk2_part }}"
-      when: partPresent.rc != 0
+      when: partPresent == false
 
     - name: Create thinpool LV
       lvol:
@@ -56,7 +60,7 @@
         opts: --wipesignatures y
         vg: docker
         size: 95%VG
-      when: partPresent.rc != 0
+      when: partPresent == false
 
     - name: Create thinpoolmeta LV
       lvol:
@@ -64,11 +68,11 @@
         opts: --wipesignatures y
         vg: docker
         size: 1%VG
-      when: partPresent.rc != 0
+      when: partPresent == false
 
     - name: Convert LVs to thinpool and storage for metadata
       command: lvconvert -y --zero n -c 512K  --thinpool docker/thinpool --poolmetadata docker/thinpoolmeta
-      when: partPresent.rc != 0
+      when: partPresent == false
 
     - name: Config thinpool profile
       copy: src=../files/docker-thinpool.profile dest=/etc/lvm/profile/docker-thinpool.profile

@@ -26,70 +26,10 @@
   environment: "{{ env }}"
 
   tasks:
-    - name: Change hostname
-      local_action:
-        module: vmware_vm_shell
-        hostname: "{{ vcenter_hostname }}"
-        username: "{{ vcenter_username }}"
-        password:  "{{ vcenter_password }}"
-        validate_certs: "{{ vcenter_validate_certs }}"
-        vm_id: "{{ inventory_hostname }}"
-        vm_username: "{{ vm_username }}"
-        vm_password: "{{ vm_password }}"
-        vm_shell: /bin/echo
-        vm_shell_args: "{{ inventory_hostname }}.{{ domain_name }} > /etc/hostname"
 
-    - name: Update hostname
-      local_action:
-        module: vmware_vm_shell
-        hostname: "{{ vcenter_hostname }}"
-        username: "{{ vcenter_username }}"
-        password:  "{{ vcenter_password }}"
-        validate_certs: "{{ vcenter_validate_certs }}"
-        vm_id: "{{ inventory_hostname }}"
-        vm_username: "{{ vm_username }}"
-        vm_password: "{{ vm_password }}"
-        vm_shell: /usr/bin/hostnamectl
-        vm_shell_args: "set-hostname {{ inventory_hostname }}"
-
-    - name: Add new connection
-      local_action:
-        module: vmware_vm_shell
-        hostname: "{{ vcenter_hostname }}"
-        username: "{{ vcenter_username }}"
-        password:  "{{ vcenter_password }}"
-        validate_certs: "{{ vcenter_validate_certs }}"
-        vm_id: "{{ inventory_hostname }}"
-        vm_username: "{{ vm_username }}"
-        vm_password: "{{ vm_password }}"
-        vm_shell: /usr/bin/nmcli
-        vm_shell_args: "con add con-name {{ nic_name }} ifname {{ nic_name }} type ethernet ip4 {{ ip_addr }} gw4 {{ gateway }}"
-
-    - name: Bring connection up
-      local_action:
-        module: vmware_vm_shell
-        hostname: "{{ vcenter_hostname }}"
-        username: "{{ vcenter_username }}"
-        password:  "{{ vcenter_password }}"
-        validate_certs: "{{ vcenter_validate_certs }}"
-        vm_id: "{{ inventory_hostname }}"
-        vm_username: "{{ vm_username }}"
-        vm_password: "{{ vm_password }}"
-        vm_shell: /usr/bin/nmcli
-        vm_shell_args: "con up {{ nic_name }}"
-
-    - name: Enable connection autoconnect
-      local_action:
-        module: vmware_vm_shell
-        hostname: "{{ vcenter_hostname }}"
-        username: "{{ vcenter_username }}"
-        password:  "{{ vcenter_password }}"
-        validate_certs: "{{ vcenter_validate_certs }}"
-        vm_id: "{{ inventory_hostname }}"
-        vm_username: "{{ vm_username }}"
-        vm_password: "{{ vm_password }}"
-        vm_shell: /usr/bin/nmcli
-        vm_shell_args: "con mod {{ nic_name }} connection.autoconnect yes"
+    - name: Change hostname with FQDN
+      hostname:
+        name: "{{ inventory_hostname }}.{{ domain_name }}"
 
     - name: Update /etc/hosts
       template:
@@ -97,8 +37,8 @@
         dest: /etc/hosts
         unsafe_writes: yes
 
-    - name: Update DNS settings
-      template:
-        src: ../templates/resolv.conf.j2
-        dest: /etc/resolv.conf
-        unsafe_writes: yes
+#    - name: Update DNS settings
+#      template:
+#        src: ../templates/resolv.conf.j2
+#        dest: /etc/resolv.conf
+#        unsafe_writes: yes

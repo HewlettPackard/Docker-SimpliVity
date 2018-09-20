@@ -27,7 +27,8 @@
   environment: "{{ env }}"
 
   tasks:
-    - name: Create VMs without a data drive
+
+    - name: Create VMs
       vmware_guest:
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
@@ -35,45 +36,23 @@
         validate_certs: "{{ vcenter_validate_certs }}"
         esxi_hostname: "{{ esxi_host }}"
         datacenter: "{{ datacenter }}"
-        folder: "{{ folder_name }}"
+        folder: "{{ datacenter }}/vm{{ folder_name }}"
         name: "{{ inventory_hostname }}"
         template: "{{ vm_template }}"
         state: poweredon
-        disk:
-          - size_gb:  "{{ disk1_size }}"
-            type: thin
-            datastore: "{{ datastores | random }}"
+        networks: "{{ networks }}"
+        customization:
+          dns_servers: "{{ dns }}"
+          domain: "{{ domain_name }}"
+        disk: "{{ disks_specs }}"
+            
         hardware:
           memory_mb: "{{ ram }}"
           num_cpus: "{{ cpus }}"
-      when: disk2_size is undefined
+      notify: CreateVMsWait
 
-    - name: Create VMs with a data drive
-      vmware_guest:
-        hostname: "{{ vcenter_hostname }}"
-        username: "{{ vcenter_username }}"
-        password: "{{ vcenter_password }}"
-        validate_certs: "{{ vcenter_validate_certs }}"
-        esxi_hostname: "{{ esxi_host }}"
-        datacenter: "{{ datacenter }}"
-        folder: "{{ folder_name }}"
-        name: "{{ inventory_hostname }}"
-        template: "{{ vm_template }}"
-        state: poweredon
-        disk:
-          - size_gb:  "{{ disk1_size }}"
-            type: thin
-            datastore: "{{ datastore }}"
-          - size_gb:   "{{ disk2_size }}" 
-            type: thin
-            datastore: "{{ datastore }}"
-        hardware:
-          memory_mb: "{{ ram }}"
-          num_cpus: "{{ cpus }}"
-      vars:
-          datastore: "{{ datastores | random }}"
-      when: disk2_size is defined
-
-    - name: Wait for VMs to boot up
-      pause:
-        minutes: 3
+  handlers:
+    - name: CreateVMsWait
+      wait_for_connection:
+        delay: 120
+        timeout: 300

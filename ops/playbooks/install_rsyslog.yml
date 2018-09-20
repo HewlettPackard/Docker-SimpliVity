@@ -21,17 +21,16 @@
 
   vars_files:
     - ../group_vars/vars
+    - includes/internal_vars.yml
 
   environment: "{{ env }}"
 
-  tasks:
-    - name: Open required ports for rsyslog
-      command: firewall-cmd --permanent --zone=public --add-port=514/tcp --add-port=514/udp
+  roles:
+    - role: hpe.openports
+      hpe_openports_ports: "{{ internal_syslog_ports }}"
       when: inventory_hostname in groups.logger
 
-    - name: Reload firewalld configuration
-      command: firewall-cmd --reload
-      when: inventory_hostname in groups.logger
+  tasks:
 
     - name: Install rsyslog
       yum:
@@ -43,10 +42,10 @@
       when: inventory_hostname in groups.logger
       notify: Restart Rsyslog
 
-    - name: Allow docker nodes to send logs
-      template: src=../templates/rsyslog.conf.j2 dest=/etc/rsyslog.conf
-      when: inventory_hostname in groups.docker
-      notify: Restart Rsyslog
+#    - name: Allow docker nodes to send logs
+#      template: src=../templates/rsyslog.conf.j2 dest=/etc/rsyslog.conf
+#      when: inventory_hostname in groups.docker
+#      notify: Restart Rsyslog
 
   handlers:
     - name: Restart Rsyslog

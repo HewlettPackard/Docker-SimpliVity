@@ -21,15 +21,32 @@
 
   vars_files:
     - ../group_vars/vars
+    - includes/internal_vars.yml
 
   environment: "{{ env }}"
 
   tasks:
-    - name: Open http and https ports
-      command: firewall-cmd --permanent --zone=public --add-port=80/tcp --add-port=443/tcp
 
-    - name: Reload firewalld configuration
-      command: firewall-cmd --reload
+    - set_fact: 
+        open_ports:
+          - "{{ internal_dtr_lb_ports }}"
+      when: inventory_hostname in groups.dtr_lb
+ 
+    - set_fact:
+        open_ports: "{{ internal_ucp_lb_ports }}"
+      when: inventory_hostname in groups.ucp_lb
+ 
+    - set_fact:
+        open_ports: "{{ internal_worker_lb_ports }}"
+      when: inventory_hostname in groups.worker_lb
+ 
+    - name: Open  ports  in the firewall
+      firewalld:
+        port: "{{ item }}"
+        immediate: true
+        permanent: true
+        state: enabled
+      with_items: "{{ open_ports }}"
 
     - name: Install Required Pkgs for seboolean module
       yum:
