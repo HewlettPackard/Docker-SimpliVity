@@ -14,7 +14,13 @@
 # limitations under the License.
 ### 
 ---
-- hosts: vms
+####################################################################################
+#
+# play 1: Resize Disk Partition of Linux Systems
+#
+#####################################################################################
+- name: Resize System Partition (Linux))
+  hosts: vms
   gather_facts: false
   become_user: root
   become: true
@@ -32,7 +38,7 @@
         start=$(parted /dev/sda unit mb print free | tail -2 | awk "/Free Space/ { print \$1 }")
         if [ "$start" == "" ]
         then 
-          echo no space left
+          echo "changed: false"
         else  
           parted /dev/sda mkpart primary ext4 $start 100%
           partprobe -s
@@ -40,5 +46,42 @@
           vgextend rhel /dev/sda3
           lvextend -l +100%FREE /dev/rhel/root
           xfs_growfs /
+          echo "changed: true"
         fi
+      register: res
+      changed_when: '"changed: true" in res.stdout_lines'
 
+####################################################################################
+#
+# play 2: Resize Disk Partition of Windows Systems
+#
+#####################################################################################
+- name: Resize System Partition (Windows)
+  hosts: win_worker
+  gather_facts: false
+  connection: local
+  user: remote
+  become: false
+
+  vars_files:
+    - ../group_vars/vars
+    - ../group_vars/vault
+
+  tasks:
+
+    - name: Resize Windows Partition
+      win_shell: | 
+        $supported = (Get-PartitionSupportedSize -DiskNumber 0 -PartitionNumber 2)
+        $current = Get-Partition -DiskNumber 0 -PartitionNumber 2
+        if ( $current.Size -lt $supported.SizeMax )
+        {
+          Resize-Partition -DiskNumber 0 -PartitionNumber 2 -Size $supported.SizeMax
+          "changed: true"
+        } 
+        else 
+        {
+          "changed: false"
+        }
+      register: res
+      changed_when: '"changed: true" in res.stdout_lines'
+      when: inventory_hostname in groups.win_worker

@@ -18,7 +18,8 @@ networks:
 #    netmask: "{{ iscsi_addr | ipaddr('netmask') }}"
 
 disks_specs:
-  - size_gb:  '{{ disk1_size }}'
+#  - size_gb:  '{{ disk1_size }}'
+  - size_gb:  '200'
     type: thin
     datastore: "{{ datastores | random }}"
   - size_gb: '{{ disk2_size }}'
