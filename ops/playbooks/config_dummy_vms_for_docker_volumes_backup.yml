@@ -29,33 +29,36 @@
   environment: "{{ env }}"
 
   tasks:
-    - name: Create dummy VMs
-      local_action:
-        module: vmware_guest
+    - name: Create Dummy VMs
+      vmware_guest:
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: "{{ vcenter_validate_certs }}"
         esxi_hostname: "{{ esxi_host }}"
         datacenter: "{{ datacenter }}"
-        folder: "{{ folder_name }}"
+        folder: "{{ datacenter }}/vm{{ folder_name }}"
         name: "{{ dummy_vm_prefix }}-{{ item }}"
         guest_id: "dosGuest"
         state: poweredoff
-        hardware:
-          memory_mb: "128"
-          num_cpus: "1"
         disk:
         - size_gb: 1
           datastore: "{{ item }}"
           type: thin
-      with_items: "{{ datastores }}"
 
+        hardware:
+          memory_mb: "128"
+          num_cpus: "1"
+      with_items: "{{ datastores }}"
+      delegate_to: localhost
+
+#
+#
     - name: Generate powercli script
       template: src=../templates/powercli_script.j2 dest={{ powercli_script }}
 
     - name: Run powercli on temporary docker container
-      command: docker run --rm --entrypoint='/usr/bin/powershell' -v /tmp:/tmp vmware/powerclicore {{ powercli_script }}
+      command: docker run --rm --entrypoint='/usr/bin/pwsh' -v /tmp:/tmp vmware/powerclicore {{ powercli_script }}
 
     - name: Delete powercli script from docker host
       file: state=absent path={{ powercli_script }}

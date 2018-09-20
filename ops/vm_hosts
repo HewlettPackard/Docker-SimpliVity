@@ -4,12 +4,12 @@ clh-ucp01 ip_addr='10.10.174.112/22' esxi_host='simply01.am2.cloudra.local'
 
 [ucp]
 clh-ucp01 ip_addr='10.10.174.112/22' esxi_host='simply01.am2.cloudra.local'
-clh-ucp02 ip_addr='10.10.174.113/22' esxi_host='simply02.am2.cloudra.local'
-clh-ucp03 ip_addr='10.10.174.114/22' esxi_host='simply03.am2.cloudra.local'
+#clh-ucp02 ip_addr='10.10.174.113/22' esxi_host='simply02.am2.cloudra.local'
+#clh-ucp03 ip_addr='10.10.174.114/22' esxi_host='simply03.am2.cloudra.local'
 
 [ucp:vars]
 cpus='4'
-ram='8192'
+ram='16384'
 disk2_size='500'
 node_policy='clh-bronze'
 
@@ -26,19 +26,20 @@ clh-dtr03 ip_addr='10.10.174.117/22' esxi_host='simply03.am2.cloudra.local'
 cpus='2' 
 ram='16384' 
 disk2_size='500'
+orchestrator=swarm
 node_policy='clh-gold'
 
 ## WORKER
 [worker]
 clh-worker01 ip_addr='10.10.174.122/22' esxi_host='simply01.am2.cloudra.local'
 clh-worker02 ip_addr='10.10.174.123/22' esxi_host='simply02.am2.cloudra.local'
-clh-worker03 ip_addr='10.10.174.124/22' esxi_host='simply03.am2.cloudra.local'
+#clh-worker03 ip_addr='10.10.174.124/22' esxi_host='simply03.am2.cloudra.local'  orchestrator=swarm
 
 [worker:vars]
 cpus='4'
 ram='65536'
 disk2_size='500'
-node_policy='clh-bronze'
+orchestrator=kubernetes
 
 ## LOAD BALANCERS
 [ucp_lb]
@@ -92,6 +93,24 @@ logger
 
 [vms:vars]
 disk1_size='100'
+
+## WINDOWS WORKER
+[win_worker]
+clh-worker04 ip_addr='10.10.174.126/22' esxi_host='simply01.am2.cloudra.local'
+#clh-worker05 ip_addr='10.10.174.127/22' esxi_host='simply02.am2.cloudra.local'
+#clh-worker06 ip_addr='10.10.174.128/22' esxi_host='simply03.am2.cloudra.local'
+
+[win_worker:vars]
+cpus='4'
+ram='65536'
+disk1_size='100'
+disk2_size='500'
+node_policy='clh-bronze'
+
+[all_vms:children]
+vms
+win_worker
+
 
 # Local 
 [local]

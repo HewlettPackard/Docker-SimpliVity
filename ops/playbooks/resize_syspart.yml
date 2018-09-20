@@ -14,32 +14,31 @@
 # limitations under the License.
 ### 
 ---
-- hosts: worker
+- hosts: vms
   gather_facts: false
   become_user: root
   become: true
 
   vars_files:
     - ../group_vars/vars
+    - ../group_vars/vault
 
   environment: "{{ env }}"
 
   tasks:
-    - name: Open required ports for Workers
-      command: firewall-cmd --permanent --zone=public --add-port=443/tcp --add-port=2377/tcp --add-port=4789/tcp --add-port=4789/udp --add-port=7946/tcp --add-port=7946/udp --add-port=12376/tcp
 
-    - name: Reload firewalld configuration
-      command: firewall-cmd --reload
+    - name: Resize system partition (Linux)
+      shell: |
+        start=$(parted /dev/sda unit mb print free | tail -2 | awk "/Free Space/ { print \$1 }")
+        if [ "$start" == "" ]
+        then 
+          echo no space left
+        else  
+          parted /dev/sda mkpart primary ext4 $start 100%
+          partprobe -s
+          pvcreate /dev/sda3
+          vgextend rhel /dev/sda3
+          lvextend -l +100%FREE /dev/rhel/root
+          xfs_growfs /
+        fi
 
-    - name: Get worker token
-      include_vars:
-        file: /tmp/worker_token
-        name: add_worker
-
-    - name: Check if node already belongs to the swarm
-      shell: docker info | grep "Swarm{{':'}} inactive" | wc -l
-      register: swarm_inactive
-
-    - name: Add Worker nodes to the swarm
-      command: "{{ add_worker.token }}"
-      when: swarm_inactive.stdout == "1"

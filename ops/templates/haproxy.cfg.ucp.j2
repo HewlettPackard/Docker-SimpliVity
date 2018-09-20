@@ -12,21 +12,32 @@ defaults
     timeout connect 5000
     timeout client 50000
     timeout server 50000
+#
+# If you want stats, you ' ll have to enable the corresponding port manually in the LB's firewall
+#
+listen stats :1936
+   mode http
+   stats enable
+   stats hide-version
+   stats realm Haproxy\ Statistics
+   stats uri /
+   stats auth admin:admin
 
-frontend public
+frontend ucp
     option tcplog
     log global
     bind *:80
     redirect scheme https code 301 if !{ ssl_fc }
     bind *:443
-    default_backend servers
-backend servers
+    default_backend ucp
+
+backend ucp
     balance roundrobin
 {% for host in groups.ucp %}
     server {{ host }} {{ hostvars[host].ip_addr | ipaddr('address') }}:443 check 
 {% endfor %}
 
-frontend graf
+frontend grafana
     bind *:3000
     log global
     mode http
@@ -40,3 +51,17 @@ backend grafana
     server g_{{host}} {{ hostvars[host].ip_addr | ipaddr('address') }}:3000 check
 {% endfor %}
 
+{% if k8s == 'true'%}
+frontend k8s
+    option tcplog
+    log global
+    bind *:6443
+    default_backend k8s
+
+backend k8s
+    balance roundrobin
+{% for host in groups.ucp %}
+    server k8s_{{ host }} {{ hostvars[host].ip_addr | ipaddr('address') }}:6443 check
+{% endfor %}
+
+{% endif %}

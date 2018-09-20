@@ -14,22 +14,32 @@
 # limitations under the License.
 ### 
 ---
-- hosts: ucp ucp_lb
+- hosts: vms
   gather_facts: false
   become_user: root
   become: true
 
   vars_files:
     - ../group_vars/vars
+    - includes/internal_vars.yml
 
   environment: "{{ env }}"
 
-  tasks:
-    - name: Open required ports for Grafana and Prometheus
-      command: firewall-cmd --permanent --zone=public --add-port=9090/tcp --add-port=3000/tcp
+  roles:
 
-    - name: Reload firewalld configuration
-      command: firewall-cmd --reload
+# open the port used by Grafana
+    - role: hpe.openports
+      hpe_openports_ports:
+        - 3000/tcp
+      when: inventory_hostname in groups.ucp_lb
+
+
+  tasks:
+
+    - name: Configure all VMS to send their logs to the logger VM
+      template: src=../templates/rsyslog.conf.j2 dest=/etc/rsyslog.conf
+      when: inventory_hostname in groups.vms and inventory_hostname not in groups.logger
+      notify: Restart Rsyslog
 
     - name: Copy monitoring files to UCP
       copy: 
@@ -115,6 +125,12 @@
     - name: Enable and start haproxy service
       systemd:
         name: haproxy
+        enabled: yes
+        state: restarted
+
+    - name: Restart Rsyslog
+      systemd:
+        name: rsyslog
         enabled: yes
         state: restarted
 

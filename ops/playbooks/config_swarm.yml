@@ -44,24 +44,34 @@
     - name: Copy the license
       copy: src="{{ license_file }}" dest="/tmp/{{ license_file | basename }}"
 
-    - name: Install swarm leader and first UCP node
-      shell: docker run --rm --name ucp -v /var/run/docker.sock:/var/run/docker.sock docker/ucp:{{ ucp_version }} install --host-address {{ ip_addr | ipaddr('address') }} --admin-username={{ ucp_username }} --admin-password={{ ucp_password }} --license "$(cat /tmp/{{ license_file | basename }})" {{ san_all_formatted }}
-      register: output
-      when: inventory_hostname in groups.ucp_main and swarm_inactive.stdout == "1"
+    - name: Copy the server certificates
+      copy: src="../files/{{inventory_hostname}}-cachain.pem" dest="/etc/docker/server.pem"
 
-    - name: Get swarm manager token
-      shell: echo `docker swarm join-token manager` | cut -f2 -d':' | sed 's|\\||g'
-      register: manager_token
-      when: inventory_hostname in groups.ucp_main
+    - name: Copy the server key
+      copy: src="../files/{{inventory_hostname}}-key.pem" dest="/etc/docker/key.pem"
 
-    - name: Get swarm worker token
-      shell: echo `docker swarm join-token worker` | cut -f2 -d':' | sed 's|\\||g'
-      register: worker_token
-      when: inventory_hostname in groups.ucp_main
+    - name: Update the daemon json file
+      template: src=../templates/daemon-tls.json.j2 dest=/etc/docker/daemon.json
 
-    - name: Save worker token
-      local_action: copy content="token{{ ":" }} {{ hostvars[groups['ucp_main'][0]]['worker_token']['stdout'] }}" dest=/tmp/worker_token
+#    - name: Install swarm leader and first UCP node
+#      shell: docker swarm init
+#      register: output
+#      when: inventory_hostname in groups.ucp_main and swarm_inactive.stdout == "1"
 
-    - name: Add additional UCP nodes to the swarm
-      command: "{{ hostvars[groups['ucp_main'][0]]['manager_token']['stdout'] }}"
-      when: inventory_hostname not in groups.ucp_main and swarm_inactive.stdout == "1"
+#    - name: Get swarm manager token
+#      shell: echo `docker swarm join-token manager` | cut -f2 -d':' | sed 's|\\||g'
+#      register: manager_token
+#      when: inventory_hostname in groups.ucp_main
+
+#    - name: Get swarm worker token
+#      shell: echo `docker swarm join-token worker` | cut -f2 -d':' | sed 's|\\||g'
+#      register: worker_token
+#      when: inventory_hostname in groups.ucp_main
+
+#    - name: Save worker token
+#      local_action: copy content="token{{ ":" }} {{ hostvars[groups['ucp_main'][0]]['worker_token']['stdout'] }}" dest=/tmp/worker_token
+#
+#    - name: Add additional UCP nodes to the swarm
+#      command: "{{ hostvars[groups['ucp_main'][0]]['manager_token']['stdout'] }}"
+#      when: inventory_hostname not in groups.ucp_main and swarm_inactive.stdout == "1"
+
