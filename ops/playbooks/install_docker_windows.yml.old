@@ -1,0 +1,146 @@
+###
+# Copyright (2017) Hewlett Packard Enterprise Development LP
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# You may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+### 
+---
+- hosts: win_worker
+  gather_facts: false
+  connection: local
+  user: remote
+  become: false
+
+  vars_files:
+    - ../group_vars/vars
+    - ../group_vars/vault
+
+  environment: "{{ env }}"
+
+  vars:
+    proxy_switch: "{% if  env.http_proxy is defined  %}-Proxy http://{{ env.http_proxy  }}{% endif %}"
+
+  tasks:
+
+#
+# Could not make the win_psmodule work behind a proxy, hence the use of win_shell, also 
+#
+
+#
+# Install Docker on the Windows VMs if 
+# the "enable_windows" variable is "true"
+#
+
+    - block:
+
+        #
+        # Apply Windows updates if wanted
+        #
+        - name: Configure Proxy for updates
+          win_shell: |
+            netsh winhttp set proxy http://{{ env.http_proxy }}
+          when: env.http_proxy is defined
+
+        - set_fact:
+            windows_update: "{{ windows_update | default(true) }}"
+
+        - block:
+
+          - name: Download and install Windows updates
+            win_updates:
+            register: update_result
+
+          - name: Reboot VM after Updates if required
+            win_reboot:
+              post_reboot_delay: 30
+            when: update_result.reboot_required
+
+          when: windows_update is defined and windows_update
+
+        - name: Evaluate Path of Powershell Profile
+          win_shell: |
+            split-path $profile
+          register: res
+
+        - name: Create Profile Directory
+          win_file:
+            path: "{{ res.stdout_lines[0] }}"
+            state: directory
+
+        - name: Configure Proxy for Powershell
+          win_template:
+            src: ../templates/windows/ps_profile.ps1.j2
+            dest: 'C:\Users\Administrator\Documents\WindowsPowerShell\Microsoft.PowerShell_profile.ps1'
+          when: env.http_proxy is defined
+       
+        - name: Configure Proxy for Dockr Daemon
+          win_shell: |
+            [Environment]::SetEnvironmentVariable("HTTP_PROXY", "http://{{ env.http_proxy }}/", [EnvironmentVariableTarget]::Machine)
+          when: env.http_proxy is defined
+
+        - name: Install Nuget Provider
+          win_shell: |
+            Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force {{ proxy_switch }}
+          register: res
+        - debug: var=res
+
+        - name: Install DockerMsftProvider Powershell Module
+          win_shell: |
+            Install-Module DockerMsftProvider -Force {{ proxy_switch }}
+          register: res
+        - debug: var=res
+
+        - name: Install Docker Package
+          win_shell: Install-Package Docker -ProviderName DockerMsftProvider -Force
+          register: res
+
+        - name: Check if Windows reboot is required
+          win_shell: |
+            (Install-WindowsFeature Containers).RestartNeeded
+          register: res
+        - debug: var=res
+
+        - name: Reboot VM after Docker package installation
+          win_reboot:
+          when: res.stdout_lines[0] == "Yes"
+
+        - name: Start Docker Service
+          win_service:
+            name: Docker
+            start_mode: auto
+            state: restarted
+
+        - name: Install required docker swarm ucp-agent-win image 
+          win_shell: |
+            docker image pull docker/ucp-agent-win:{{ ucp_version }}
+
+        - name: Install required docker swarm ucp-dsinfo-win image
+          win_shell: |
+            docker image pull docker/ucp-dsinfo-win:{{ ucp_version }}
+
+        - name: Run Windows node setup script
+          win_shell: |
+            docker run --rm docker/ucp-agent-win:{{ ucp_version }} windows-script | 
+            powershell -noprofile -noninteractive -command 'Invoke-Expression -Command $input'
+          register: res
+        - debug: var=res
+
+        - name: Test Docker Installation
+          win_shell: docker container run hello-world:nanoserver
+          register: docker_cmd
+
+        - name: Fail Playbook if Docker Test Fails
+          fail:
+          when: docker_cmd.rc != 0
+
+      when: 
+        - enable_windows == true

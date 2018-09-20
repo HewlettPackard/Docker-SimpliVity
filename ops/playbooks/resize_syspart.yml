@@ -1,0 +1,44 @@
+###
+# Copyright (2017) Hewlett Packard Enterprise Development LP
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# You may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+### 
+---
+- hosts: vms
+  gather_facts: false
+  become_user: root
+  become: true
+
+  vars_files:
+    - ../group_vars/vars
+    - ../group_vars/vault
+
+  environment: "{{ env }}"
+
+  tasks:
+
+    - name: Resize system partition (Linux)
+      shell: |
+        start=$(parted /dev/sda unit mb print free | tail -2 | awk "/Free Space/ { print \$1 }")
+        if [ "$start" == "" ]
+        then 
+          echo no space left
+        else  
+          parted /dev/sda mkpart primary ext4 $start 100%
+          partprobe -s
+          pvcreate /dev/sda3
+          vgextend rhel /dev/sda3
+          lvextend -l +100%FREE /dev/rhel/root
+          xfs_growfs /
+        fi
+

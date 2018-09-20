@@ -44,18 +44,29 @@
       shell: yum-config-manager --enable rhel-7-server-extras-rpms
 
     - name: Set Docker url
-      shell: echo {{ docker_ee_url }}/rhel > /etc/yum/vars/dockerurl
+      lineinfile:
+        path: /etc/yum/vars/dockerurl
+        create: yes
+        backup: yes
+        state: present
+        line: "{{ docker_ee_url }}/rhel" 
 
-    - name: Set Docker version
-      shell: echo {{ rhel_version }}  > /etc/yum/vars/dockerosversion
+    - name: Set OS version
+      lineinfile:
+        path: /etc/yum/vars/dockerosversion
+        create: yes
+        backup: yes
+        state: present
+        line: "{{ rhel_version }}"
 
     - name: Add Docker repository
       command: yum-config-manager --add-repo {{ docker_ee_url }}/rhel/docker-ee.repo
 
     - name: Install Docker
       yum:
-        name: docker-ee
-        state: latest
+        name: '{{ docker_ee_version | default("docker-ee") }}'
+#        enablerepo: docker-ee-test-18.01
+        state: 'latest' 
         update_cache: yes
 
     - name: Ensure Docker is started

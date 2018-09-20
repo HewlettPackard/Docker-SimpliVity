@@ -38,12 +38,12 @@
       when: env.http_proxy is defined or env.https_proxy is defined
       notify: Restart Docker
 
-    - name: Add insecure registry
-      lineinfile:
-        path: /usr/lib/systemd/system/docker.service
-        regexp: 'ExecStart=.*'
-        line: 'ExecStart=/usr/bin/dockerd --insecure-registry {{ dtr_lb }}'
-      notify: Restart Docker
+#    - name: Add insecure registry
+#      lineinfile:
+#        path: /usr/lib/systemd/system/docker.service
+#        regexp: 'ExecStart=.*'
+#        line: 'ExecStart=/usr/bin/dockerd --insecure-registry {{ dtr_lb }}'
+#      notify: Restart Docker
 
     - meta: flush_handlers
 

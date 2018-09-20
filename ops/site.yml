@@ -1,23 +1,31 @@
 ---
 # This playbook will create a Docker UCP environment
 
-- include: playbooks/create_vms.yml
-- include: playbooks/config_networking.yml
-#- include: playbooks/distribute_keys.yml # this step is optional; enabling it will allow for passwordless login between nodes
-#- include: playbooks/config_subscription.yml
-- include: playbooks/install_haproxy.yml
-- include: playbooks/install_ntp.yml
-- include: playbooks/install_docker.yml
-- include: playbooks/install_rsyslog.yml
-- include: playbooks/config_docker_lvs.yml
-- include: playbooks/docker_post_config.yml
-- include: playbooks/install_nfs_server.yml
-- include: playbooks/install_nfs_clients.yml
-- include: playbooks/install_ucp_nodes.yml
-- include: playbooks/install_dtr_nodes.yml
-- include: playbooks/install_worker_nodes.yml
-- include: playbooks/install_logspout.yml
-- include: playbooks/config_scheduler.yml
-- include: playbooks/config_monitoring.yml
-- include: playbooks/config_dummy_vms_for_docker_volumes_backup.yml
-- include: playbooks/config_simplivity_backups.yml
+- import_playbook: playbooks/create_vms.yml
+- import_playbook: playbooks/config_networking.yml
+- import_playbook: playbooks/resize_syspart.yml
+#- import_playbook: playbooks/config_subscription.yml
+- import_playbook: playbooks/install_haproxy.yml
+- import_playbook: playbooks/config_ntp.yml
+- import_playbook: playbooks/install_docker.yml
+- import_playbook: playbooks/install_rsyslog.yml
+- import_playbook: playbooks/config_docker_lvs.yml
+- import_playbook: playbooks/docker_post_config.yml
+- import_playbook: playbooks/install_nfs_server.yml
+- import_playbook: playbooks/install_nfs_clients.yml
+- import_playbook: playbooks/create_main_ucp.yml
+- import_playbook: playbooks/scale_ucp.yml
+- import_playbook: playbooks/create_main_dtr.yml
+#- import_playbook: playbooks/install_logspout.yml
+#- import_playbook: playbooks/config_monitoring.yml
+#- import_playbook: playbooks/splunk_demo.yml
+#- import_playbook: playbooks/splunk_uf.yml
+#- import_playbook: playbooks/splunk_k8s.yml
+- import_playbook: playbooks/config_scheduler.yml
+- import_playbook: playbooks/scale_workers.yml
+- import_playbook: playbooks/scale_dtr.yml
+- import_playbook: playbooks/reconfigure_dtr.yml
+#- import_playbook: playbooks/install_sysdig.yml
+- import_playbook: playbooks/config_dummy_vms_for_docker_volumes_backup.yml
+- import_playbook: playbooks/config_simplivity_backups.yml
+
