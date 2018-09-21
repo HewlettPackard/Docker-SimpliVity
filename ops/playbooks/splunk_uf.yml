@@ -157,7 +157,7 @@
 
   tasks:
 
-  - block:
+  - block:  # monitoring_stack is defined
 
     - include_tasks: includes/find_ucp.yml ping_servers="{{ groups.ucp }}"
 
@@ -244,8 +244,7 @@
 
 # end of section for Windows Hosts
 
-
-    when: monitoring_stack is defined and enable_windows == true
+    when: monitoring_stack is defined
 
 
   - debug: msg="No splunk integration wanted"

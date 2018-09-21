@@ -81,10 +81,6 @@
 
   tasks:
 
-#
-# Install Vsphere plugin on the Windows VMs if
-# the "enable_windows" variable is "true"
-#
   - name: Download vSphere Docker Volume Service Installer
     win_get_url:
       url: "{{ windows_vdvs_ps }}"
