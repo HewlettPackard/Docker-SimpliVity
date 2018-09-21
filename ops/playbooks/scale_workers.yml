@@ -14,7 +14,8 @@
 # limitations under the License.
 ###
 ---
-- hosts: worker
+- name: Join Workers (Linix)
+  hosts: worker
   gather_facts: false
 
   vars_files:
@@ -35,3 +36,32 @@
       ARG_ADVERTIZE_IP:  "{{ ucp_instance }}.{{ domain_name }}:2377"
       worker_role_ports: "{{ internal_worker_ports }}"
       worker_join_delay: 180
+
+###############################################################
+#
+# Play 2: Join Windows Workers
+#
+###############################################################
+- name: Join Workers (Windows)
+  hosts: win_worker
+  gather_facts: false
+
+  vars_files:
+    - ../group_vars/vars
+    - ../group_vars/vault
+
+  pre_tasks:
+    - include_tasks: includes/find_ucp.yml ping_servers="{{ groups.ucp }}"
+      when: enable_windows == true
+    - debug: var=ucp_instance
+      when: _debug is defined
+
+  roles:
+    - role: windows_worker
+      ARG_UCP_IP:        "{{ ucp_instance }}.{{domain_name}}"
+      ARG_UCP_USER:      "{{ ucp_username }}"
+      ARG_UCP_PASSWORD:  "{{ ucp_password }}"
+      ARG_ADVERTIZE_IP:  "{{ ucp_instance }}.{{ domain_name }}:2377"
+      worker_join_delay: 180
+      when: enable_windows == true
+
