@@ -28,4 +28,3 @@
 #- import_playbook: playbooks/install_sysdig.yml
 - import_playbook: playbooks/config_dummy_vms_for_docker_volumes_backup.yml
 - import_playbook: playbooks/config_simplivity_backups.yml
-

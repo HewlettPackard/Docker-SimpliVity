@@ -15,8 +15,8 @@ disk2: '/dev/sdb'
 disk2_part: '/dev/sdb1'
 vsphere_plugin_version: '0.21' 
 
-# enable_windows: if defined true the creatation of windows 2016 worker nodes will be actioned, default is false
-enable_windows: false
+# enable_windows: is obsolete, ignored
+#enable_windows: false
 win_vm_template: 'windows-template-name'
 win_username: 'Administrator'
 windows_vdvs_ps: 'https://raw.githubusercontent.com/vmware/vsphere-storage-for-docker/master/install-vdvs.ps1'
