@@ -1,67 +1,75 @@
 global
-    log         127.0.0.1 local2
-    chroot      /var/lib/haproxy
-    pidfile     /var/run/haproxy.pid
-    maxconn     256
-    user        haproxy
-    group       haproxy
-    daemon
-    stats socket /var/lib/haproxy/stats
+  log         127.0.0.1 local2
+  chroot      /var/lib/haproxy
+  pidfile     /var/run/haproxy.pid
+  maxconn     256
+  user        haproxy
+  group       haproxy
+  daemon
+  stats socket /var/lib/haproxy/stats
 defaults
-    mode    tcp
-    timeout connect 5000
-    timeout client 50000
-    timeout server 50000
+  mode    tcp
+  option dontlognull
+  timeout connect 5000
+  timeout client 50000
+  timeout server 50000
+  timeout tunnel 1h
+  timeout client-fin 50s
 #
 # If you want stats, you ' ll have to enable the corresponding port manually in the LB's firewall
 #
-listen stats :1936
-   mode http
-   stats enable
-   stats hide-version
-   stats realm Haproxy\ Statistics
-   stats uri /
-   stats auth admin:admin
+frontend ucp_stats
+  mode http
+  bind 0.0.0.0:1936
+  default_backend ucp_stats_backend
 
-frontend ucp
-    option tcplog
-    log global
-    bind *:80
-    redirect scheme https code 301 if !{ ssl_fc }
-    bind *:443
-    default_backend ucp
+backend ucp_stats_backend
+  mode http
+  option httplog
+  stats enable
+  stats hide-version
+  stats realm Haproxy\ Statistics
+  stats uri /
+  stats auth admin:admin
+  stats admin if TRUE
+  stats refresh 5m
 
-backend ucp
-    balance roundrobin
+frontend ucp_443
+  mode tcp
+  bind 0.0.0.0:443
+  default_backend ucp_443_backend
+
+backend ucp_443_backend
+  mode tcp
+  option httpchk GET /_ping HTTP/1.1\r\nHost:\ {{ groups.ucp_lb[0] }}.{{ domain_name }}
+  balance source
 {% for host in groups.ucp %}
-    server {{ host }} {{ hostvars[host].ip_addr | ipaddr('address') }}:443 check 
+  server {{ host }} {{ hostvars[host].ip_addr | ipaddr('address') }}:443  weight 100 check check-ssl verify none
+{% endfor %}
+
+frontend k8s_6443
+  option tcplog
+  log global
+  bind *:6443
+  default_backend k8s_6443_backend
+
+backend k8s_6443_backend
+  balance roundrobin
+{% for host in groups.ucp %}
+  server {{host}} {{ hostvars[host].ip_addr | ipaddr('address') }}:6443 check
 {% endfor %}
 
 frontend grafana
-    bind *:3000
-    log global
-    mode http
-    option httplog
-    default_backend grafana
+  bind *:3000
+  log global
+  mode http
+  option httplog
+  default_backend grafana_backend
 
-backend grafana
-    mode http
-    balance source
+backend grafana_backend
+  mode http
+  balance source
 {% for host in groups.ucp %}
-    server g_{{host}} {{ hostvars[host].ip_addr | ipaddr('address') }}:3000 check
+    server {{host}} {{ hostvars[host].ip_addr | ipaddr('address') }}:3000 check
 {% endfor %}
 
-{% if k8s == 'true'%}
-frontend k8s
-    option tcplog
-    log global
-    bind *:6443
-    default_backend k8s
-
-backend k8s
-    balance roundrobin
-{% for host in groups.ucp %}
-    server k8s_{{ host }} {{ hostvars[host].ip_addr | ipaddr('address') }}:6443 check
-{% endfor %}
-
-{% endif %}
