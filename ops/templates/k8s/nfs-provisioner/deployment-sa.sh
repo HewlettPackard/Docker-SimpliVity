@@ -4,6 +4,7 @@ kind: Deployment
 apiVersion: extensions/v1beta1
 metadata:
   name: nfs-provisioner
+  namespace: {{ nfs_provisioner_namespace }}
 spec:
   replicas: 1
   strategy:

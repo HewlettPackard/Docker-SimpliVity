@@ -27,6 +27,28 @@
   environment: "{{ env }}"
 
   tasks:
+
+    # see http://success.docker.com/article/node-using-swap-memory-instead-of-host-memory
+    - name: Set vm.swapiness
+      sysctl:
+        name: vm.swappiness
+        value: 0
+        state: present
+
+    # http://success.docker.com/article/node-using-swap-memory-instead-of-host-memory
+    - name: set sysctl.vm.overcommit_memory
+      sysctl:
+        name: vm.overcommit_memory
+        value: 1
+        state: present
+
+    # http://success.docker.com/article/fix-ucp-calico-for-rp-filter
+    - name: set net.ipv4.conf.all.rp_filter
+      sysctl:
+        name: net.ipv4.conf.all.rp_filter
+        value: 1
+        state: present
+
     - name: Install dependencies
       yum:
         name: "{{ item }}"
@@ -107,7 +129,6 @@
         $svc.status
       }
     register: status
-  - debug: var=status
 
   - block: # Docker is not running
     #
@@ -121,7 +142,6 @@
     - name: See if Windows Updates are wanted or not
       set_fact:
         windows_update: "{{ windows_update | default(true) }}"
-    - debug: var=status
 
     - block:
 
@@ -205,6 +225,14 @@
         start_mode: auto
         state: restarted
 
+    - wait_for_connection:
+        delay: 120
+        timeout: 300
+      register: res
+
+    - debug: var=res
+      when: _debug is defined
+
     - name: Install required docker swarm ucp-agent-win image 
       win_shell: |
         docker image pull docker/ucp-agent-win:{{ ucp_version }}
@@ -229,9 +257,10 @@
       fail:
       when: docker_cmd.rc != 0
 
-    when: status.stdout == "" # Docker was not running
+    # idempotency not implemented, we don't touch the target if the service was installed
+    when: status.stdout == "" # Docker was installedO
 
   - block: # Docker was running
-    - debug: msg="Docker is already up and running"
-    when: status.stdout_lines[0] == "Running"
+    - debug: msg="Docker Service is installed, not making any change to the system"
+    when: status.stdout_lines != ""
 

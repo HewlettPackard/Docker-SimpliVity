@@ -128,6 +128,7 @@ k8s_cluster: 'ucp_hpe-ucp.cloudra.local'
 nfs_provisioner_role: 'nfs-provisioner-runner'
 nfs_provisioner_name: "hpe.com/nfs"
 nfs_provisioner_storage_class_name: "nfs"
+nfs_provisioner_namespace: nfsstorage
 #nfs_provisioner_server_ip: vfs3par.cloudra.local
 #nfs_provisioner_server_share: '/vfs3par/vfs3par/fs_clh/share'
 nfs_provisioner_server_ip: clh-nfs.cloudra.local
