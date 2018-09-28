@@ -177,7 +177,7 @@
 
     - name: Grant the service account with the role
       uri:
-        url: "https://{{ ucp_instance }}.{{ domain_name }}/collectionGrants/system%3Aserviceaccount%3Adefault%3Anfs-provisioner/kubernetesnamespaces/{{ nfs_role[0].id }}?type=grantobject"
+        url: "https://{{ ucp_instance }}.{{ domain_name }}/collectionGrants/system%3Aserviceaccount%3A{{ nfs_provisioner_namespace}}%3Anfs-provisioner/kubernetesnamespaces/{{ nfs_role[0].id }}?type=grantobject"
         headers:
           Content-Type: application/json
           Authorization: Bearer {{ auth_token }}
