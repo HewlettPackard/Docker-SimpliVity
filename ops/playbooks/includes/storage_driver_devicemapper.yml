@@ -14,18 +14,7 @@
 # limitations under the License.
 ### 
 ---
-- hosts: docker
-  gather_facts: false
-  become_user: root
-  become: true
-
-  vars_files:
-    - ../group_vars/vars
-
-  environment: "{{ env }}"
-
-  tasks:
-
+        
     - name: Check for partitions on disk
       parted:
         state: info
@@ -47,7 +36,7 @@
         part_start: 0%
         part_end: 100%
       when: partPresent == false
-        
+
     - name: Create Docker VG
       lvg:
         vg: docker
@@ -90,10 +79,5 @@
         state: directory
 
     - name: Config Docker daemon
-      template: src=../templates/daemon.json.j2 dest=/etc/docker/daemon.json
+      template: src=../templates/daemon.devicemapper.json.j2 dest=/etc/docker/daemon.json
 
-    - name: Enable and start docker service
-      systemd:
-        name: docker
-        enabled: yes
-        state: started
