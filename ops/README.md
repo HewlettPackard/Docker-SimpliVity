@@ -634,7 +634,7 @@ All Docker-related variables are mandatory and are described in Table 8.
 | images_folder | Directory in the NFS server that will be mounted in the DTR nodes and that will host your Docker images. |
 | license_file  | Full path to your Docker EE license file (it should be stored in your Ansible host).<br>License file is available from the Docker Store |
 | ucp_username  | Username of the administrator user for UCP and DTR, typically `admin`. Note: The corresponding password is stored in a separate file (`group_vars/vault`) with the variable named `ucp_password`.|
-
+| docker_storage_driver  | Storage driver to use by the Docker engine. Accepts two values. `overlay2` (recommended) or `devicemapper`. If this variable is not defined, `overlay2` is configured. |
 
 
 

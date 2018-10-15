@@ -7,9 +7,9 @@
 #- import_playbook: playbooks/config_subscription.yml
 - import_playbook: playbooks/install_haproxy.yml
 - import_playbook: playbooks/config_ntp.yml
+- import_playbook: playbooks/config_storage_driver.yml
 - import_playbook: playbooks/install_docker.yml
 - import_playbook: playbooks/install_rsyslog.yml
-- import_playbook: playbooks/config_docker_lvs.yml
 - import_playbook: playbooks/docker_post_config.yml
 - import_playbook: playbooks/install_nfs_server.yml
 - import_playbook: playbooks/install_nfs_clients.yml

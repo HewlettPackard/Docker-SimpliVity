@@ -133,3 +133,8 @@ nfs_provisioner_namespace: nfsstorage
 #nfs_provisioner_server_share: '/vfs3par/vfs3par/fs_clh/share'
 nfs_provisioner_server_ip: clh-nfs.cloudra.local
 nfs_provisioner_server_share: '/k8s'
+
+
+#storage driver for docker nodes: accepted values are 'overlay2' and devicemapper
+#docker_storage_driver: overlay2
+
