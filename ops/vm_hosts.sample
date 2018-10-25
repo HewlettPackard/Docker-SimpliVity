@@ -40,24 +40,15 @@ ram='65536'
 disk2_size='500'
 orchestrator=kubernetes
 
-## LOAD BALANCERS
-[ucp_lb]
-hpe-ucp ip_addr='10.60.59.17/16'    esxi_host='esxi-hpe-1.cloudra.local'
+## LOAD BALANCERS (new style, using floating IPs managed by keepalived), make sure you document the dictionary loadbalancers: in group_vars/vars
+[loadbalancer]
+hpe-lb1 ip_addr='10.10.174.160/22' esxi_host='esxi-hpe-1.cloudra.local' ucp=true worker=true
+hpe-lb2 ip_addr='10.10.174.161/22' esxi_host='esxi-hpe-2.cloudra.local' dtr=true
 
-[dtr_lb]
-hpe-dtr ip_addr='10.60.59.18/16'    esxi_host='esxi-hpe-2.cloudra.local'
-
-[worker_lb]
-hpe-worker ip_addr='10.60.59.19/16' esxi_host='esxi-hpe-3.cloudra.local'
-
-[lbs]
-hpe-ucp ip_addr='10.60.59.17/16'    esxi_host='esxi-hpe-1.cloudra.local'
-hpe-dtr ip_addr='10.60.59.18/16'    esxi_host='esxi-hpe-2.cloudra.local'
-hpe-worker ip_addr='10.60.59.19/16' esxi_host='esxi-hpe-3.cloudra.local'
-
-[lbs:vars]
+[loadbalancer:vars]
 cpus='2'
 ram='4096'
+
 
 [docker:children]
 ucp

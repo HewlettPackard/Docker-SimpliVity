@@ -84,13 +84,13 @@ internal_wrkk8s_ports:
  
 
 internal_ucp_ports:
-  - "{% if k8s == 'true' %}{{ internal_ucpk8s_ports }}{% else %}{{  internal_ucp200_ports }}{% endif %}"
+  "{% if k8s == 'true' %}{{ internal_ucpk8s_ports }}{% else %}{{  internal_ucp200_ports }}{% endif %}"
 
 internal_worker_ports:
-  - "{% if k8s == 'true' %}{{ internal_wrkk8s_ports }}{% else %}{{  internal_wrk200_ports }}{% endif %}"
+  "{% if k8s == 'true' %}{{ internal_wrkk8s_ports }}{% else %}{{  internal_wrk200_ports }}{% endif %}"
 
 internal_dtr_ports:
-  - "{% if k8s == 'true' %}{{ internal_dtrk8s_ports }}{% else %}{{  internal_dtr200_ports }}{% endif %}"
+  "{% if k8s == 'true' %}{{ internal_dtrk8s_ports }}{% else %}{{  internal_dtr200_ports }}{% endif %}"
 
 internal_syslog_ports:
   - 514/tcp
@@ -106,8 +106,8 @@ internal_ucpk8s_lb_ports:
   - 443/tcp
   - 6443/tcp
 
-internal_ucp_lb_ports:
-  - "{% if k8s == 'true' %}{{ internal_ucpk8s_lb_ports }}{% else %}{{  internal_ucp200_lb_ports }}{% endif %}"
+internal_ucp_lb_ports: 
+  "{% if k8s == 'true' %}{{ internal_ucpk8s_lb_ports }}{% else %}{{ internal_ucp200_lb_ports }}{% endif %}"
 
 internal_dtr_lb_ports:
   - 80/tcp
@@ -117,4 +117,18 @@ internal_worker_lb_ports:
   - 80/tcp
   - 443/tcp
 
+#
+# if new-style load balancers are wanted, they take precedence over the old-style singleton load balancers once specified with ucp_lb, dtr_lb and worker_lb
+#
+ucp_lb_fqdn_legacy: "{% if groups.ucp_lb is defined and groups.ucp_lb | length > 0 %}{{ groups.ucp_lb[0] }}.{{ domain_name }}{% endif %}"
+ucp_lb_fqdn_vrrp: "{% if loadbalancers is defined and loadbalancers.ucp is defined %}{{ loadbalancers.ucp.public_fqdn }}{% endif %}"
+ucp_lb_fqdn: "{% if ucp_lb_fqdn_vrrp | length > 0 %}{{ ucp_lb_fqdn_vrrp }}{% else %}{{ ucp_lb_fqdn_legacy }}{% endif %}"
+
+ucp_lb_ipv4_legacy: "{% if groups.ucp_lb is defined and groups.ucp_lb | length > 0 %}{{ hostvars[groups.ucp_lb[0]].ip_addr | ipaddr('address') }}{% endif %}"
+ucp_lb_ipv4_vrrp: "{% if loadbalancers is defined and loadbalancers.ucp is defined %}{{ loadbalancers.ucp.public_vip }}{% endif %}"
+ucp_lb_ipv4: "{% if ucp_lb_ipv4_vrrp | length > 0 %}{{ ucp_lb_ipv4_vrrp }}{% else %}{{ ucp_lb_ipv4_legacy }}{% endif %}"
+
+dtr_lb_fqdn_legacy: "{% if groups.dtr_lb is defined and groups.dtr_lb | length > 0 %}{{ groups.dtr_lb[0] }}.{{ domain_name }}{% endif %}"
+dtr_lb_fqdn_vrrp: "{% if loadbalancers is defined and loadbalancers.dtr is defined %}{{ loadbalancers.dtr.public_fqdn }}{% endif %}"
+dtr_lb_fqdn: "{% if dtr_lb_fqdn_vrrp | length > 0 %}{{ dtr_lb_fqdn_vrrp }}{% else %}{{ dtr_lb_fqdn_legacy }}{% endif %}"
 

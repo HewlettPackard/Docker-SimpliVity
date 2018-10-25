@@ -26,8 +26,6 @@
     - includes/internal_vars.yml
 
   vars:
-    dtr_lb: "{{ groups['dtr_lb'][0] }}.{{ domain_name }}"
-    ucp_lb: "{{ groups['ucp_lb'][0] }}.{{ domain_name }}"
     nfs_server: "{{ hostvars[groups['nfs'][0]].ip_addr | ipaddr('address') }}"
     http_proxy_switch:  "{% if  env.http_proxy is defined %} --http-proxy {{ env.http_proxy }} {% endif %}"
     https_proxy_switch:  "{% if  env.https_proxy is defined %} --https-proxy {{ env.https_proxy }} {% endif %}"
@@ -82,8 +80,8 @@
       command: docker run --env UCP_USERNAME --env UCP_PASSWORD {{ switch_env_ucp_ca }} {{ switch_env_dtr_certificates }} docker/dtr:{{ dtr_version }} install 
              --nfs-storage-url nfs://{{ nfs_server }}{{ images_folder }}
              --ucp-node {{ inventory_hostname }}.{{ domain_name }}
-             --dtr-external-url https://{{ groups.dtr_lb[0] }}.{{ domain_name }}
              --ucp-url https://{{ ucp_instance }}.{{ domain_name }}
+             --dtr-external-url https://{{ groups.dtr[0] }}.{{ domain_name }}
              {{ switch_ucp_insecure }}
              {{ http_proxy_switch }} {{ https_proxy_switch }} {{ no_proxy_switch }}
       vars:
@@ -92,22 +90,3 @@
         switch_env_dtr_certificates: "{% if dtr_ca_cert is defined %}--env DTR_CA --env DTR_CERT --env DTR_KEY{% endif %}" 
       when: dtr_instance == ".none." 
       register: dtrlog
-#      until: dtrlog.rc == 0
-#      retries: 2
-#      delay: 20
-
-#
-# Enable Image Scanning
-#
-#    - name: Enable image scanning
-#      uri:
-#        url: "https://{{ inventory_hostname }}.{{ domain_name }}/api/v0/meta/settings"
-#        method: POST
-#        user: "{{ ucp_username }}"
-#        password: "{{ ucp_password }}"
-#        body: {"scanningEnabled":true}
-#        status_code: 202
-#        body_format: json
-#        force_basic_auth: yes
-#        validate_certs: no
-#      when: dtr_instance == ".none." 

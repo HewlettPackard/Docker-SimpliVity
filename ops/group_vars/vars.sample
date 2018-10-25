@@ -138,3 +138,23 @@ nfs_provisioner_server_share: '/k8s'
 #storage driver for docker nodes: accepted values are 'overlay2' and devicemapper
 #docker_storage_driver: overlay2
 
+#
+# Load Balancers, comment out if using the old-style load balancers (ucp_lb, dtr_lb, worker_lb)
+#
+loadbalancers:
+  ucp:
+    public_interface: 'ens192'
+    public_vip: '10.10.174.135'
+    public_fqdn: svt2-ucp.am2.cloudra.local
+    virtual_router_id: 51
+  dtr:
+    public_interface: 'ens192'
+    public_vip: '10.10.174.136'
+    public_fqdn: svt2-dtr.am2.cloudra.local
+    virtual_router_id: 52
+  worker:
+    public_interface: 'ens192'
+    public_vip: '10.10.174.137'
+    public_fqdn: svt2-wrk.am2.cloudra.local
+    virtual_router_id: 53
+

@@ -14,13 +14,15 @@
 # limitations under the License.
 ###
 ---
-- hosts: local
+- name: Reconfigure DTR
+  hosts: local
   gather_facts: false
 
   vars_files:
     - ../group_vars/vars
     - ../group_vars/vault
-    - ../group_vars/backups
+    - includes/internal_vars.yml
+#    - ../group_vars/backups
 
   vars:
     http_proxy_switch:  "{% if  env.http_proxy is defined %} --http-proxy {{ env.http_proxy }} {% endif %}"
@@ -62,13 +64,21 @@
 # We reconfigure the UCP endpoint, for some reason, using the LB fqdn does not work when we install/join DTR
 #
 
+    - name: Do we have UCP Load Balancer defined
+      set_fact:
+        ucp_url: "{% if ucp_lb_fqdn | length > 0 %}https://{{ ucp_lb_fqdn }}{% else %}https://{{ ucp_instance }}.{{domain_name}}{% endif %}"
+    - name: Do we have DTR Load Balancer defined
+      set_fact:
+        dtr_url: "{% if dtr_lb_fqdn | length > 0 %}https://{{ dtr_lb_fqdn }}{% else %}https://{{ groups.dtr[0] }}.{{domain_name}}{% endif %}"
+
     - name: Reconfigure DTR
       command: docker run 
         --env UCP_USERNAME 
         --env UCP_PASSWORD 
         {{ switch_env_ucp_ca }} {{  switch_env_dtr_certificates }}
         docker/dtr:{{ dtr_version }} reconfigure
-          --ucp-url https://{{ groups.ucp_lb[0] }}.{{ domain_name }} 
+          --ucp-url {{ ucp_url }}
+          --dtr-external-url {{ dtr_url }}
           {{ switch_ucp_insecure }} --existing-replica-id {{ existing_dtr_replica_id }}
       vars:
         switch_ucp_insecure:         "{% if ucp_ca_cert is defined %}{% else %}--ucp-insecure-tls{% endif %}"
