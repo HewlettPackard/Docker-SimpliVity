@@ -15,7 +15,7 @@
 ### 
 ---
 - name: Install Load Balancers
-  hosts: lbs
+  hosts: loadbalancer
   gather_facts: false
   become_user: root
   become: true
@@ -29,25 +29,22 @@
   tasks:
 
     - set_fact: 
-        open_ports:
-          - "{{ internal_dtr_lb_ports }}"
-      when: inventory_hostname in groups.dtr_lb
- 
-    - set_fact:
-        open_ports: "{{ internal_ucp_lb_ports }}"
-      when: inventory_hostname in groups.ucp_lb
- 
-    - set_fact:
-        open_ports: "{{ internal_worker_lb_ports }}"
-      when: inventory_hostname in groups.worker_lb
- 
-    - name: Open  ports  in the firewall
+        open_ports: "{{ internal_dtr_lb_ports | union (internal_ucp_lb_ports) | union ( internal_worker_lb_ports ) }}"
+
+    - name: Open ports  in the firewall
       firewalld:
         port: "{{ item }}"
         immediate: true
         permanent: true
         state: enabled
       with_items: "{{ open_ports }}"
+
+    - name: Add rule for vrrp protocole
+      firewalld:
+        rich_rule: 'rule protocol value="vrrp" accept'
+        immediate: true
+        permanent: true
+        state: enabled
 
     - name: Install Required Pkgs for seboolean module
       yum:
@@ -57,50 +54,74 @@
         - libsemanage-python
         - libselinux-python
 
+    - name: Install haproxy and keepalived
+      yum:
+        name: "{{ item }}"
+        state: latest
+      with_items:
+        - psmisc
+        - haproxy
+        - keepalived
+
     - name: Enable HAPROXY to open non standard ports
       seboolean:
         name: haproxy_connect_any
         state: yes
         persistent: yes
 
-    - name: Install haproxy
-      yum:
-        name: haproxy
-        state: latest
+    - name: Allow binding on remote IPs
+      sysctl:
+        name: net.ipv4.ip_nonlocal_bind
+        value: 1
+        state: present
 
-    - name: Update haproxy.cfg on Worker Load Balancer
+    - name: Allow routing
+      sysctl:
+        name: net.ipv4.ip_forward
+        value: 1
+        state: present
+
+    - name: Update haproxy.cfg
       template:
-        src: ../templates/haproxy.cfg.worker.j2
+        src: ../templates/lbs/haproxy.cfg.j2
         dest: /etc/haproxy/haproxy.cfg
         owner: root
         group: root
         mode: 0644        
-      when: inventory_hostname in groups.worker_lb
       notify: Enable and start haproxy service
 
-    - name: Update haproxy.cfg on UCP Load Balancer
-      template:
-        src: ../templates/haproxy.cfg.ucp.j2
-        dest: /etc/haproxy/haproxy.cfg
-        owner: root
-        group: root
-        mode: 0644
-      when: inventory_hostname in groups.ucp_lb
-      notify: Enable and start haproxy service
+    - name: Enable and start haproxy service
+      systemd:
+        name: haproxy
+        enabled: yes
+        state: started
 
-    - name: Update haproxy.cfg on DTR Load Balancer
+    - name: Update keepalived.conf
       template:
-        src: ../templates/haproxy.cfg.dtr.j2
-        dest: /etc/haproxy/haproxy.cfg
+        src: ../templates/lbs/keepalived.conf.j2
+        dest: /etc/keepalived/keepalived.conf
         owner: root
         group: root
-        mode: 0644
-      when: inventory_hostname in groups.dtr_lb
-      notify: Enable and start haproxy service
+        mode: 0644        
+      notify: Enable and start keepalived service
+
+    - name: Enable and start keepalived service
+      systemd:
+        name: keepalived
+        enabled: yes
+        state: started
 
   handlers:
+
     - name: Enable and start haproxy service
       systemd:
         name: haproxy
         enabled: yes
         state: restarted
+
+    - name: Enable and start keepalived service
+      systemd:
+        name: keepalived
+        enabled: yes
+        state: restarted
+

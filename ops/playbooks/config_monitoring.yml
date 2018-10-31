@@ -31,8 +31,7 @@
     - role: hpe.openports
       hpe_openports_ports:
         - 3000/tcp
-      when: inventory_hostname in groups.ucp_lb
-
+      when: inventory_hostname in groups.ucp_lb or inventory_hostname in groups.loadbalancer
 
   tasks:
 
@@ -118,7 +117,7 @@
         owner: root
         group: root
         mode: 0644
-      when: inventory_hostname in groups.ucp_lb
+      when: inventory_hostname in groups.ucp_lb or inventory_hostname in groups.loadbalancer
       notify: Enable and start haproxy service
 
   handlers:

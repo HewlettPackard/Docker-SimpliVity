@@ -14,7 +14,8 @@
 # limitations under the License.
 ### 
 ---
-- hosts: ucp_main
+- name: Create First UCP Instance
+  hosts: ucp_main
   gather_facts: false
   become_user: root
   become: true
@@ -25,8 +26,8 @@
     - includes/internal_vars.yml
 
   vars:
-    san_fqdns: "{% for host in groups['ucp']+groups['ucp_lb'] %}--san {{ host }}.{{ domain_name }} {% endfor %}"
-    san_ips: "{% for host in groups['ucp']+groups['ucp_lb'] %} --san {{ hostvars[host].ip_addr | ipaddr('address') }} {% endfor %}"
+    san_fqdns: "{% for host in groups['ucp'] %}--san {{ host }}.{{ domain_name }} {% endfor %} {% if ucp_lb_fqdn | length > 0 %}--san {{ ucp_lb_fqdn }} {% endif %}"
+    san_ips: "{% for host in groups['ucp'] %} --san {{ hostvars[host].ip_addr | ipaddr('address') }} {% endfor %} {% if ucp_lb_ipv4 | length > 0 %} --san {{ ucp_lb_ipv4 }} {% endif %}"
     san_all_formatted: "{{ san_fqdns }} {{ san_ips }}"
 
   environment:
@@ -82,14 +83,16 @@
 #
 # Install UCP if needed
 #
+
     - name: Install swarm leader and first UCP node
-      command: docker run --rm --env UCP_ADMIN_USER --env UCP_ADMIN_PASSWORD
-        --name ucp
-        -v /var/run/docker.sock:/var/run/docker.sock 
-        -v /tmp/license.lic:/config/docker_subscription.lic
-        docker/ucp:{{ ucp_version }} install 
-          --host-address {{ ip_addr | ipaddr('address') }}  
-          --pod-cidr {{ k8s_pod_cidr | default ('192.168.0.0/16') }}
+      command: |
+         docker run --rm --env UCP_ADMIN_USER --env UCP_ADMIN_PASSWORD
+           --name ucp
+           -v /var/run/docker.sock:/var/run/docker.sock 
+           -v /tmp/license.lic:/config/docker_subscription.lic
+           docker/ucp:{{ ucp_version }} install 
+             --host-address {{ ip_addr | ipaddr('address') }}  
+             --pod-cidr {{ k8s_pod_cidr | default ('192.168.0.0/16') }}
           {{ san_all_formatted }}
           {{ external_server_cert_switch }}
       vars:

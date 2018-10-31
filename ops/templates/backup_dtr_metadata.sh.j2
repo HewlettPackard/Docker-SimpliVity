@@ -22,9 +22,8 @@ ucp_instance=$3
 backup_meta=${backup_name}.tgz 
 
 # backup the DTR metadata 
-#docker run --log-driver none --rm docker/dtr:{{ dtr_version }} backup --ucp-url https://{{ groups.ucp_lb[0] }}.{{ domain_name}} --ucp-insecure-tls --ucp-username '{{ucp_username}}' --ucp-password '{{ucp_password}}'  --existing-replica-id $replica_id > /tmp/backup_dtr_meta.tar 
 
-docker run --log-driver none --rm docker/dtr:{{ dtr_version }} backup --ucp-url https://{{ groups.ucp_lb[0] }}.{{ domain_name}} --ucp-insecure-tls --ucp-username '{{ucp_username}}' --ucp-password '{{ucp_password}}'  --existing-replica-id $replica_id  | ssh -oStrictHostKeyChecking=no {{ backup_server }} "cat >{{ backup_dest }}/${backup_meta}"
+docker run --log-driver none --rm docker/dtr:{{ dtr_version }} backup --ucp-url https://${ucp_instance} --ucp-insecure-tls --ucp-username '{{ucp_username}}' --ucp-password '{{ucp_password}}'  --existing-replica-id $replica_id  | ssh -oStrictHostKeyChecking=no {{ backup_server }} "cat >{{ backup_dest }}/${backup_meta}"
 
 #
 # backup the data, compress it and stream it to our SSH server

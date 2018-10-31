@@ -34,6 +34,6 @@ ssh -oStrictHostKeyChecking=no {{ backup_server }} "cat {{ backup_dtr_meta }}" |
     $ucp_insecure_switch \
     --ucp-node {{ groups.dtr_main[0] }}.{{ domain_name }} \
     --replica-id ${replica_id}  \
-    --dtr-external-url https://{{ groups.dtr_lb[0] }}.{{ domain_name }} \
+    --dtr-external-url https://{{ groups.dtr[0] }}.{{ domain_name }} \
     --nfs-storage-url nfs://{{ groups.nfs[0] }}.{{ domain_name }}/docker-images \
     {{ http_proxy_switch }} {{ https_proxy_switch }} {{ no_proxy_switch }} 
