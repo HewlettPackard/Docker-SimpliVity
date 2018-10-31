@@ -30,8 +30,6 @@
         permanent: true
         immediate: true
         state: enabled
-      when:
-        - firewalld_not_enabled is undefined
 
     # Verify remote system can open a connection to
     # collector.sysdigcloud.com port 6666 to send Sysdig
