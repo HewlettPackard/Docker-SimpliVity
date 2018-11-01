@@ -144,17 +144,17 @@ nfs_provisioner_server_share: '/k8s'
 loadbalancers:
   ucp:
     public_interface: 'ens192'
-    public_vip: '10.10.174.135'
-    public_fqdn: svt2-ucp.am2.cloudra.local
+    public_vip: '10.60.59.135'
+    public_fqdn: hpe-ucp.cloudra.local
     virtual_router_id: 51
   dtr:
     public_interface: 'ens192'
-    public_vip: '10.10.174.136'
-    public_fqdn: svt2-dtr.am2.cloudra.local
+    public_vip: '10.60.59.136'
+    public_fqdn: hpe-dtr.cloudra.local
     virtual_router_id: 52
   worker:
     public_interface: 'ens192'
-    public_vip: '10.10.174.137'
-    public_fqdn: svt2-wrk.am2.cloudra.local
+    public_vip: '10.60.59.137'
+    public_fqdn: hpe-wrk.cloudra.local
     virtual_router_id: 53
 

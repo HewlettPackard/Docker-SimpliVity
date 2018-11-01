@@ -51,9 +51,10 @@
 
     - name: Install dependencies
       yum:
-        name: "{{ item }}"
+        name: "{{ packages }}"
         state: latest
-      with_items:
+      vars:
+        packages:
         - policycoreutils-python 
         - libseccomp 
         - libtool-ltdl 

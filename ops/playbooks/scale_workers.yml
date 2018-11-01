@@ -14,7 +14,7 @@
 # limitations under the License.
 ###
 ---
-- name: Join Workers (Linix)
+- name: Join Workers (Linux)
   hosts: worker
   gather_facts: false
 
@@ -24,7 +24,9 @@
     - includes/internal_vars.yml
 
   pre_tasks:
-    - include_tasks: includes/find_ucp.yml ping_servers="{{ groups.ucp }}"
+    - include_tasks: includes/find_ucp.yml
+      vars:
+        ping_servers: "{{ groups.ucp }}"
     - debug: var=ucp_instance
       when: _debug is defined
 
@@ -51,7 +53,9 @@
     - ../group_vars/vault
 
   pre_tasks:
-    - include_tasks: includes/find_ucp.yml ping_servers="{{ groups.ucp }}"
+    - include_tasks: includes/find_ucp.yml
+      vars:
+        ping_servers: "{{ groups.ucp }}"
     - debug: var=ucp_instance
       when: _debug is defined
 

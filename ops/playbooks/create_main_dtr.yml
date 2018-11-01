@@ -14,7 +14,8 @@
 # limitations under the License.
 ### 
 ---
-- hosts: dtr_main
+- name: Install DTR
+  hosts: dtr_main
   serial: 1
   gather_facts: false
   become_user: root
@@ -41,7 +42,9 @@
 
 
   pre_tasks:
-    - include_tasks: includes/find_ucp.yml ping_servers="{{ groups.ucp }}"
+    - include_tasks: includes/find_ucp.yml
+      vars:
+        ping_servers: "{{ groups.ucp }}"
     - debug: var=ucp_instance
       when: _debug is defined
 
@@ -59,7 +62,9 @@
 #
 # Is DTR running ?
 #
-    - include_tasks: includes/find_dtr.yml ping_servers="{{ groups.dtr }}" 
+    - include_tasks: includes/find_dtr.yml
+      vars:
+        ping_servers: "{{ groups.dtr }}" 
 #
 # if DTR is running, log something
 #

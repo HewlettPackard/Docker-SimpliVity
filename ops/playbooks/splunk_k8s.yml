@@ -14,7 +14,8 @@
 # limitations under the License.
 ###
 ---
-- hosts: local
+- name: install Splunk Agents for Kubernetes
+  hosts: local
   gather_facts: false
   become_user: root
   become: true
@@ -33,7 +34,9 @@
 
   - block:
 
-    - include_tasks: includes/find_ucp.yml ping_servers="{{ groups.ucp }}"
+    - include_tasks: includes/find_ucp.yml
+      vars:
+        ping_servers: "{{ groups.ucp }}"
     - debug: var=ucp_instance
       when: _debug is defined
 

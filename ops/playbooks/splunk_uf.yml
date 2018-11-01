@@ -32,7 +32,9 @@
 
   - block:
 
-    - include_tasks: includes/find_ucp.yml ping_servers="{{ groups.ucp }}"
+    - include_tasks: includes/find_ucp.yml
+      vars:
+        ping_servers: "{{ groups.ucp }}"
 
     - name: source stack specific variables
       include_vars:
@@ -159,7 +161,9 @@
 
   - block:  # monitoring_stack is defined
 
-    - include_tasks: includes/find_ucp.yml ping_servers="{{ groups.ucp }}"
+    - include_tasks: includes/find_ucp.yml
+      vars:
+        ping_servers: "{{ groups.ucp }}"
 
     - name: source stack specific variables
       include_vars:

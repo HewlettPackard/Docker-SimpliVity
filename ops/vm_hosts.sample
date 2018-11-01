@@ -42,8 +42,8 @@ orchestrator=kubernetes
 
 ## LOAD BALANCERS (new style, using floating IPs managed by keepalived), make sure you document the dictionary loadbalancers: in group_vars/vars
 [loadbalancer]
-hpe-lb1 ip_addr='10.10.174.160/22' esxi_host='esxi-hpe-1.cloudra.local' ucp=true worker=true
-hpe-lb2 ip_addr='10.10.174.161/22' esxi_host='esxi-hpe-2.cloudra.local' dtr=true
+hpe-lb1 ip_addr='10.60.59.160/16' esxi_host='esxi-hpe-1.cloudra.local' ucp=true worker=true
+hpe-lb2 ip_addr='10.60.59.161/16' esxi_host='esxi-hpe-2.cloudra.local' dtr=true
 
 [loadbalancer:vars]
 cpus='2'

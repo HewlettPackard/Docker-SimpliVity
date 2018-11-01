@@ -14,7 +14,8 @@
 # limitations under the License.
 ### 
 ---
-- hosts: vms
+- name: Deploy Grafana and Prometheus Stack for Swarm
+  hosts: vms
   gather_facts: false
   become_user: root
   become: true

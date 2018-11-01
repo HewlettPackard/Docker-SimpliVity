@@ -41,7 +41,7 @@ frontend ucp_443
 
 backend ucp_443_backend
   mode tcp
-  option httpchk GET /_ping HTTP/1.1\r\nHost:\ {{ groups.ucp_lb[0] }}.{{ domain_name }}
+  option httpchk GET /_ping HTTP/1.1\r\nHost:\ {{ ucp_lb_fqdn }}
   balance source
 {% for host in groups.ucp %}
   server {{ host }} {{ hostvars[host].ip_addr | ipaddr('address') }}:443  weight 100 check check-ssl verify none

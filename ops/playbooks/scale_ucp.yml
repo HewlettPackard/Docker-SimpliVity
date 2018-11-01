@@ -14,7 +14,8 @@
 # limitations under the License.
 ###
 ---
-- hosts: ucp
+- name: Scale UCP
+  hosts: ucp
   serial: 1
   gather_facts: false
 
@@ -24,7 +25,9 @@
     - includes/internal_vars.yml
 
   pre_tasks:
-    - include_tasks: includes/find_ucp.yml ping_servers="{{ groups.ucp }}"
+    - include_tasks: includes/find_ucp.yml
+      vars:
+        ping_servers: "{{ groups.ucp }}"
     - debug: var=ucp_instance
       when: _debug is defined
 
