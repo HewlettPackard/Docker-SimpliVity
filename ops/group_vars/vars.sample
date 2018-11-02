@@ -8,6 +8,25 @@ vm_username: 'root'
 vm_template: 'linux-template-name'
 vm_portgroup: 'NameOfPortGroup'
 
+# Simplivity configuration
+simplivity_username: 'Administrator@vsphere.local'
+#omnistack_ovc: ['10.10.173.109','10.10.173.110','10.10.173.111']
+omnistack_ovc: ['10.10.173.109']
+backup_policies:
+ - name: 'hpe-bronze'
+   days: 'All'
+   start_time: '11:30'
+   frequency: '1440'
+   retention: '43200'
+ - name: 'hpe-gold'
+   days: 'All'
+   start_time: '00:00'
+   frequency: '60'
+   retention: '43200'
+dummy_vm_prefix: 'hpe-VM3'
+docker_volumes_policy: 'hpe-gold'
+svt_cleanup: true
+
 # the folder name is understood relative to the selected datacenter
 folder_name: '/NameOfFolder'
 datastores: ['NameOfDataStore']
