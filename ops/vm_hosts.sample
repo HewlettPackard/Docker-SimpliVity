@@ -11,6 +11,7 @@ hpe-ucp03 ip_addr='10.60.59.13/16' esxi_host='esxi-hpe-3.cloudra.local'
 cpus='4'
 ram='16384'
 disk2_size='500'
+node_policy='hpe-bronze'
 
 # DTR
 [dtr_main]
@@ -27,6 +28,7 @@ ram='16384'
 disk2_size='500'
 # make sure swarm is specified for DTR otherwise DTR machines will be configured in mixed mode and the deployment  "may" fail in some cases
 orchestrator=swarm
+node_policy='hpe-gold'
 
 ## WORKER
 [worker]
@@ -48,7 +50,7 @@ hpe-lb2 ip_addr='10.60.59.161/16' esxi_host='esxi-hpe-2.cloudra.local' dtr=true
 [loadbalancer:vars]
 cpus='2'
 ram='4096'
-
+node_policy='hpe-bronze'
 
 [docker:children]
 ucp
@@ -69,6 +71,7 @@ hpe-logger ip_addr='10.60.59.24/16' esxi_host='esxi-hpe-2.cloudra.local'
 [logger:vars]
 cpus='2'
 ram='4096'
+node_policy='hpe-gold'
 
 [vms:children]
 ucp
