@@ -64,6 +64,7 @@ hpe-nfs ip_addr='10.60.59.20/16'    esxi_host='esxi-hpe-3.cloudra.local'
 cpus='2'
 ram='4096'
 disk2_size='500'
+node_policy='hpe-gold'
 
 [logger]
 hpe-logger ip_addr='10.60.59.24/16' esxi_host='esxi-hpe-2.cloudra.local'
