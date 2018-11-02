@@ -14,7 +14,8 @@
 # limitations under the License.
 ### 
 ---
-- hosts: nfs
+- name: Install NFS Server
+  hosts: nfs
   gather_facts: false
   become_user: root
   become: true
@@ -123,9 +124,10 @@
 
     - name: Install NFS server
       yum:
-        name: "{{ item }}"
+        name: "{{ packages }}"
         state: latest
-      with_items:
+      vars:
+        packages:
         - rpcbind
         - nfs-utils
 

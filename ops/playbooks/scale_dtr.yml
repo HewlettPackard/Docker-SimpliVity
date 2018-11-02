@@ -14,7 +14,8 @@
 # limitations under the License.
 ###
 ---
-- hosts: dtr
+- name: Scale DTR
+  hosts: dtr
   serial: 1
   gather_facts: false
 
@@ -35,7 +36,9 @@
     - UCP_CA: "{{ ucp_ca_cert | default('') }}"
 
   pre_tasks:
-    - include_tasks: includes/find_ucp.yml ping_servers="{{ groups.ucp }}"
+    - include_tasks: includes/find_ucp.yml
+      vars:
+        ping_servers: "{{ groups.ucp }}"
     - debug: var=ucp_instance
       when: _debug is defined
 

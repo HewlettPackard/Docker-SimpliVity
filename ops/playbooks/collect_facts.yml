@@ -14,7 +14,8 @@
 # limitations under the License.
 ###
 ---
-- hosts: localhost
+- name: Collect Fact
+  hosts: localhost
   gather_facts: false
 
   vars_files:
@@ -26,12 +27,16 @@
     - "{{ env }}"
 
   tasks:
-    - include_tasks: includes/find_ucp.yml ping_servers="{{ groups.ucp }}"
+    - include_tasks: includes/find_ucp.yml
+      vars:
+        ping_servers: "{{ groups.ucp }}"
     - debug: var=ucp_instance
     - fail:
         msg: "cannot find UCP endpoint at any of {{ groups.ucp }}"
       when: ucp_instance == ".none."
-    - include_tasks: includes/find_dtr.yml ping_servers="{{ groups.dtr }}"
+    - include_tasks: includes/find_dtr.yml
+      vars:
+        ping_servers: "{{ groups.dtr }}"
     - debug: var=dtr_instance
     - fail:
         msg: "cannot find DTR  endpoint at any of {{ groups.dtr }}"

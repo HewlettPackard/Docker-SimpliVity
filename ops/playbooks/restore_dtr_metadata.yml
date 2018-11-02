@@ -14,7 +14,8 @@
 # limitations under the License.
 ###
 ---
-- hosts: dtr_main
+- name: Restore DTR Metadata
+  hosts: dtr_main
   gather_facts: false
 
   vars_files:
@@ -29,7 +30,9 @@
     no_proxy_switch:  "{% if  env.no_proxy is defined %} --no-proxy '{{ env.no_proxy }}' {% endif %}"
 
   pre_tasks:
-    - include_tasks: includes/find_ucp.yml ping_servers="{{ groups.ucp }}"
+    - include_tasks: includes/find_ucp.yml
+      vars:
+        ping_servers: "{{ groups.ucp }}"
     - debug: var=ucp_instance
       when: _debug is defined
     - fail:

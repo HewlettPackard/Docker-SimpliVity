@@ -51,9 +51,10 @@
 
     - name: Install Required Pkgs for seboolean module
       yum:
-        name: "{{ item }}"
+        name: "{{ packages }}"
         state: latest
-      with_items:
+      vars:
+        packages:
         - libsemanage-python
         - libselinux-python
 

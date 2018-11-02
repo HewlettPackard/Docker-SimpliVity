@@ -14,7 +14,8 @@
 # limitations under the License.
 ### 
 ---
-- hosts: ucp_main
+- name: Restore Swarm
+  hosts: ucp_main
   gather_facts: false
   become_user: root
   become: true
@@ -32,7 +33,9 @@
     JOINING_IP:  "{{ hostvars[groups.ucp_main[0]]['ip_addr'] | ipaddr('address')}}:2377"
   
   pre_tasks:
-    - include_tasks: includes/find_ucp.yml ping_servers="{{ groups.ucp }}"
+    - include_tasks: includes/find_ucp.yml
+      vars:
+        ping_servers: "{{ groups.ucp }}"
     - debug: var=ucp_instance
       when: _debug is defined
 

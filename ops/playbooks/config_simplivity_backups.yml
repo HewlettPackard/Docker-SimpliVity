@@ -137,7 +137,9 @@
     with_items:
       - "{{ backup_policies }}"
 
-  - include_tasks: includes/svt_wait_for_tasks.yml tasks="{{ res.results }}"
+  - include_tasks: includes/svt_wait_for_tasks.yml
+    vars:
+      tasks: "{{ res.results }}"
 
   - name: Get policy IDs
     uri:
@@ -257,7 +259,9 @@
       delegate_to: localhost
       register: res
 
-    - include_tasks: includes/svt_wait_for_tasks.yml tasks="{{ [ res ] }}"
+    - include_tasks: includes/svt_wait_for_tasks.yml
+      vars:
+        tasks: "{{ [ res ] }}"
 
     when: node_policy is defined
 
@@ -354,7 +358,9 @@
       loop_control:
         pause: 2
  
-    - include_tasks: includes/svt_wait_for_tasks.yml tasks="{{ res.results }}" 
+    - include_tasks: includes/svt_wait_for_tasks.yml
+      vars:
+        tasks: "{{ res.results }}" 
 
     #
     # Fail if we could not find all the Dummy VM
