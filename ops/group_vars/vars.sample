@@ -42,6 +42,7 @@ windows_vdvs_ps: 'https://raw.githubusercontent.com/vmware/vsphere-storage-for-d
 windows_vdvs_path: 'https://vmware.bintray.com/vDVS/vsphere-storage-for-docker_windows'
 windows_vdvs_version: '0.21' # was 0.17
 windows_vdvs_directory: 'C:\Users\Administrator\Downloads\'
+windows_winrm_script: 'http://yourlocalwebsercver/ConfigureRemotingForAnsible.ps1'
 #windows_update: true
 
 # Networking
