@@ -31,7 +31,8 @@ internal_ucpk8s_ports:
   - 10250/tcp
   - 12376/tcp
   - 12378/tcp
-  - 12379-12387/tcp
+  - 12379-12386/tcp
+  - 12388/tcp
 
 internal_ucp200_ports:
   - 443/tcp
