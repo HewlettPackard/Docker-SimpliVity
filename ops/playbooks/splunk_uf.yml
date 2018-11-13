@@ -146,7 +146,6 @@
   hosts: logger win_worker
   gather_facts: false
   connection: local
-  user: remote
   become: false
 
   vars_files:
@@ -180,6 +179,8 @@
           immediate: true
           permanent: true
           state: enabled
+        delegate_to: "{{ groups.logger[0] }}"
+        become: true
         with_items: "{{ splunk_architecture_syslog_ports }}"
 
       when: inventory_hostname in groups.logger
