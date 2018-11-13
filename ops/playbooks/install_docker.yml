@@ -200,13 +200,15 @@
     #
     - name: Install DockerMsftProvider Powershell Module
       win_shell: |
-        Install-Module DockerMsftProvider -Force {{ proxy_switch }}
+        Install-Module DockerMsftProvider -Force {{ proxy_switch }} 
       register: res
     - debug: var=res
       when: _debug is defined
 
     - name: Install Docker Package
-      win_shell: Install-Package Docker -ProviderName DockerMsftProvider -Force {{ proxy_switch }}
+      win_shell: Install-Package Docker -ProviderName DockerMsftProvider -Force {{ proxy_switch }}  {{ VersionSwitch }}
+      vars:
+        VersionSwitch: "{% if docker_ee_version_windows is defined %}-RequiredVersion {{ docker_ee_version_windows }}{% endif %}"
       register: res
 
     - name: Check if Windows reboot is required
