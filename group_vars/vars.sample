@@ -53,7 +53,11 @@ domain_name: 'cloudra.local'
 ntp_servers: ['10.60.1.123','0.us.pool.net.org','1.us.pool.net.org']
 
 # Docker configuration
-# docker_ee_url: is defined in group_vars/vault, should be kept secret
+#docker_ee_url: is defined in group_vars/vault, should be kept secret
+
+# name of the docker-ee engine you want to install
+docker_ee_reponame: stable-17.06
+
 #
 # by default, the latest, stable version of docker-ee is installed, but you can specify the version you want (which is recommended)
 # docker_ee_version: 'docker-ee-17.06.2.ee.6-3.el7.rhel.x86_64'

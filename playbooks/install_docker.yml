@@ -83,8 +83,15 @@
         state: present
         line: "{{ rhel_version }}"
 
-    - name: Add Docker repository
-      command: yum-config-manager --add-repo {{ docker_ee_url }}/rhel/docker-ee.repo
+    - name: Add Docker Repository
+      yum_repository:
+        name: docker-ee-{{ docker_ee_reponame }}
+        description: Docker EE {{ docker_ee_reponame }} - $basesearch
+        file: docker-ee
+        baseurl: $dockerurl/$dockerosversion/$basearch/stable-18.09/
+        enabled: yes
+        gpgcheck: yes
+        gpgkey: $dockerurl/gpg
 
     - name: Install Docker
       yum:
