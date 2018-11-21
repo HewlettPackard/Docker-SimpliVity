@@ -86,9 +86,9 @@
     - name: Add Docker Repository
       yum_repository:
         name: docker-ee-{{ docker_ee_reponame }}
-        description: Docker EE {{ docker_ee_reponame }} - $basesearch
+        description: Docker EE {{ docker_ee_reponame }} - $basearch
         file: docker-ee
-        baseurl: $dockerurl/$dockerosversion/$basearch/stable-18.09/
+        baseurl: $dockerurl/$dockerosversion/$basearch/{{ docker_ee_reponame }}/
         enabled: yes
         gpgcheck: yes
         gpgkey: $dockerurl/gpg
