@@ -1,4 +1,0 @@
-{% for host in groups.dtr %}
-{{ images_folder }} {{ hostvars[host].ip_addr | ipaddr('address') }}(rw,sync,no_root_squash,no_all_squash) 
-{% endfor %}
-{{ nfs_provisioner_server_share }} *(rw,sync,no_root_squash,no_all_squash)
