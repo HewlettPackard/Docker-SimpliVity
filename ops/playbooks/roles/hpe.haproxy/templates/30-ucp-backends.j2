@@ -1,1 +1,0 @@
-    server {{ inventory_hostname }} {{ hostvars[inventory_hostname].ip_addr | ipaddr('address') }}:443 check

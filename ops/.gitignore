@@ -1,4 +1,0 @@
-vm_hosts
-vm_hosts.all
-group_vars/vault
-group_vars/vars

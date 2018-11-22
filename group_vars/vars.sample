@@ -1,0 +1,182 @@
+---
+# VMware configuration
+vcenter_hostname: 'vcenter.cloudra.local'
+vcenter_username: 'administrator@synergy.local'
+vcenter_validate_certs: 'no'
+datacenter: 'NameOfDatacenter'
+vm_username: 'root'
+vm_template: 'linux-template-name'
+vm_portgroup: 'NameOfPortGroup'
+
+# Simplivity configuration
+simplivity_username: 'Administrator@vsphere.local'
+#omnistack_ovc: ['10.10.173.109','10.10.173.110','10.10.173.111']
+omnistack_ovc: ['10.10.173.109']
+backup_policies:
+ - name: 'hpe-bronze'
+   days: 'All'
+   start_time: '11:30'
+   frequency: '1440'
+   retention: '43200'
+ - name: 'hpe-gold'
+   days: 'All'
+   start_time: '00:00'
+   frequency: '60'
+   retention: '43200'
+dummy_vm_prefix: 'hpe-VM3'
+docker_volumes_policy: 'hpe-gold'
+svt_cleanup: true
+
+# the folder name is understood relative to the selected datacenter
+folder_name: '/NameOfFolder'
+datastores: ['NameOfDataStore']
+disk2: '/dev/sdb'
+disk2_part: '/dev/sdb1'
+vsphere_plugin_version: '0.21' 
+
+# enable_windows: is obsolete, ignored
+#enable_windows: false
+win_vm_template: 'windows-template-name'
+win_username: 'Administrator'
+windows_vdvs_ps: 'https://raw.githubusercontent.com/vmware/vsphere-storage-for-docker/master/install-vdvs.ps1'
+windows_vdvs_path: 'https://vmware.bintray.com/vDVS/vsphere-storage-for-docker_windows'
+windows_vdvs_version: '0.21' # was 0.17
+windows_vdvs_directory: 'C:\Users\Administrator\Downloads\'
+windows_winrm_script: 'http://yourlocalwebsercver/ConfigureRemotingForAnsible.ps1'
+#windows_update: true
+
+# Networking
+nic_name: 'ens192'
+gateway: '10.60.0.1'
+dns: ['10.60.50.106']
+domain_name: 'cloudra.local'
+ntp_servers: ['10.60.1.123','0.us.pool.net.org','1.us.pool.net.org']
+
+# Docker configuration
+# docker_ee_url: is defined in group_vars/vault, should be kept secret
+#
+# by default, the latest, stable version of docker-ee is installed, but you can specify the version you want (which is recommended)
+# docker_ee_version: 'docker-ee-17.06.2.ee.6-3.el7.rhel.x86_64'
+# make sure you specify docker_ee_version with the version that went thru QA
+docker_ee_version: 'docker-ee-17.06.2.ee.17-3.el7.x86_64'
+docker_ee_version_windows: '17.06'
+
+# replace dtr_version and ucp_version by the actual version number which went thru QA
+rhel_version: '7'
+dtr_version: '2.5.6'
+ucp_version: '3.0.6'
+images_folder: '/docker-images'
+license_file: '/root/license.lic'
+ucp_username: 'admin'
+
+#
+# cidr to use for pod IP adresses
+#
+#k8s_pod_cidr: 192.168.0.0/16
+
+#
+# certs dir
+#
+# if this variables are defined, they must point to a folder on the ansible box containing 3 files that the user should supply
+#    ca.pem is the file contaning the root CA certificate
+#    cert.pem is the file containing the server (UCP) certificate followed bythe chain of intermediate CA' certificates (if any)
+#    key.pem, contains the private key
+#
+# There is one folder for UCP, one folder for DTR
+#
+# if ucp_certs_dir is not defined, UCP generates self-signed certificates
+# if dtr_certs_dir is undefined, DTR is installed using the --ucp-insecure-tls switch
+
+#ucp_certs_dir: '/root/certs/ucp_certs' 
+#dtr_certs_dir: '/root/certs/dtr_certs'
+
+# Monitoring configuration
+cadvisor_version: 'v0.28.3'
+node_exporter_version: 'v1.15.0'
+prometheus_version: 'v2.3.2'
+grafana_version: '5.2.3'
+prom_persistent_vol_name: 'prom-db-data'
+prom_persistent_vol_size: '10GB'
+
+# Central Logging configuration
+logspout_version: 'v3.2.4'
+
+# Environment configuration
+# Leave proxy settings empty if proxy is not required
+env:
+   dummy: 'placeholder'
+#  http_proxy: 'proxy.am2.hpelabs.net:8080'
+#  https_proxy: 'proxy.am2.hpelabs.net:8080'
+#  no_proxy: '/var/run/docker.sock,localhost,am2.cloudra.local,10.10.174.'
+
+#
+# Monitoring
+#
+#
+# monitoring_stack: <value> 
+#   - if not defined, the playbooks monitoring.yml and monitoring_win.yml will not do anything
+#   - if defined, it should ve set to 'splunk' or 'splunk_demo' 
+#   - if set to 'splunk_demo', the playbook monitoring.yml will deploy a splunk instance in the docker cluster, the
+#        UI can be reached at http://<any docker node in the swarm>:8000, password is admin/changeme
+#   - if set to 'splunk', the splunk deployment is pre-existing and the universal forwarders will forward the data they collect to
+#        all the indexers specified with the variable splunk_architecture_forward_servers
+#
+
+monitoring_stack: splunk_demo
+
+#
+#monitoring_stack: splunk
+#splunk_architecture_forward_servers:
+#  - splunk-indexer1.cloudra.local:9997
+#  - splunk-indexer2.cloudra.local:9997
+#
+# define splunk_ssl to enable SSL between the indexers and the universal forwaders. This is only supported when choosing splunk (vs splunk_demo)
+#   and you need to enable SSL in your inders manually
+# if you don't want SSL, comment/undefine the splunk_ssl: line
+#
+#splunk_ssl: yes
+
+#
+# Sysdig
+#
+sysdig_agent: 'https://s3.amazonaws.com/download.draios.com/stable/install-agent'
+sysdig_tags: 'location:EnterCity,role:Enterprise CaaS on Synergy,owner:Customer name'
+
+#k8s sysdig restricted control type
+sysdig_restricted_control_role: 'Restricted Control'
+k8s_cluster: 'ucp_hpe-ucp.cloudra.local'
+
+#k8s nfs provisionner role name
+nfs_provisioner_role: 'nfs-provisioner-runner'
+nfs_provisioner_name: "hpe.com/nfs"
+nfs_provisioner_storage_class_name: "nfs"
+nfs_provisioner_namespace: nfsstorage
+#nfs_provisioner_server_ip: vfs3par.cloudra.local
+#nfs_provisioner_server_share: '/vfs3par/vfs3par/fs_clh/share'
+nfs_provisioner_server_ip: clh-nfs.cloudra.local
+nfs_provisioner_server_share: '/k8s'
+
+
+#storage driver for docker nodes: accepted values are 'overlay2' and devicemapper
+#docker_storage_driver: overlay2
+
+#
+# Load Balancers, comment out if using the old-style load balancers (ucp_lb, dtr_lb, worker_lb)
+#
+loadbalancers:
+  ucp:
+    public_interface: 'ens192'
+    public_vip: '10.60.59.135'
+    public_fqdn: hpe-ucp.cloudra.local
+    virtual_router_id: 51
+  dtr:
+    public_interface: 'ens192'
+    public_vip: '10.60.59.136'
+    public_fqdn: hpe-dtr.cloudra.local
+    virtual_router_id: 52
+  worker:
+    public_interface: 'ens192'
+    public_vip: '10.60.59.137'
+    public_fqdn: hpe-wrk.cloudra.local
+    virtual_router_id: 53
+

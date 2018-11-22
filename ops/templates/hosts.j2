@@ -1,5 +1,0 @@
-127.0.0.1   localhost localhost.localdomain 
-
-{% for host in groups.vms %}
-{{ hostvars[host].ip_addr | ipaddr('address') }} {{ host }} {{ host }}.{{ domain_name }}
-{% endfor %}
