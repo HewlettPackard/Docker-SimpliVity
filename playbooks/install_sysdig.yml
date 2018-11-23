@@ -150,7 +150,7 @@
         shm_size: 512m
    
 
-- hosts: nfs,logger,lbs
+- hosts: vms:!docker
   vars_files:
     - ../group_vars/vars
     - ../group_vars/vault
