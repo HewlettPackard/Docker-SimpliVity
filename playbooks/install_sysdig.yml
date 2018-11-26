@@ -14,7 +14,8 @@
 # limitations under the License.
 ###
 ---
-- hosts: docker
+- name: Install sysdig agent on Docker hosts (linux)
+  hosts: docker
   gather_facts: true
   become_user: root
   become: true
@@ -150,7 +151,8 @@
         shm_size: 512m
    
 
-- hosts: nfs,logger,lbs
+- name: Install sysdig agent on non docker hosts (linux)
+  hosts: vms:!docker
   vars_files:
     - ../group_vars/vars
     - ../group_vars/vault
@@ -211,5 +213,4 @@
       
     - name: execute install-agent.sh
       command: /root/install-agent.sh --access_key '{{ sysdig_access_key }}' --tags '{{ sysdig_tags }}'
-...
-     
+
