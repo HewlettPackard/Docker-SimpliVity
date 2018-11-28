@@ -54,21 +54,13 @@ ntp_servers: ['10.60.1.123','0.us.pool.net.org','1.us.pool.net.org']
 
 # Docker configuration
 #docker_ee_url: is defined in group_vars/vault, should be kept secret
-
-# name of the docker-ee engine you want to install
 docker_ee_reponame: stable-17.06
-
-#
-# by default, the latest, stable version of docker-ee is installed, but you can specify the version you want (which is recommended)
-# docker_ee_version: 'docker-ee-17.06.2.ee.6-3.el7.rhel.x86_64'
-# make sure you specify docker_ee_version with the version that went thru QA
-docker_ee_version: 'docker-ee-17.06.2.ee.17-3.el7.x86_64'
+#docker_ee_version: 'docker-ee-17.06.2.ee.17-3.el7.x86_64'
 docker_ee_version_windows: '17.06'
-
-# replace dtr_version and ucp_version by the actual version number which went thru QA
 rhel_version: '7'
 dtr_version: '2.5.6'
 ucp_version: '3.0.6'
+
 images_folder: '/docker-images'
 license_file: '/root/license.lic'
 ucp_username: 'admin'
