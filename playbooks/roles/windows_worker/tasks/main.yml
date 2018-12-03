@@ -122,3 +122,10 @@
       when: orchestrator is defined and orchestrator == "swarm"
       delegate_to: "{{ ucp_instance }}"
 
+#
+# Add custom label to Windows nodes
+#
+    - name: Add Label to Windows Node
+      command: "docker node update --label-add windows-node=true {{ inventory_hostname }}"
+      delegate_to: "{{ ucp_instance }}"
+

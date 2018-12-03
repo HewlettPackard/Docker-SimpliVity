@@ -139,3 +139,10 @@
       when: orchestrator is defined and orchestrator == "swarm"
       delegate_to: "{{ ucp_instance }}"
 
+#
+# Add custom label to Linux nodes
+#
+    - name: Add Label to Linux Nodes
+      command: "docker node update --label-add linux-node=true {{ inventory_hostname }}.{{ domain_name }}"
+      delegate_to: "{{ ucp_instance }}"
+
