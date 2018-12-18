@@ -68,11 +68,13 @@ spec:
         ### OPTIONAL: add tags for this host
         # - name: TAGS
         #   value: linux:ubuntu,dept:dev,local:nyc
-        ### OPTIONAL: Needed to connect to a Sysdig On-Premises backend
-        # - name: COLLECTOR
-        #   value: collector-staging.sysdigcloud.com
-        # - name: COLLECTOR_PORT
-        #   value: "6443"
+        ### OPTIONAL: Needed to connect to a Sysdig On-Premises backend or if sat behind a proxy
+        #  Example collector value collector-staging.sysdigcloud.com
+        - name: COLLECTOR
+          value: '{{ sysdig_collector }}'
+        # Default collector port  value: "6443"
+        - name: COLLECTOR_PORT
+          value: '{{ sysdig_collector_port }}'
         # - name: COLLECTOR
         #   value: 192.168.183.200
         # - name: SECURE

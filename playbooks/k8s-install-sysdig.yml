@@ -25,28 +25,37 @@
     #
     # Open required firewall ports
     #
-    - name: Configure required firewall ports
+    - name: Configure required firewall port 6443
       firewalld:
-        port: 6666/tcp
+        port: 6443/tcp
+        permanent: true
+        immediate: true
+        state: enabled
+       
+    - name: Configure required firewall port 80
+      firewalld:
+        port: 80/tcp
         permanent: true
         immediate: true
         state: enabled
 
+
     # Verify remote system can open a connection to
-    # collector.sysdigcloud.com port 6666 to send Sysdig
+    # collector.sysdigcloud.com port 6443 to send Sysdig
     # information to Sysdig's SaaS instance.  If the connection
     # succeeds then set the variable 'sysdig_connection'
     # to 'true' and continue.  Otherwise print an error
     # message explaining that connectivity requirements
     # were not met.
     
-    - name: Check connectivity to collector.sysdigcloud.com port 6666
+    - name: Check connectivity to collector.sysdigcloud.com port 6443
       wait_for:
-        host: collector.sysdigcloud.com
-        port: 6666
+        #host: collector.sysdigcloud.com
+        host: '{{ sysdig_collector }}'
+        port: '{{ sysdig_collector_port }}'
         state: started
         timeout: 10
-        msg: "Connectivity to collector.sysdigcloud.com port 6666 failed!  Exiting."
+        msg: "Connectivity to collector.sysdigcloud.com port 6443 failed!  Exiting."
 
     - set_fact:
         sysdig_connection: true
