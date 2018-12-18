@@ -127,3 +127,10 @@
 
     - debug: msg="Availability={{resp.json.Spec.Availability}} Role={{resp.json.Spec.Role}} State={{resp.json.Status.State}}"
       when: _debug is defined
+
+#
+# Add custom label to Linux nodes
+#
+    - name: Add Label to Linux Nodes
+      command: "docker node update --label-add linux-node=true {{ inventory_hostname }}.{{ domain_name }}"
+      delegate_to: "{{ ucp_instance }}"

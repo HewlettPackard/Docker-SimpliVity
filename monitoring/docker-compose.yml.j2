@@ -26,6 +26,7 @@ services:
       placement:
         constraints:
         - node.labels.com.docker.ucp.orchestrator.swarm==true
+        - node.labels.linux-node==true
       resources:
         limits:
           cpus: '0.20'
@@ -61,6 +62,7 @@ services:
       placement:
         constraints:
         - node.labels.com.docker.ucp.orchestrator.swarm==true
+        - node.labels.linux-node==true
       resources:
         limits:
           cpus: '0.20'
