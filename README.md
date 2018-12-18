@@ -687,7 +687,7 @@
 <ul class="ul">
 <li class="li"><a class="xref" href="#create-rhel-vms">Provisioning RHEL VMs</a></li>
 
-<li class="li"><a class="xref" href="#unique_729980834">Provisioning load balancers for UCP and DTR</a></li>
+<li class="li"><a class="xref" href="#unique_2072037671">Provisioning load balancers for UCP and DTR</a></li>
 
 <li class="li"><a class="xref" href="#install-docker-ucp-dtr">Installing Docker UCP and DTR on RHEL VMs</a></li>
 
@@ -1288,7 +1288,7 @@ your high availability (HA) needs.</p>
 container traffic management. There are two load balancer VMs – the UCP load balancer and
 DTR load balancer. The playbooks can be configured to deploy one or more worker load
 balancers depending on the requirements of your applications. A typical load balancer architecture for
-applciations running on Docker EE is shown in <a class="xref" href="#load-balancers__lbs">Figure 2</a>. 
+applications running on Docker EE is shown in <a class="xref" href="#load-balancers__lbs">Figure 2</a>. 
 The playbooks now support load balancers based on VRRP, using <code class="ph codeph">HAproxy</code> and <code class="ph codeph">keepalived</code>.
 The solution can be deployed using these loadbalancers, or external load balancers, or no load balancers or 
 the legacy version of standalone load balancers.             
@@ -2985,7 +2985,7 @@ The corresponding password is stored in the variable named <code class="ph codep
 
 
 <ol class="ol">
-<li class="li">If DRS is not enabled, the placement of the VMs is specified in the the ansible inventory file vm_hosts</li>
+<li class="li">If DRS is not enabled, the placement of the VMs is specified in the ansible inventory file vm_hosts</li>
 
 <li class="li">If DRS is enabled, the placement of the VMs is outside the control of the playbooks</li>
 
@@ -3567,7 +3567,7 @@ win_password: 'yourpass'
 sysdig_access_key: 'enter_sysdig_access_key'
 rhn_orgid: "YourOrgId"
 rhn_key: "YourActivationKey"
-#password for the splunk universal forwarder. Must meet password complexiy requirement (see splunk doc)
+#password for the splunk universal forwarder. Must meet password complexity requirement (see splunk doc)
 splunk_uf_password: 'YourPa$$word12'
 </code></pre>
 
@@ -3653,7 +3653,7 @@ disks_specs:
 
 
 <p class="p">In this example, the size of the first two drives is specified using the values of the variables <code class="ph codeph">disk1_size</code> and <code class="ph codeph">disk2_size</code>  
-  that are declared in the <code class="ph codeph">group_vars/vars</code> file. This maintains compatability with <code class="ph codeph">vm_hosts</code> inventories 
+  that are declared in the <code class="ph codeph">group_vars/vars</code> file. This maintains compatibility with <code class="ph codeph">vm_hosts</code> inventories 
   from earlier releases of the playbooks. However, it is possible to provide explicit values, depending on your requirements, for the
 individual UCP, DTR, worker or NFS VMs. For example, you may want to increase the size of the second disk for the NFS VM as this is used
 to store the DTR images, so the default value of 500GB may not be sufficient to meet your needs. </p>
@@ -3666,7 +3666,7 @@ for demo purposes and should not be used in a production environment.
 
   
 <p class="p">In the following example, the <code class="ph codeph">group_vars/nfs.yml</code> has been modified to 
-configure the NFS VM  with a 50GB boot disk, a 500GB drive for DTR images and a 800GB drive for Kubernetes persistent volumes data. 
+configure the NFS VM  with a 50GB boot disk, a 500GB drive for DTR images and an 800GB drive for Kubernetes persistent volumes data. 
 </p>
   
   
@@ -3739,7 +3739,7 @@ the deployment to your needs.
 <ul class="ul">
 <li class="li"><a class="xref" href="#create-rhel-vms">Provisioning RHEL VMs</a></li>
 
-<li class="li"><a class="xref" href="#unique_729980834">Provisioning load balancers for UCP and DTR</a></li>
+<li class="li"><a class="xref" href="#unique_2072037671">Provisioning load balancers for UCP and DTR</a></li>
 
 <li class="li"><a class="xref" href="#install-docker-ucp-dtr">Installing Docker UCP and DTR on RHEL VMs</a></li>
 
@@ -3953,7 +3953,7 @@ order to have a synchronized clock across the environment. It will use the list 
 </div>
 
 </div>
-<div class="topic nested1" aria-labelledby="ariaid-title57" id="unique_729980834">
+<div class="topic nested1" aria-labelledby="ariaid-title57" id="unique_2072037671">
 <h2 class="title topictitle2" id="ariaid-title57">Provisioning load balancers for UCP and DTR</h2>
 
 <div class="body">
@@ -4914,7 +4914,7 @@ provided with your access key which will be used by the playbooks to install the
 <tr class="row">
 <td class="entry nocellnorowborder" align="left" valign="top" headers="d29e8912 ">k8s_cluster</td>
 <td class="entry nocellnorowborder" align="left" valign="top" headers="d29e8915 ">group_vars/vars</td>
-<td class="entry nocellnorowborder" align="left" valign="top" headers="d29e8918 ">This should match the cluster name displayed when you source the environment setup script, for example, 
+<td class="entry nocellnorowborder" align="left" valign="top" headers="d29e8918 ">This should match the cluster name displayed when you source the environment setup script, for example. 
 <pre class="pre codeblock"><code># source env.sh
 Cluster "<strong class="ph b">ucp_hpe-ucp.cloudra.local</strong>:6443_admin" set.
 User "ucp_hpe-ucp.cloudra.local:6443_admin" set.
@@ -5095,7 +5095,7 @@ Sysdig will automatically display information regarding your setup. Alternativel
 <li class="li">Ensure that you have configured the required variables, as described in the section 
   <a class="xref" href="#monitoring-config-sysdig__sysdig-config-k8s">Sysdig configuration for Kubernetes</a>.
   
-For example, you add the the relevant variables in the <code class="ph codeph">group_vars/vars</code> file.
+For example, you add the relevant variables in the <code class="ph codeph">group_vars/vars</code> file.
 
 <pre class="pre codeblock"><code>sysdig_restricted_control_role: 'Restricted Control'
 k8s_cluster: ucp_gab-ucp.cloudra.local
@@ -5210,9 +5210,9 @@ Splunk. </p>
     
 
 <ul class="ul">
-<li class="li"><code class="ph codeph">/var/log/messages</code> from the docker host (including the daemon engine logs)</li>
+<li class="li"><code class="ph codeph">/var/log/messages</code> from the Docker host (including the daemon engine logs)</li>
 
-<li class="li"><code class="ph codeph">/var/log/secure</code> from the docker hosts</li>
+<li class="li"><code class="ph codeph">/var/log/secure</code> from the Docker hosts</li>
 
 <li class="li">container logs via a Splunk technical add-on</li>
 
@@ -5579,7 +5579,7 @@ replica sets, services, etc.</p>
 <h2 class="title topictitle2" id="ariaid-title83">Redeploying Splunk demo</h2>
 
 <div class="body">
-<p class="p">The Splunk demo deployment, whilst fully featured, is serverely restricted in the amount of data it can process. Once this limit has been
+<p class="p">The Splunk demo deployment, whilst fully featured, is severely restricted in the amount of data it can process. Once this limit has been
 reached, often after running for just one or two days, it is necessary to re-deploy the application if you want to continue 
 experimenting with the demo.</p>
 
