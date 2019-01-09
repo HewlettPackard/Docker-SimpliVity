@@ -4,6 +4,9 @@
   become_user: root
   become: true
 
+  vars_files:
+  - ../group_vars/vars
+
   vars:
     kubectl_tmp_directory: "{{lookup('env', 'TMPDIR') | default('/tmp',true)}}"
     kubectl_os: "linux"
