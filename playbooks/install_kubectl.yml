@@ -1,0 +1,47 @@
+---
+- hosts: local
+  gather_facts: false
+  become_user: root
+  become: true
+
+  vars:
+    kubectl_tmp_directory: "{{lookup('env', 'TMPDIR') | default('/tmp',true)}}"
+    kubectl_os: "linux"
+    kubectl_arch: "amd64"
+    kubectl_bin_directory: "/usr/local/bin"
+    kubectl_owner: "root"
+    kubectl_group: "root"
+
+
+  environment: "{{ env }}"
+
+  tasks:
+
+    - name: Download kubernetes-client archive
+      get_url:
+        url: "https://dl.k8s.io/v{{kubectl_version}}/kubernetes-client-{{kubectl_os}}-{{kubectl_arch}}.tar.gz"
+        checksum: "{{kubectl_checksum}}"
+        dest: "{{kubectl_tmp_directory}}"
+      tags:
+        - kubectl
+
+    - name: Unarchive kubernetes-client
+      unarchive:
+        src: "{{kubectl_tmp_directory}}/kubernetes-client-{{kubectl_os}}-{{kubectl_arch}}.tar.gz"
+        dest: "{{kubectl_tmp_directory}}"
+      tags:
+        - kubectl
+
+    - name: Copy kubectl binary to destination directory
+      copy:
+        src: "{{kubectl_tmp_directory}}/kubernetes/client/bin/{{item}}"
+        dest: "{{kubectl_bin_directory}}/{{item}}"
+        mode: 0755
+        owner: root
+        group: root
+        remote_src: yes
+      with_items:
+        - kubectl
+
+
+
