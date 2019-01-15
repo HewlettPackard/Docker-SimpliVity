@@ -81,7 +81,7 @@ spec:
         - name: ADDITIONAL_CONF
           value: |
           new_k8s: true
-          k8s_cluster_name: 'gabriels_cluster' 
+          k8s_cluster_name: '{{ k8s_cluster }}' 
         volumeMounts:
         - mountPath: /host/var/run/docker.sock
           name: docker-sock
