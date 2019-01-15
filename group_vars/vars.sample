@@ -135,6 +135,8 @@ monitoring_stack: splunk_demo
 #
 # Sysdig
 #
+sysdig_collector: 'collector.sysdigcloud.com'
+sysdig_collector_port: '6666'
 sysdig_agent: 'https://s3.amazonaws.com/download.draios.com/stable/install-agent'
 sysdig_tags: 'location:EnterCity,role:Enterprise CaaS on Synergy,owner:Customer name'
 
