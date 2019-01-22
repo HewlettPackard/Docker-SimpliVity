@@ -1,0 +1,45 @@
+# Licensed under the Apache License, Version 2.0 (the "License");
+# You may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+###
+---
+- hosts: local
+  connection: local
+  gather_facts: false
+
+  vars_files:
+    - ../group_vars/vars
+    - ../group_vars/vault
+
+  environment: "{{ env }}"
+  tasks:
+    # Assume playbooks/install_client_bundle.yml has been run before this 
+    # Assume that ucp_instance hasn't changed in the meantime
+    # - include_tasks: includes/config_client.yml
+    
+     - name: install helm
+       shell: |
+         curl https://raw.githubusercontent.com/helm/helm/master/scripts/get | bash
+         warn=false
+         helm init
+
+     - name: install tiller
+       shell: |
+         eval "$(<env.sh)"
+         # rolebinding.rbac.authorization.k8s.io/default-view create
+         kubectl create rolebinding default-view \   
+                              --clusterrole=view \   
+                              --serviceaccount=kube-system:default \
+                              --namespace=kube-system
+         # clusterrolebinding.rbac.authorization.k8s.io/add-on-cluster-admin create
+         kubectl create clusterrolebinding add-on-cluster-admin \   
+                                    --clusterrole=cluster-admin \   
+                                    --serviceaccount=kube-system:default
