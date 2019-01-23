@@ -145,14 +145,17 @@ sysdig_restricted_control_role: 'Restricted Control'
 k8s_cluster: 'ucp_hpe-ucp.cloudra.local'
 
 #k8s nfs provisionner role name
+nfs_provisioner_namespace: nfsstorage
+nfs_provisioner_serviceaccount: 'nfs-provisioner'
 nfs_provisioner_role: 'nfs-provisioner-runner'
 nfs_provisioner_name: "hpe.com/nfs"
 nfs_provisioner_storage_class_name: "nfs"
-nfs_provisioner_namespace: nfsstorage
+nfs_provisioner_server_ip: hpe-nfs.cloudra.local
+nfs_provisioner_server_share: '/k8s'
+
+
 #nfs_provisioner_server_ip: vfs3par.cloudra.local
 #nfs_provisioner_server_share: '/vfs3par/vfs3par/fs_clh/share'
-nfs_provisioner_server_ip: clh-nfs.cloudra.local
-nfs_provisioner_server_share: '/k8s'
 
 
 #storage driver for docker nodes: accepted values are 'overlay2' and devicemapper
