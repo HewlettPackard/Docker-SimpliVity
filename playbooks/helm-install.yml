@@ -21,25 +21,38 @@
 
   environment: "{{ env }}"
   tasks:
+
+    - include_tasks: includes/find_ucp.yml
+      vars:
+        ping_servers: "{{ groups.ucp }}"
+    - debug: var=ucp_instance
+      when: _debug is defined
+
     # Assume playbooks/install_client_bundle.yml has been run before this 
     # Assume that ucp_instance hasn't changed in the meantime
     # - include_tasks: includes/config_client.yml
     
-     - name: install helm
-       shell: |
+    - name: install helm
+      shell: |
          curl https://raw.githubusercontent.com/helm/helm/master/scripts/get | bash
          warn=false
          helm init
 
-     - name: install tiller
-       shell: |
-         eval "$(<env.sh)"
-         # rolebinding.rbac.authorization.k8s.io/default-view create
-         kubectl create rolebinding default-view \   
-                              --clusterrole=view \   
-                              --serviceaccount=kube-system:default \
-                              --namespace=kube-system
-         # clusterrolebinding.rbac.authorization.k8s.io/add-on-cluster-admin create
-         kubectl create clusterrolebinding add-on-cluster-admin \   
+    - name: install tiller
+      shell: |
+        . env.sh
+        # rolebinding.rbac.authorization.k8s.io/default-view create
+        kubectl create rolebinding default-view \   
+                             --clusterrole=view \   
+                             --serviceaccount=kube-system:default \
+                             --namespace=kube-system
+        # clusterrolebinding.rbac.authorization.k8s.io/add-on-cluster-admin create
+        kubectl create clusterrolebinding add-on-cluster-admin \   
                                     --clusterrole=cluster-admin \   
                                     --serviceaccount=kube-system:default
+      args:
+        chdir: ~/certs.{{ ucp_instance }}.{{ ucp_username }}
+        executable: /usr/bin/bash
+      register: ps
+
+    - debug: var=ps.stdout_lines
