@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prometheus
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: prometheus
+  template:
+    metadata:
+      labels:
+        app: prometheus
+    spec:
+      containers:
+      - name: inventory
+        image: alpine
+        command: ["sh", "-c"]
+        args:
+        - apk add --no-cache curl &&
+          while :; do
+            curl -Ss --cacert /bundle/ca.pem --cert /bundle/cert.pem --key /bundle/key.pem --output /inventory/inventory.json https://ucp-controller.kube-system.svc.cluster.local/metricsdiscovery;
+            sleep 15;
+          done
+        volumeMounts:
+        - name: bundle
+          mountPath: /bundle
+        - name: inventory
+          mountPath: /inventory
+      - name: prometheus
+        image: prom/prometheus
+        command: ["/bin/prometheus"]
+        args:
+        - --config.file=/config/prometheus.yaml
+        - --storage.tsdb.path=/prometheus
+        - --web.console.libraries=/etc/prometheus/console_libraries
+        - --web.console.templates=/etc/prometheus/consoles
+        volumeMounts:
+        - name: bundle
+          mountPath: /bundle
+        - name: config
+          mountPath: /config
+        - name: inventory
+          mountPath: /inventory
+      volumes:
+      - name: bundle
+        secret:
+          secretName: prometheus
+      - name: config
+        configMap:
+          name: prometheus
+      - name: inventory
+        emptyDir:
+          medium: Memory
+
