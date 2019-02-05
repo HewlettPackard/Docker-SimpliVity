@@ -33,8 +33,3 @@ backup_dest: "/root/backups"
 # backup_server: this MUST be set to the IP address of your ansible box
 #
 backup_server: "ip address of your ansible box"
-
-
-# backup_passphrase: Enter a 12 character passphrase  which will enable encryption of your ucp data
-backup_passphrase: "secret123456"
-
