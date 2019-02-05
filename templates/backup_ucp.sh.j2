@@ -26,5 +26,5 @@ backup_file=${backup_name}.tgz
  
 # backup UCP
 docker container run --log-driver none --rm  --name ucp -v /var/run/docker.sock:/var/run/docker.sock docker/ucp:{{ detected_ucp_version }} \
-   backup --id $ucp_id \
+   backup --id $ucp_id --passphrase {{ backup_passphrase }} \
 | gzip - | ssh -oStrictHostKeyChecking=no {{ backup_server }} "cat >{{ backup_dest }}/${backup_file}"
