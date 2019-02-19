@@ -22,7 +22,8 @@ ucp_only=${ucp_only,,}
 # Restore UCP from backup
 #
 ssh -oStrictHostKeyChecking=no {{ backup_server }} "cat {{ backup_ucp }}" | zcat | \
-    docker container run  -i --rm --name ucp -v /var/run/docker.sock:/var/run/docker.sock  docker/ucp:{{ ucp_version }} restore 
+    docker container run  -i --rm --name ucp -v /var/run/docker.sock:/var/run/docker.sock  docker/ucp:{{ ucp_version }} restore \
+       --passphrase {{ backup_passphrase }} 
 
 #
 # restart docker
