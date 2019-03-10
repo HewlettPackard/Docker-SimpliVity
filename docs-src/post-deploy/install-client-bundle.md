@@ -11,6 +11,16 @@ A convenience playbook is provided to install and apply the client bundle. To ru
 The client bundle is downloaded to `~/certs.<<ucp_instance>>.<<ucp_username>>` where `ucp_instance` will 
 be specific to the cluster you are running against, for example, `hpe2-ucp01` and the `ucp-username` is typically `admin`.
 
+The playbook downloads the client bundle, but does not configure it for use. Change to the download folder
+and execute `eval "$(<env.sh)"`
+
+
+```
+# cd ~/certs.hpe2-ucp01.admin
+# eval "$(<env.sh)"
+```
+
+
 Test the configuration by again running the `kubectl version` command - this time, it should now report 
 the server  version as well as the client version:
 
