@@ -1,0 +1,136 @@
+# Licensed under the Apache License, Version 2.0 (the "License");
+# You may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+###
+---
+- name: Install sysdig
+  hosts: docker
+  vars_files:
+    - ../group_vars/vars
+    - ../group_vars/vault
+
+  environment: "{{ env }}"
+  tasks:
+    #
+    # Open required firewall ports
+    #
+    - name: Configure required firewall ports
+      firewalld:
+        port: "{{ sysdig_collector_port }}/tcp"
+        permanent: true
+        immediate: true
+        state: enabled
+
+    # Verify remote system can open a connection to
+    # collector.sysdigcloud.com port to send Sysdig
+    # information to Sysdig's SaaS instance.  If the connection
+    # succeeds then set the variable 'sysdig_connection'
+    # to 'true' and continue.  Otherwise print an error
+    # message explaining that connectivity requirements
+    # were not met.
+
+    - name: Check connectivity to collector.sysdigcloud.com port 
+      wait_for:
+        host: "{{ sysdig_collector }}"
+        port: "{{ sysdig_collector_port }}"
+        state: started
+        timeout: 10
+        msg: "Connectivity to {{ sysdig_collector }} port {{ sysdig_collector_port }} failed!  Exiting."
+
+    - set_fact:
+        sysdig_connection: true
+
+    - name: Install Kernel Headers
+      yum:
+        name: kernel-devel-{{ ansible_kernel }}
+        state: latest
+        update_cache: yes
+
+
+
+
+
+
+- hosts: local
+  connection: local
+  gather_facts: false
+
+  vars_files:
+    - ../group_vars/vars
+    - ../group_vars/vault
+
+  tasks:
+
+
+    - name: Copy sysdig namespace template
+      template:
+        src: ../templates/sysdig/k8s/sysdig-namespace.yml.j2
+        dest: /tmp/sysdig-namespace.yml
+
+    - name: Copy sysdig serviceaccount template
+      template:
+        src: ../templates/sysdig/k8s/sysdig-serviceaccount.yml.j2
+        dest: /tmp/sysdig-serviceaccount.yml
+
+    - name: Copy sysdig clusterrole template
+      template:
+        src: ../templates/sysdig/k8s/sysdig-agent-clusterrole.yml.j2
+        dest: /tmp/sysdig-agent-clusterrole.yml
+
+    - name: Copy sysdig clusterrolebinding template
+      template:
+        src: ../templates/sysdig/k8s/sysdig-clusterrolebinding.yml.j2
+        dest: /tmp/sysdig-clusterrolebinding.yml
+
+    - name: Copy sysdig daemonset template
+      template:
+        src: ../templates/sysdig/k8s/sysdig-agent-daemonset-v1.yml.j2
+        dest: /tmp/sysdig-agent-daemonset-v1.yml
+
+    - name: Copy sysdig daemonset template v2
+      template:
+        src: ../templates/sysdig/k8s/sysdig-agent-daemonset-v2.yml.j2
+        dest: /tmp/sysdig-agent-daemonset-v2.yml
+
+
+    - name: Copy sysdig configmap template v2
+      template:
+        src: ../templates/sysdig/k8s/sysdig-agent-configmap.yml.j2
+        dest: /tmp/sysdig-agent-configmap.yml
+
+
+    - include_tasks: includes/find_ucp.yml
+      vars:
+        ping_servers: "{{ groups.ucp }}"
+    - debug: var=ucp_instance
+      when: _debug is defined
+
+    # Assume playbooks/install_client_bundle.yml has been run before this 
+    # Assume that ucp_instance hasn't changed in the meantime
+    # - include_tasks: includes/config_client.yml
+
+    - name: Apply yml files to install agent
+      shell: |
+        . env.sh
+        kubectl apply -f /tmp/sysdig-namespace.yml
+        kubectl apply -f /tmp/sysdig-serviceaccount.yml
+        kubectl apply -f /tmp/sysdig-agent-clusterrole.yml
+        kubectl apply -f /tmp/sysdig-clusterrolebinding.yml
+        # kubectl -n sysdig apply -f /tmp/sysdig-agent-daemonset-v1.yml --validate=false
+        kubectl -n sysdig create secret generic sysdig-agent --from-literal=access-key={{ sysdig_access_key }}
+        kubectl -n sysdig apply -f /tmp/sysdig-agent-daemonset-v2.yml
+      args:
+        chdir: ~/certs.{{ ucp_instance }}.{{ ucp_username }}
+        executable: /usr/bin/bash
+      register: ps
+
+    - debug: var=ps.stdout_lines
+

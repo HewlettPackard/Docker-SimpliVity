@@ -19,5 +19,5 @@
 - import_playbook: playbooks/scale_workers.yml
 - import_playbook: playbooks/scale_dtr.yml
 - import_playbook: playbooks/reconfigure_dtr.yml
-- import_playbook: playbooks/splunk_uf.yml
+#- import_playbook: playbooks/splunk_uf.yml
 - import_playbook: playbooks/scale_ucp.yml

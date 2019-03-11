@@ -28,6 +28,7 @@ internal_ucpk8s_ports:
   - 6444/tcp
   - 7946/tcp
   - 7946/udp
+  - 9099/tcp
   - 10250/tcp
   - 12376/tcp
   - 12378/tcp
@@ -51,6 +52,7 @@ internal_dtrk8s_ports:
   - 6444/tcp
   - 7946/tcp
   - 7946/udp
+  - 9099/tcp
   - 10250/tcp
   - 12376/tcp
   - 12378/tcp
@@ -78,6 +80,7 @@ internal_wrkk8s_ports:
   - 6444/tcp
   - 7946/tcp
   - 7946/udp
+  - 9099/tcp
   - 10250/tcp
   - 12376/tcp
   - 12378/tcp

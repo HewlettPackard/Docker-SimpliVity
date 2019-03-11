@@ -135,6 +135,8 @@ monitoring_stack: splunk_demo
 #
 # Sysdig
 #
+sysdig_collector: 'collector.sysdigcloud.com'
+sysdig_collector_port: '6666'
 sysdig_agent: 'https://s3.amazonaws.com/download.draios.com/stable/install-agent'
 sysdig_tags: 'location:EnterCity,role:Enterprise CaaS on Synergy,owner:Customer name'
 
@@ -143,14 +145,17 @@ sysdig_restricted_control_role: 'Restricted Control'
 k8s_cluster: 'ucp_hpe-ucp.cloudra.local'
 
 #k8s nfs provisionner role name
+nfs_provisioner_namespace: nfsstorage
+nfs_provisioner_serviceaccount: 'nfs-provisioner'
 nfs_provisioner_role: 'nfs-provisioner-runner'
 nfs_provisioner_name: "hpe.com/nfs"
 nfs_provisioner_storage_class_name: "nfs"
-nfs_provisioner_namespace: nfsstorage
+nfs_provisioner_server_ip: hpe-nfs.cloudra.local
+nfs_provisioner_server_share: '/k8s'
+
+
 #nfs_provisioner_server_ip: vfs3par.cloudra.local
 #nfs_provisioner_server_share: '/vfs3par/vfs3par/fs_clh/share'
-nfs_provisioner_server_ip: clh-nfs.cloudra.local
-nfs_provisioner_server_share: '/k8s'
 
 
 #storage driver for docker nodes: accepted values are 'overlay2' and devicemapper
@@ -176,3 +181,9 @@ loadbalancers:
     public_fqdn: hpe-wrk.cloudra.local
     virtual_router_id: 53
 
+
+kubectl_version: "1.11.5"
+kubectl_checksum: "sha512:7028d357f65603398c35b7578793a153248e17c2ad631541a587f4ae13ef93f058db130390eea4820c2fd7707509ed0eb581cb129790b12680e869829a6fc241"
+
+helm_version: "2.12.3"
+helm_checksum: "sha256:3425a1b37954dabdf2ba37d5d8a0bd24a225bb8454a06f12b115c55907809107"
