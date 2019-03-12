@@ -22,7 +22,7 @@ However, if the deployment is running behind a proxy, you may need to make this 
     yum install httpd
     systemctl enable httpd
     systemctl start httpd
-    firewall-cmd --permanent --add-port 80/tcp --zone=pubpic
+    firewall-cmd --permanent --add-port 80/tcp --zone=public
     firewall-cmd --reload
     ```
 
