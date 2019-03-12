@@ -8,7 +8,7 @@ To run the playbook:
 
 ```
 # cd ~/Docker-SimpliVity
-# ansible-playbook -i vm_hosts playbooks/install-kubectl.yml --vault-password-file .vault_pass
+# ansible-playbook -i vm_hosts playbooks/install_kubectl.yml --vault-password-file .vault_pass
 ```
 
 
