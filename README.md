@@ -15,6 +15,10 @@ New features include:
 - Support for Helm charts, with 2 sample charts for validation purposes
 
 
+**Warning:** There is a known issue with restoring DTR backups in this release - this should be fixed in the next release
+of Docker EE 2.1, due in a few weeks. If this issue is a show-stopper for you, then you should use the previous release 
+of HPE Express Containers, which features Docker EE 2.0 (Kubernetes 1.8).  
+
 Documentation is available at [https://hewlettpackard.github.io/Docker-SimpliVity](https://hewlettpackard.github.io/Docker-SimpliVity)
 
 
