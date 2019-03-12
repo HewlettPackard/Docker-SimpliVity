@@ -1,8 +1,0 @@
-#
-# http://docs.splunk.com/Documentation/Forwarder/7.0.2/Forwarder/InstallaWindowsuniversalforwarderfromthecommandline
-#
-#Start-Process -FilePath msiexec.exe -ArgumentList "/i {{ splunk_architecture_universal_forwarder_package }}.msi PERFMON=cpu,memory,network,diskspace WINEVENTLOG_APP_ENABLE=1 WINEVENTLOG_SEC_ENABLE=1 WINEVENTLOG_SYS_ENABLE=1 WINEVENTLOG_FWD_ENABLE=1 WINEVENTLOG_SET_ENABLE=1 LAUNCHSPLUNK=0 AGREETOLICENSE=Yes /quiet /L*v install_splunkuf.txt" -wait
-
-
-Start-Process -FilePath msiexec.exe -ArgumentList "/i {{ splunk_architecture_universal_forwarder_package }}.msi WINEVENTLOG_APP_ENABLE=0 WINEVENTLOG_SEC_ENABLE=0 WINEVENTLOG_SYS_ENABLE=0 WINEVENTLOG_FWD_ENABLE=0 WINEVENTLOG_SET_ENABLE=0 LAUNCHSPLUNK=0 AGREETOLICENSE=Yes /quiet /L*v install_splunkuf.txt" -wait
-

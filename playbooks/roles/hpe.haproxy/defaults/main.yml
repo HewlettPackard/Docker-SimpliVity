@@ -1,7 +1,0 @@
----
-# defaults file for hpe.haproxy
-hpe_haproxy_server: "localhost"
-hpe_haproxy_env:
-  http_proxy: '10.12.7.21:8080'
-  https_proxy: '10.12.7.21:8080'
-  no_proxy: '/var/run/docker.sock,localhost,am2.cloudra.local,10.10.174.'

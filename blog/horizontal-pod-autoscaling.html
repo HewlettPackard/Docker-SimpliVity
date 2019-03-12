@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Horizontal pod autoscaling walkthrough | HPE Express Containers</title>
+    <meta name="description" content="An example of scaling pods based on CPU usage">
+    
+    
+    <link rel="preload" href="/Docker-SimpliVity/assets/css/styles.02e276a3.css" as="style"><link rel="preload" href="/Docker-SimpliVity/assets/js/app.02e276a3.js" as="script"><link rel="preload" href="/Docker-SimpliVity/assets/js/33.c030c776.js" as="script"><link rel="prefetch" href="/Docker-SimpliVity/assets/css/21.styles.8219cb4e.css"><link rel="prefetch" href="/Docker-SimpliVity/assets/css/6.styles.430f79bd.css"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/1.38c50155.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/10.118f3105.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/100.9752aabf.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/101.92aaa72b.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/102.2e89109f.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/103.bace6e97.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/104.70058219.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/105.1b4fe69f.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/106.26f7c2f2.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/11.b2394f6d.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/12.14c8a56c.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/13.7fdf36fc.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/14.a5dd6084.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/15.8c268df6.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/16.f4b722ea.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/17.b4cef22d.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/18.0e77c75f.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/19.8fa9bc01.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/2.b3128ed0.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/20.393abbf8.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/21.8219cb4e.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/22.30c6555f.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/23.b09f966b.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/24.049eab65.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/25.b0cedf4a.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/26.e04be0b3.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/27.484df42f.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/28.ec47006d.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/29.e8e96341.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/3.919f6860.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/30.8fb84ac5.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/31.354da6cb.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/32.77819759.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/34.d1e2f4f8.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/35.53ab4a15.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/36.ddd803a0.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/37.0030f343.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/38.377187bb.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/39.d12b0203.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/4.24c212e2.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/40.8a829343.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/41.3e85eb8b.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/42.d6a5fae9.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/43.f8929b4c.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/44.a967a845.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/45.6035a65c.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/46.d3c436db.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/47.2163d531.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/48.e0bbdf95.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/49.405e4c05.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/5.f4a1335b.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/50.e06dad30.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/51.8656f0c8.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/52.0210b5b6.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/53.8eccfeae.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/54.46c84e1a.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/55.3b9ba405.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/56.704043c1.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/57.a57f3b22.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/58.0daef345.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/59.8c2c1879.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/6.430f79bd.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/60.4896fcd3.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/61.e2bd0879.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/62.33974de6.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/63.25ddf7f7.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/64.e3a96fe0.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/65.0ad14737.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/66.3d279cc2.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/67.fe2ffe2c.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/68.a3663524.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/69.03c2ac15.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/7.2c7b2e13.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/70.ef25b8ad.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/71.6ebce9b8.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/72.354601f2.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/73.b404a210.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/74.7c477722.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/75.cc94bc65.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/76.13ca128b.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/77.d95871c1.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/78.44efb3d9.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/79.de1ba575.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/8.cead2115.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/80.d15829cc.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/81.20a5baac.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/82.2a9b519e.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/83.28b13d54.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/84.bbb77987.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/85.c3f762ba.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/86.2dd00407.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/87.5339f18e.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/88.bc8b9ab3.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/89.50184d9d.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/9.1781f01c.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/90.f2d6b3ad.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/91.a72a5d37.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/92.6cd4f7a1.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/93.e8bb9dc1.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/94.1282b7e9.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/95.ed877cfb.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/96.f41ac521.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/97.0c6ecb76.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/98.ab5efdde.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/99.f8449e64.js">
+    <link rel="stylesheet" href="/Docker-SimpliVity/assets/css/21.styles.8219cb4e.css"><link rel="stylesheet" href="/Docker-SimpliVity/assets/css/6.styles.430f79bd.css"><link rel="stylesheet" href="/Docker-SimpliVity/assets/css/styles.02e276a3.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/Docker-SimpliVity/" class="home-link router-link-active"><!----> <span class="site-name">HPE Express Containers</span></a> <div class="links" style="max-width:nullpx;"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><a href="/Docker-SimpliVity/" class="nav-link">Home</a></div><div class="nav-item"><a href="/Docker-SimpliVity/blog/" class="nav-link router-link-active">Blog</a></div> <a href="https://github.com/HewlettPackard/Docker-Simplivity" target="_blank" rel="noopener noreferrer" class="repo-link">
+    Contribute!
+    <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></nav></div></header> <div class="sidebar-mask"></div> <div class="sidebar"><nav class="nav-links"><div class="nav-item"><a href="/Docker-SimpliVity/" class="nav-link">Home</a></div><div class="nav-item"><a href="/Docker-SimpliVity/blog/" class="nav-link router-link-active">Blog</a></div> <a href="https://github.com/HewlettPackard/Docker-Simplivity" target="_blank" rel="noopener noreferrer" class="repo-link">
+    Contribute!
+    <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></nav>  <ul class="sidebar-links"><li><div class="sidebar-group first collapsable"><p class="sidebar-heading open"><span>Introduction</span> <span class="arrow down"></span></p> <ul class="sidebar-group-items"><li><a href="/Docker-SimpliVity/introduction.html" class="sidebar-link">Executive Summary</a></li></ul></div></li><li><div class="sidebar-group collapsable"><p class="sidebar-heading"><span>Release notes</span> <span class="arrow right"></span></p> <!----></div></li><li><div class="sidebar-group collapsable"><p class="sidebar-heading"><span>Solution overview</span> <span class="arrow right"></span></p> <!----></div></li><li><div class="sidebar-group collapsable"><p class="sidebar-heading"><span>Solution components</span> <span class="arrow right"></span></p> <!----></div></li><li><div class="sidebar-group collapsable"><p class="sidebar-heading"><span>Preparing the environment</span> <span class="arrow right"></span></p> <!----></div></li><li><div class="sidebar-group collapsable"><p class="sidebar-heading"><span>Configuring the core components</span> <span class="arrow right"></span></p> <!----></div></li><li><div class="sidebar-group collapsable"><p class="sidebar-heading"><span>Overview of the playbooks</span> <span class="arrow right"></span></p> <!----></div></li><li><div class="sidebar-group collapsable"><p class="sidebar-heading"><span>Deploying core components</span> <span class="arrow right"></span></p> <!----></div></li><li><div class="sidebar-group collapsable"><p class="sidebar-heading"><span>Post deployment</span> <span class="arrow right"></span></p> <!----></div></li><li><div class="sidebar-group collapsable"><p class="sidebar-heading"><span>Configuring Storage</span> <span class="arrow right"></span></p> <!----></div></li><li><div class="sidebar-group collapsable"><p class="sidebar-heading"><span>Deploying Windows workers</span> <span class="arrow right"></span></p> <!----></div></li><li><div class="sidebar-group collapsable"><p class="sidebar-heading"><span>Deploying Sysdig monitoring</span> <span class="arrow right"></span></p> <!----></div></li><li><div class="sidebar-group collapsable"><p class="sidebar-heading"><span>Deploying Splunk</span> <span class="arrow right"></span></p> <!----></div></li><li><div class="sidebar-group collapsable"><p class="sidebar-heading"><span>Deploying Prometheus and Grafana on Kubernetes</span> <span class="arrow right"></span></p> <!----></div></li><li><div class="sidebar-group collapsable"><p class="sidebar-heading"><span>Deploying Prometheus and Grafana on Docker Swarm</span> <span class="arrow right"></span></p> <!----></div></li><li><div class="sidebar-group collapsable"><p class="sidebar-heading"><span>Backup and restore</span> <span class="arrow right"></span></p> <!----></div></li><li><div class="sidebar-group collapsable"><p class="sidebar-heading"><span>Solution lifecycle management</span> <span class="arrow right"></span></p> <!----></div></li><li><div class="sidebar-group collapsable"><p class="sidebar-heading"><span>Appendices</span> <span class="arrow right"></span></p> <!----></div></li></ul> </div> <div class="page"> <div class="content"><h1 id="horizontal-pod-autoscaling"><a href="#horizontal-pod-autoscaling" aria-hidden="true" class="header-anchor">#</a> Horizontal pod autoscaling</h1> <h2 id="prerequisites"><a href="#prerequisites" aria-hidden="true" class="header-anchor">#</a> Prerequisites</h2> <ul><li>Install the <code>kubectl</code> binary on your Ansible box</li> <li>Install the UCP Client bundle for the <code>admin</code> user</li> <li>Confirm that you can connect to the cluster by running a test command, for example, <code>kubectl get nodes</code></li> <li>Install <code>metrics-server</code> as shown in <a href="/Docker-SimpliVity/blog/install-metrics-server.html">../blog/install-metrics-server.html</a></li></ul> <h2 id="introduction"><a href="#introduction" aria-hidden="true" class="header-anchor">#</a> Introduction</h2> <p>The Horizontal Pod Autoscaler automatically scales the number of pods in a deployment or replica set based on the observed CPU utilization.</p> <h2 id="assigning-cpu-resources-to-containers-and-pods"><a href="#assigning-cpu-resources-to-containers-and-pods" aria-hidden="true" class="header-anchor">#</a> Assigning CPU Resources to Containers and Pods</h2> <p>It is possible to <code>request</code> the minimum amount of CPU that a container requires. If the cluster has this amount available, the container will be allowed to start. However, the container will not be scheduled if the requested CPU resource is not
+available. You can also specify a CPU <code>limit</code> to set a maximum amount of CPU resources the container is allowed.</p> <p>A Container is guaranteed to have as much CPU as specified in its <code>request</code>, but is not allowed to use more CPU than its <code>limit</code>. The CPU resource is measured in CPU units. One CPU, in Kubernetes, is equivalent to:</p> <ul><li>One AWS vCPU</li> <li>One GCP Core</li> <li>One Azure vCore</li> <li>One Hyperthread on a bare-metal Intel processor with Hyperthreading</li></ul> <p>Fractional values are allowed. A Container that requests 0.5 CPU is guaranteed half as much CPU as a Container that requests 1 CPU. You can use the suffix <code>m</code> to mean <code>milli</code> or one thousandth of a CPU. For example, 100m CPU and 0.1 CPU are the same.</p> <p>CPU is always requested as an absolute quantity, never as a relative quantity; 0.1 is the same amount of CPU on a single-core,dual-core, or 48-core machine.</p> <h2 id="workload"><a href="#workload" aria-hidden="true" class="header-anchor">#</a> Workload</h2> <p>To demonstrate the Horizontal Pod Autoscaler, we will serve up a single PHP page that performs a compute-intensive workload:</p> <div class="language- extra-class"><pre class="language-text"><code>&lt;?php
+  $x = 0.0001;
+  for ($i = 0; $i &lt;= 1000000; $i++) {
+    $x += sqrt($x);
+  }
+  echo &quot;OK!&quot;;
+?&gt;
+</code></pre></div><p>This file is used as the index page for a web server that is deployed using a custom docker image. A Dockerfile  based on the <code>php-apache</code> image is used to containerize our worload:</p> <div class="language- extra-class"><pre class="language-text"><code>FROM php:5-apache
+ADD index.php /var/www/html/index.php
+RUN chmod a+rx index.php
+
+</code></pre></div><p>Evert time the index page is accessed, the computation will be performed and the message &quot;OK!&quot; will be returned to the client.</p> <h2 id="deploying-the-service"><a href="#deploying-the-service" aria-hidden="true" class="header-anchor">#</a> Deploying the service</h2> <p>First, we will start a deployment running the image and expose it as a service. We set the CPU request to <code>200m</code> or <code>200/1000</code> equals <code>0.2</code> CPU. Note that, in this instance, we do not set an upper <code>limit</code> and so the container can use as much CPU as is available on the node.</p> <div class="language- extra-class"><pre class="language-text"><code>$ kubectl run php-apache --image=k8s.gcr.io/hpa-example --requests=cpu=200m --expose --port=80
+</code></pre></div><p>In a separate terminal, you can set up a watch for the pods, deployments and replica sets that are created:</p> <div class="language- extra-class"><pre class="language-text"><code># watch -n 10 kubectl get pods,deploy,rs
+
+Every 10.0s: kubectl get pods,deploy,rs                    Fri Mar  1 14:43:14 2019
+
+NAME                             READY     STATUS    RESTARTS   AGE
+pod/php-apache-7bf9f4b44-lmzfl   1/1       Running   0          37s
+
+NAME                               DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
+deployment.extensions/php-apache   1         1         1            1           38s
+
+NAME                                         DESIRED   CURRENT   READY     AGE
+replicaset.extensions/php-apache-7bf9f4b44   1         1         1         37s
+</code></pre></div><p>In another terminal, you can use <code>kubectl top</code> to monitor the CPU usage. Here, you can see that the single pod is using minimal CPU and memory resources (<code>1m</code> equals 1/1000th CPU, '7Mi' equals 7MB memory).</p> <div class="language- extra-class"><pre class="language-text"><code># watch -n 10 kubectl top pods
+
+Every 10.0s: kubectl top pods | grep php-apache    Fri Mar  1 14:43:26 2019
+
+php-apache-7bf9f4b44-lmzfl   1m           7Mi
+</code></pre></div><p>You can use the <code>kubectl describe</code> command to see details of the deployment. You can see the CPU <code>request</code> of <code>200m</code> and that,
+for now, only one replica is deployed.</p> <div class="language- extra-class"><pre class="language-text"><code># kubectl describe deploy php-apache
+
+Name:                   php-apache
+Namespace:              default
+CreationTimestamp:      Fri, 01 Mar 2019 14:41:45 +0000
+Labels:                 run=php-apache
+Annotations:            deployment.kubernetes.io/revision=1
+Selector:               run=php-apache
+Replicas:               1 desired | 1 updated | 1 total | 1 available | 0 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:  run=php-apache
+  Containers:
+   php-apache:
+    Image:      k8s.gcr.io/hpa-example
+    Port:       80/TCP
+    Host Port:  0/TCP
+    Requests:
+      cpu:        200m
+    Environment:  &lt;none&gt;
+    Mounts:       &lt;none&gt;
+  Volumes:        &lt;none&gt;
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Available      True    MinimumReplicasAvailable
+  Progressing    True    NewReplicaSetAvailable
+OldReplicaSets:  &lt;none&gt;
+NewReplicaSet:   php-apache-7bf9f4b44 (1/1 replicas created)
+Events:
+  Type    Reason             Age   From                   Message
+  ----    ------             ----  ----                   -------
+  Normal  ScalingReplicaSet  8m    deployment-controller  Scaled up replica set php-apache-7bf9f4b44 to 1
+</code></pre></div><h2 id="expose-nodeport"><a href="#expose-nodeport" aria-hidden="true" class="header-anchor">#</a> Expose NodePort</h2> <p>By default, the service that has been generated is assigned a ClusterIP. It can be convenient to use a NodePort to expose the service.</p> <div class="language- extra-class"><pre class="language-text"><code># kubectl get svc php-apache
+NAME         TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)   AGE
+php-apache   ClusterIP   10.96.103.118   &lt;none&gt;        80/TCP    1m
+</code></pre></div><p>Use the <code>kubectl patch</code> command to change the service type to <code>NodePort</code> and to set an explicit port, in this instance <code>33999</code>.</p> <div class="language- extra-class"><pre class="language-text"><code># kubectl patch svc php-apache --type='json' -p '[{&quot;op&quot;:&quot;replace&quot;,&quot;path&quot;:&quot;/spec/type&quot;,&quot;value&quot;:&quot;NodePort&quot;}]'
+
+# kubectl patch svc php-apache --type='json' -p '[{&quot;op&quot;: &quot;add&quot;, &quot;path&quot;:&quot;/spec/ports/0/nodePort&quot;, &quot;value&quot;:33999}]'
+</code></pre></div><p>Now, when you inspect the service, you will see that it can be accessed through any node in the cluster, on the specified port. You will use this when generating a load on the service.</p> <div class="language- extra-class"><pre class="language-text"><code># kubectl get svc php-apache
+
+NAME         TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE
+php-apache   NodePort   10.96.103.118   &lt;none&gt;        80:33999/TCP   2m
+</code></pre></div><h2 id="create-autoscaler"><a href="#create-autoscaler" aria-hidden="true" class="header-anchor">#</a> Create autoscaler</h2> <p>Use the <code>kubectl autoscale</code> command to generate the autoscaler.</p> <div class="language- extra-class"><pre class="language-text"><code># kubectl autoscale deployment php-apache --cpu-percent=50 --min=1 --max=10
+
+horizontalpodautoscaler.autoscaling/php-apache autoscaled
+</code></pre></div><p>In this instance, you specify that when the CPU hits 50% utilization, another pod should be deployed. (In reality, you may want to set this threshold higher, for example, to 70% or 80%). Remember that you set the CPU <code>request</code> to <code>200m</code>, so  you should see a new pod being created when CPU utilization rises above <code>100m</code> in absolute terms. You also specifiy that, at most, 10 pods should be deployed.</p> <p>In a separate terminal, run a watch on the <code>hpa</code> resource. Note that, as there is still no load on the web server, the target utilization shows <code>0%/50%</code>.</p> <div class="language- extra-class"><pre class="language-text"><code># watch -n 10 kubectl get hpa
+
+Every 10.0s: kubectl get hpa                        Fri Mar  1 14:47:07 2019
+
+NAME         REFERENCE               TARGETS   MINPODS   MAXPODS   REPLICAS   AGE
+php-apache   Deployment/php-apache   0%/50%    1         10        1          1m
+</code></pre></div><h2 id="generate-load"><a href="#generate-load" aria-hidden="true" class="header-anchor">#</a> Generate load</h2> <p>In another terminal, run a simple shell script to repeatedly access the index page, using any of the nodes in the cluster and
+the specified port number.</p> <div class="language- extra-class"><pre class="language-text"><code># while true; do wget -q -O- http://hpe2-ucp01.am2.cloudra.local:33999; done
+
+OK!OK!OK!OK!OK!OK!OK!OK!OK!OK!OK!OK!OK...
+</code></pre></div><h2 id="wait-for-scaling"><a href="#wait-for-scaling" aria-hidden="true" class="header-anchor">#</a> Wait for scaling</h2> <p>After a slight delay, <code>kubectl top pods</code> will report that the single pod is consuming significant CPU resources - recall that you did not specify a <code>limit</code> to set an upper boundary on the CPU utilization. In this instance, it is consuming more than 8 times the target threshold (50% of 200m or 100m), so new pods should be deployed shortly.</p> <div class="language- extra-class"><pre class="language-text"><code>Every 10.0s: kubectl top pods                      Fri Mar  1 14:52:34 2019
+
+NAME                         CPU(cores)   MEMORY(bytes)
+php-apache-7bf9f4b44-lmzfl   887m         10Mi
+</code></pre></div><p>The <code>hpa</code> resource also indicates that the target is being exceeded (443%/50%).</p> <div class="language- extra-class"><pre class="language-text"><code>Every 10.0s: kubectl get hpa                        Fri Mar  1 14:52:43 2019
+
+NAME         REFERENCE               TARGETS    MINPODS   MAXPODS   REPLICAS
+   AGE
+php-apache   Deployment/php-apache   443%/50%   1         10        1
+   6m
+</code></pre></div><h2 id="scaling-to-4-pods"><a href="#scaling-to-4-pods" aria-hidden="true" class="header-anchor">#</a> Scaling to 4 pods</h2> <p>After a certain amount of time, the <code>watch</code> on pods, deployments and replica sets will show new pods being deployed:</p> <div class="language- extra-class"><pre class="language-text"><code>Every 10.0s: kubectl get pods,deploy,rs                    Fri Mar  1 14:53:00 2019
+
+NAME                             READY     STATUS    RESTARTS   AGE
+pod/php-apache-7bf9f4b44-4q9xb   1/1       Running   0          26s
+pod/php-apache-7bf9f4b44-6jmg4   1/1       Running   0          26s
+pod/php-apache-7bf9f4b44-jsrlh   1/1       Running   0          26s
+pod/php-apache-7bf9f4b44-lmzfl   1/1       Running   0          10m
+
+NAME                               DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
+deployment.extensions/php-apache   4         4         4            4           10m
+NAME                                         DESIRED   CURRENT   READY     AGE
+replicaset.extensions/php-apache-7bf9f4b44   4         4         4         10m
+</code></pre></div><p>Use <code>kubectl describe</code> on the deployment to see details of the scaling event.</p> <div class="language- extra-class"><pre class="language-text"><code># kubectl describe deploy php-apache
+Name:                   php-apache
+...
+NewReplicaSet:   php-apache-7bf9f4b44 (4/4 replicas created)
+Events:
+  Type    Reason             Age   From                   Message
+  ----    ------             ----  ----                   -------
+  Normal  ScalingReplicaSet  11m   deployment-controller  Scaled up replica set php-apache-7bf9f4b44 to 1
+  Normal  ScalingReplicaSet  1m    deployment-controller  Scaled up replica set php-apache-7bf9f4b44 to 4
+</code></pre></div><h2 id="impact-of-scaling-to-4"><a href="#impact-of-scaling-to-4" aria-hidden="true" class="header-anchor">#</a> Impact of scaling to 4</h2> <p>After a while, <code>kubectl top pods</code> will show that the 4 pods are coping better than one, but they are still exceeding the target, in this instance, 50% of 200m or 100m.</p> <div class="language- extra-class"><pre class="language-text"><code>Every 10.0s: kubectl top pods                      Fri Mar  1 14:55:28 2019
+
+NAME                         CPU(cores)   MEMORY(bytes)
+php-apache-7bf9f4b44-4q9xb   232m         10Mi
+php-apache-7bf9f4b44-6jmg4   236m         10Mi
+php-apache-7bf9f4b44-jsrlh   226m         9Mi
+php-apache-7bf9f4b44-lmzfl   199m         10Mi
+</code></pre></div><p>Similarly, the <code>hpa</code> resource  shows that the overall target threshold is still being missed (111%/50%).</p> <div class="language- extra-class"><pre class="language-text"><code>Every 10.0s: kubectl get hpa                        Fri Mar  1 14:55:48 2019
+
+NAME         REFERENCE               TARGETS    MINPODS   MAXPODS   REPLICAS    AGE
+php-apache   Deployment/php-apache   111%/50%   1         10        4           10m
+
+</code></pre></div><h2 id="scaling-to-8-pods"><a href="#scaling-to-8-pods" aria-hidden="true" class="header-anchor">#</a> Scaling to 8 pods</h2> <p>As the thresholds are still being exceeded, another round of scaling takes place, this time from 4 to 8 pods.</p> <div class="language- extra-class"><pre class="language-text"><code>Every 10.0s: kubectl get pods,deploy,rs                    Fri Mar  1 14:58:40 2019
+
+NAME                             READY     STATUS    RESTARTS   AGE
+pod/php-apache-7bf9f4b44-2bcc9   1/1       Running   0          3s
+pod/php-apache-7bf9f4b44-4q9xb   1/1       Running   0          6m
+pod/php-apache-7bf9f4b44-6jmg4   1/1       Running   0          6m
+pod/php-apache-7bf9f4b44-7r7lp   1/1       Running   0          3s
+pod/php-apache-7bf9f4b44-bpw8s   1/1       Running   0          3s
+pod/php-apache-7bf9f4b44-d5jp7   1/1       Running   0          3s
+pod/php-apache-7bf9f4b44-jsrlh   1/1       Running   0          6m
+pod/php-apache-7bf9f4b44-lmzfl   1/1       Running   0          16m
+
+NAME                               DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
+deployment.extensions/php-apache   8         8         8            8           16m
+NAME                                         DESIRED   CURRENT   READY     AGE
+replicaset.extensions/php-apache-7bf9f4b44   8         8         8         16m
+</code></pre></div><p>Again, you can use <code>kubectl describe</code> on the deployment for confirmation of the scaling event.</p> <div class="language- extra-class"><pre class="language-text"><code># kubectl describe deploy php-apache
+Name:                   php-apache
+...
+NewReplicaSet:   php-apache-7bf9f4b44 (8/8 replicas created)
+Events:
+  Type    Reason             Age   From                   Message
+  ----    ------             ----  ----                   -------
+  Normal  ScalingReplicaSet  17m   deployment-controller  Scaled up replica set php-apache-7bf9f4b44 to 1
+  Normal  ScalingReplicaSet  7m    deployment-controller  Scaled up replica set php-apache-7bf9f4b44 to 4
+  Normal  ScalingReplicaSet  1m    deployment-controller  Scaled up replica set php-apache-7bf9f4b44 to 8
+</code></pre></div><h2 id="impact-of-scaling-to-8"><a href="#impact-of-scaling-to-8" aria-hidden="true" class="header-anchor">#</a> Impact of scaling to 8</h2> <p>After a while, <code>kubectl top pods</code> will show that the 8 pods are almost sufficient to achieve the required threshold. On average, it would seem that most pods are close to the <code>100m</code> requirement.</p> <div class="language- extra-class"><pre class="language-text"><code>Every 10.0s: kubectl top pods                      Fri Mar  1 15:01:37 2019
+
+NAME                         CPU(cores)   MEMORY(bytes)
+php-apache-7bf9f4b44-2bcc9   83m          9Mi
+php-apache-7bf9f4b44-4q9xb   98m          10Mi
+php-apache-7bf9f4b44-6jmg4   143m         10Mi
+php-apache-7bf9f4b44-7r7lp   80m          9Mi
+php-apache-7bf9f4b44-bpw8s   111m         10Mi
+php-apache-7bf9f4b44-d5jp7   157m         10Mi
+php-apache-7bf9f4b44-jsrlh   108m         9Mi
+php-apache-7bf9f4b44-lmzfl   96m          10Mi
+</code></pre></div><p>Similarly, the <code>hpa</code> resource  shows that the overall target threshold is close to being achieved (54%/50%).</p> <div class="language- extra-class"><pre class="language-text"><code>Every 10.0s: kubectl get hpa                        Fri Mar  1 15:01:55 2019
+
+NAME         REFERENCE               TARGETS   MINPODS   MAXPODS   REPLICAS
+  AGE
+php-apache   Deployment/php-apache   54%/50%   1         10        8
+  16m
+</code></pre></div><h2 id="further-scaling-and-tolerance"><a href="#further-scaling-and-tolerance" aria-hidden="true" class="header-anchor">#</a> Further scaling and tolerance</h2> <p>Given this particular workload and your environment, the exact number of pods deployed is not certain. In this instance, another two pods were subsequently deployed, but then one was removed to leave a steady-state of 9 pods required to meet the CPU requirements. Tolerance levels are deployed to stop <code>thrashing</code>, where pods are added and removed repeatedly.</p> <h2 id="scaling-down"><a href="#scaling-down" aria-hidden="true" class="header-anchor">#</a> Scaling down</h2> <p>Stop the shell script that is generating the workload. The CPU usage reported by <code>kubectl top pods</code> will drop to a minimal level (<code>1m</code>) while the <code>hpa</code> resouce will show a target of <code>0%/50%</code>.</p> <div class="language- extra-class"><pre class="language-text"><code>Every 10.0s: kubectl top pods                      Fri Mar  1 15:15:28 2019
+
+NAME                         CPU(cores)   MEMORY(bytes)
+php-apache-7bf9f4b44-2bcc9   1m           9Mi
+php-apache-7bf9f4b44-4q9xb   1m           10Mi
+php-apache-7bf9f4b44-6jmg4   1m           10Mi
+php-apache-7bf9f4b44-7r7lp   1m           9Mi
+php-apache-7bf9f4b44-bpw8s   1m           10Mi
+php-apache-7bf9f4b44-d5jp7   1m           10Mi
+php-apache-7bf9f4b44-jsrlh   1m           9Mi
+php-apache-7bf9f4b44-lmzfl   1m           10Mi
+php-apache-7bf9f4b44-q6qcf   1m           10Mi
+</code></pre></div><p>In time, the pods will be scaled down to one, as shown below:</p> <div class="language- extra-class"><pre class="language-text"><code>Every 10.0s: kubectl get pods,deploy,rs                    Fri Mar  1 15:16:41 2019
+
+NAME                             READY     STATUS        RESTARTS   AGE
+pod/php-apache-7bf9f4b44-2bcc9   0/1       Terminating   0          18m
+pod/php-apache-7bf9f4b44-4q9xb   0/1       Terminating   0          24m
+pod/php-apache-7bf9f4b44-d5jp7   0/1       Terminating   0          18m
+pod/php-apache-7bf9f4b44-lmzfl   1/1       Running       0          34m
+
+NAME                               DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
+deployment.extensions/php-apache   1         1         1            1           34m
+NAME                                         DESIRED   CURRENT   READY     AGE
+replicaset.extensions/php-apache-7bf9f4b44   1         1         1         34m
+
+</code></pre></div><p>You can again run <code>kubectl describe</code> on the deployment, to see the scaling event.</p> <div class="language- extra-class"><pre class="language-text"><code># kubectl describe deploy php-apache
+Name:                   php-apache
+...
+NewReplicaSet:   php-apache-7bf9f4b44 (1/1 replicas created)
+Events:
+  Type    Reason             Age   From                   Message
+  ----    ------             ----  ----                   -------
+  Normal  ScalingReplicaSet  35m   deployment-controller  Scaled up replica set php-apache-7bf9f4b44 to 1
+  Normal  ScalingReplicaSet  25m   deployment-controller  Scaled up replica set php-apache-7bf9f4b44 to 4
+  Normal  ScalingReplicaSet  19m   deployment-controller  Scaled up replica set php-apache-7bf9f4b44 to 8
+  Normal  ScalingReplicaSet  12m   deployment-controller  Scaled up replica set php-apache-7bf9f4b44 to 10
+  Normal  ScalingReplicaSet  6m    deployment-controller  Scaled down replica set php-apache-7bf9f4b44 to 9
+  Normal  ScalingReplicaSet  1m    deployment-controller  Scaled down replica set php-apache-7bf9f4b44 to 1
+</code></pre></div><h2 id="teardown"><a href="#teardown" aria-hidden="true" class="header-anchor">#</a> Teardown</h2> <p>Run the following commands to clean up:</p> <div class="language- extra-class"><pre class="language-text"><code># kubectl delete deploy php-apache
+deployment.extensions &quot;php-apache&quot; deleted
+
+# kubectl delete service php-apache
+service &quot;php-apache&quot; deleted
+
+# kubectl delete hpa php-apache
+horizontalpodautoscaler.autoscaling &quot;php-apache&quot; deleted
+</code></pre></div><h2 id="resources"><a href="#resources" aria-hidden="true" class="header-anchor">#</a> Resources</h2> <p>Video:</p> <iframe src="https://player.vimeo.com/video/320716536" width="640" height="359" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen="allowfullscreen"></iframe> <p><a href="https://vimeo.com/320716536">Horizontal pod autoscaling walkthrough</a>  on <a href="https://vimeo.com">Vimeo</a>.</p> <p>Introduction to HPA at <a href="https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/" target="_blank" rel="noopener noreferrer">https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></p> <p>Example is based on <a href="https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale-walkthrough/" target="_blank" rel="noopener noreferrer">https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale-walkthrough/<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></p> <p>Assigning CPU resources: <a href="https://kubernetes.io/docs/tasks/configure-pod-container/assign-cpu-resource/" target="_blank" rel="noopener noreferrer">https://kubernetes.io/docs/tasks/configure-pod-container/assign-cpu-resource/<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></p></div> <div class="page-edit"><div class="edit-link"><a href="https://github.com/HewlettPackard/Docker-Simplivity/edit/devel/docs-src/blog/horizontal-pod-autoscaling.md" target="_blank" rel="noopener noreferrer">Help us improve this page!</a> <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></div> <!----></div> <!----> </div> <!----></div></div>
+    <script src="/Docker-SimpliVity/assets/js/33.c030c776.js" defer></script><script src="/Docker-SimpliVity/assets/js/app.02e276a3.js" defer></script>
+  </body>
+</html>

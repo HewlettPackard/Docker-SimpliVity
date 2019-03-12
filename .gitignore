@@ -1,9 +1,0 @@
-vm_hosts
-vm_hosts.all
-license.lic
-*.svt2
-ansible.log
-.vault_pass
-license.lic
-ansible.log
-
