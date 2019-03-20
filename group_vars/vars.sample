@@ -32,18 +32,17 @@ folder_name: '/NameOfFolder'
 datastores: ['NameOfDataStore']
 disk2: '/dev/sdb'
 disk2_part: '/dev/sdb1'
-vsphere_plugin_version: '0.21' 
+vsphere_plugin_version: '0.21'
 
-# enable_windows: is obsolete, ignored
-#enable_windows: false
+# Windows configuration
 win_vm_template: 'windows-template-name'
 win_username: 'Administrator'
 windows_vdvs_ps: 'https://raw.githubusercontent.com/vmware/vsphere-storage-for-docker/master/install-vdvs.ps1'
 windows_vdvs_path: 'https://vmware.bintray.com/vDVS/vsphere-storage-for-docker_windows'
-windows_vdvs_version: '0.21' # was 0.17
+windows_vdvs_version: '0.21'
 windows_vdvs_directory: 'C:\Users\Administrator\Downloads\'
 windows_winrm_script: 'http://yourlocalwebsercver/ConfigureRemotingForAnsible.ps1'
-#windows_update: true
+windows_update: true
 
 # Networking
 nic_name: 'ens192'
@@ -73,7 +72,7 @@ ucp_username: 'admin'
 #
 # certs dir
 #
-# if this variables are defined, they must point to a folder on the ansible box containing 3 files that the user should supply
+# if these variables are defined, they must point to a folder on the ansible box containing 3 files that the user should supply
 #    ca.pem is the file contaning the root CA certificate
 #    cert.pem is the file containing the server (UCP) certificate followed bythe chain of intermediate CA' certificates (if any)
 #    key.pem, contains the private key
@@ -111,7 +110,7 @@ env:
 #
 # monitoring_stack: <value> 
 #   - if not defined, the playbooks monitoring.yml and monitoring_win.yml will not do anything
-#   - if defined, it should ve set to 'splunk' or 'splunk_demo' 
+#   - if defined, it should be set to 'splunk' or 'splunk_demo' 
 #   - if set to 'splunk_demo', the playbook monitoring.yml will deploy a splunk instance in the docker cluster, the
 #        UI can be reached at http://<any docker node in the swarm>:8000, password is admin/changeme
 #   - if set to 'splunk', the splunk deployment is pre-existing and the universal forwarders will forward the data they collect to

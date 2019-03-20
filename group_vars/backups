@@ -15,14 +15,14 @@
 #
 backup_swarm: "/root/restore/backup_swarm.tgz"
 backup_ucp: "/root/restore/backup_ucp.tgz"
-backup_dtr_meta: "/root/restore/backup_dtr_meta.vars.tgz"
-backup_dtr_data: "/root/restore/backup_dtr_meta.tgz"
+backup_dtr_meta: "/root/restore/backup_dtr_meta.tgz"
+backup_dtr_data: "/root/restore/backup_dtr_data.tgz"
 
 #
 # Make sure you specify the correct replica ID of the DTR replica which you are about to restore. You can find this information in 
-# the .vars.tgz file that was created together with the archive that contains the  DTR metadata
+# the .vars.tgz file that was created together with the archive that contains the DTR metadata.
 #
-backup_dtr_id: "81427e184ba3"
+backup_dtr_id: "your replica ID"
 
 #
 # backup_dest is the name of an EXISTING folder on your ansible box
@@ -32,4 +32,4 @@ backup_dest: "/root/backups"
 #
 # backup_server: this MUST be set to the IP address of your ansible box
 #
-backup_server: "10.10.174.91"
+backup_server: "ip address of your ansible box"
