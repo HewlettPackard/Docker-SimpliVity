@@ -13,7 +13,8 @@ ram='16384'
 disk2_size='500'
 node_policy='hpe-bronze'
 
-# DTR
+
+## DTR
 [dtr_main]
 hpe-dtr01 ip_addr='10.60.59.14/16' esxi_host='esxi-hpe-1.cloudra.local'
 
@@ -24,13 +25,15 @@ hpe-dtr03 ip_addr='10.60.59.16/16' esxi_host='esxi-hpe-3.cloudra.local'
 
 [dtr:vars]
 cpus='2' 
-ram='16384' 
+ram='16384'
 disk2_size='500'
-# make sure swarm is specified for DTR otherwise DTR machines will be configured in mixed mode and the deployment  "may" fail in some cases
+# make sure "swarm" is specified for DTR otherwise DTR machines will be
+# configured in mixed mode and the deployment "may" fail in some cases
 orchestrator=swarm
 node_policy='hpe-gold'
 
-## WORKER
+
+## LINUX WORKER
 [worker]
 hpe-worker01 ip_addr='10.60.59.21/16' esxi_host='esxi-hpe-1.cloudra.local'
 hpe-worker02 ip_addr='10.60.59.22/16' esxi_host='esxi-hpe-2.cloudra.local'
@@ -40,9 +43,25 @@ hpe-worker03 ip_addr='10.60.59.23/16' esxi_host='esxi-hpe-3.cloudra.local' orche
 cpus='4'
 ram='65536'
 disk2_size='500'
-orchestrator=kubernetes
+orchestrator='kubernetes'
 
-## LOAD BALANCERS (new style, using floating IPs managed by keepalived), make sure you document the dictionary loadbalancers: in group_vars/vars
+
+## LOAD BALANCERS (Legacy Style)
+[ucp_lb]
+#hpe-ucp ip_addr='10.60.59.88/16'     external_addr='10.13.180.10/24' esxi_host='esxi-hpe-1.cloudra.local'
+[dtr_lb]
+#hpe-dtr ip_addr='10.60.59.89/16'     external_addr='10.13.180.11/24' esxi_host='esxi-hpe-2.cloudra.local'
+[worker_lb]
+#hpe-worker ip_addr='10.60.59.90/16'  external_addr='10.13.180.12/24' esxi_host='esxi-hpe-3.cloudra.local'
+
+[lbs:children]
+ucp_lb
+dtr_lb
+worker_lb
+
+
+## LOAD BALANCERS (new style, using floating IPs managed by keepalived)
+## make sure you document the dictionary loadbalancers: in group_vars/vars
 [loadbalancer]
 hpe-lb1 ip_addr='10.60.59.160/16' esxi_host='esxi-hpe-1.cloudra.local' ucp=true worker=true
 hpe-lb2 ip_addr='10.60.59.161/16' esxi_host='esxi-hpe-2.cloudra.local' dtr=true
@@ -58,7 +77,7 @@ dtr
 worker
 
 [nfs]
-hpe-nfs ip_addr='10.60.59.20/16'    esxi_host='esxi-hpe-3.cloudra.local'
+hpe-nfs ip_addr='10.60.59.20/16' esxi_host='esxi-hpe-3.cloudra.local'
 
 [nfs:vars]
 cpus='2'
@@ -78,12 +97,14 @@ node_policy='hpe-gold'
 ucp
 dtr
 worker
+lbs
 loadbalancer
 nfs
 logger
 
 [vms:vars]
 disk1_size='100'
+
 
 ## WINDOWS WORKER
 [win_worker]
@@ -96,7 +117,7 @@ cpus='4'
 ram='65536'
 disk1_size='100'
 disk2_size='500'
-# Kubernetes 1.8 does not support windows worker nodes
+# Kubernetes currently does not support Windows worker nodes
 orchestrator=swarm
 
 [all_vms:children]
@@ -104,6 +125,6 @@ vms
 win_worker
 
 
-# Local 
+## LOCAL
 [local]
 localhost ansible_connection=local

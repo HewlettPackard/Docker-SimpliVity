@@ -6,10 +6,10 @@ simplivity_password: 'xxxx'
 ucp_password: 'zzzz'
 win_password: 'yourpass'
 sysdig_access_key: 'enter_sysdig_access_key'
-rhn_orgid: "YourOrgId"
-rhn_key: "YourActivationKey"
+rhn_orgid: 'YourOrgId'
+rhn_key: 'YourActivationKey'
 redhat_user: 'YourUserName'
 redhat_pass: 'YourPassword'
-#password for the splunk universal forwarder. Must meet password complexiy requirement (see splunk donc)
+#password for the splunk universal forwarder. Must meet password complexity requirements (see splunk documentation)
 splunk_uf_password: 'YourPa$$word12'
 backup_passphrase: 'Enteryourpassphrase'
