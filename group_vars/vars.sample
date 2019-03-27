@@ -114,7 +114,7 @@ windows_vdvs_version: '0.21'
 windows_vdvs_directory: 'C:\Users\Administrator\Downloads\'
 windows_winrm_script: 'http://yourlocalwebsercver/ConfigureRemotingForAnsible.ps1'
 docker_ee_version_windows: '18.09'
-windows_update: true
+windows_update: 'false'
 
 # Prometheus and Grafana configuration
 cadvisor_version: 'v0.28.3'
