@@ -48,11 +48,11 @@ orchestrator='kubernetes'
 
 ## LOAD BALANCERS (Legacy Style)
 [ucp_lb]
-#hpe-ucp ip_addr='10.60.59.88/16'     external_addr='10.13.180.10/24' esxi_host='esxi-hpe-1.cloudra.local'
+#hpe-ucp ip_addr='10.60.59.88/16'    esxi_host='esxi-hpe-1.cloudra.local'
 [dtr_lb]
-#hpe-dtr ip_addr='10.60.59.89/16'     external_addr='10.13.180.11/24' esxi_host='esxi-hpe-2.cloudra.local'
+#hpe-dtr ip_addr='10.60.59.89/16'    esxi_host='esxi-hpe-2.cloudra.local'
 [worker_lb]
-#hpe-worker ip_addr='10.60.59.90/16'  external_addr='10.13.180.12/24' esxi_host='esxi-hpe-3.cloudra.local'
+#hpe-worker ip_addr='10.60.59.90/16' esxi_host='esxi-hpe-3.cloudra.local'
 
 [lbs:children]
 ucp_lb
