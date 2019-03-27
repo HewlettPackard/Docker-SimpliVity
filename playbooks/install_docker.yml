@@ -125,7 +125,7 @@
   environment: "{{ env }}"
 
   vars:
-    proxy_switch: "{% if  env.http_proxy is defined  %}-Proxy http://{{ env.http_proxy  }}{% endif %}"
+    proxy_switch: "{% if  env.http_proxy is defined  %}-Proxy {{ env.http_proxy  }}{% endif %}"
 
   tasks:
 
@@ -144,7 +144,7 @@
     #
     - name: Configure Proxy for use by Windows Updates
       win_shell: |
-        netsh winhttp set proxy http://{{ env.http_proxy }}
+        netsh winhttp set proxy {{ env.http_proxy }}
       when: env.http_proxy is defined
 
     - name: See if Windows Updates are wanted or not
@@ -189,7 +189,7 @@
 
     - name: Configure Proxy for Docker Daemon
       win_shell: |
-        [Environment]::SetEnvironmentVariable("HTTP_PROXY", "http://{{ env.http_proxy }}/", [EnvironmentVariableTarget]::Machine)
+        [Environment]::SetEnvironmentVariable("HTTP_PROXY", "{{ env.http_proxy }}/", [EnvironmentVariableTarget]::Machine)
       when: env.http_proxy is defined
 
     #

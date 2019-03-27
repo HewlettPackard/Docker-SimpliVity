@@ -15,7 +15,7 @@
 ### 
 ---
 - hosts: all_vms
-  name: Delete ALl VMs
+  name: Delete ALL VMs
   gather_facts: false
   connection: local
   user: remote
