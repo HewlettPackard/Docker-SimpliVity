@@ -8,7 +8,7 @@
 # Backup of the UCP metadata always causes a short interruption of ctrl plane services. See the
 # Docker documentation for more info
 #
-#swarm_backup_offline: "true"
+swarm_backup_offline: "false"
 
 #
 # name of the archive containing the backup of the swarm data, the UCP data, the DTR metata data and the DTR images
@@ -20,9 +20,9 @@ backup_dtr_data: "/root/restore/backup_dtr_data.tgz"
 
 #
 # Make sure you specify the correct replica ID of the DTR replica which you are about to restore. You can find this information in 
-# the .vars.tgz file that was created together with the archive that contains the  DTR metadata
+# the .vars.tgz file that was created together with the archive that contains the DTR metadata.
 #
-backup_dtr_id: "8e7266e788b5"
+backup_dtr_id: "your replica ID"
 
 #
 # backup_dest is the name of an EXISTING folder on your ansible box

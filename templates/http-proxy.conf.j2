@@ -1,2 +1,4 @@
 [Service]
-Environment="HTTP_PROXY={{ env.http_proxy }}" "HTTPS_PROXY={{ env.https_proxy }}" NO_PROXY="{{ env.no_proxy }}"
+Environment="HTTP_PROXY={{ env.http_proxy }}"
+Environment="HTTPS_PROXY={{ env.https_proxy }}"
+Environment="NO_PROXY={% for host in groups['ucp'] %}{{ hostvars[host]['ip_addr'] | ipaddr('address') }},{% endfor %}{{ env.no_proxy }}"

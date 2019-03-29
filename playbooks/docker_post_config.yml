@@ -79,7 +79,7 @@
       proxy_url: "{{ proxy_url }}"
       dest: "{{ windows_vdvs_directory }}install-vdvs.ps1"
     vars:
-      proxy_url: "{% if env.http_proxy is defined %}http://{{ env.http_proxy }}{% endif %}"
+      proxy_url: "{% if env.http_proxy is defined %} {{ env.http_proxy }}{% endif %}"
 
   - name: Install Windows vSphere Docker Volume Service
     win_shell: |
