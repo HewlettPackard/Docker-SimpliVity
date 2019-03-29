@@ -28,8 +28,8 @@
   tasks:
     - name: Check the status of subscription-manager
       shell:
-        cmd: subscription-manager status
-      register: res
+        cmd: subscription-manager repos --list-enabled
+      register: submgr_result
       ignore_errors: yes
       no_log: true
 
@@ -59,7 +59,9 @@
           - redhat_user is defined and redhat_user != ''
           - redhat_pass is defined and redhat_pass != ''
 
-      when: '"Overall Status: Current" not in res.stdout_lines'
+      when: (submgr_result.rc != 0) or
+            (submgr_result.stdout.find('Consumer profile') != -1) or
+            (submgr_result.stdout.find('This system has no repositories') != -1)
 
     - name: Determine Enabled Repositories
       shell:

@@ -4,7 +4,7 @@
 - import_playbook: playbooks/create_vms.yml
 - import_playbook: playbooks/config_networking.yml
 - import_playbook: playbooks/resize_syspart.yml
-#- import_playbook: playbooks/config_subscription.yml
+- import_playbook: playbooks/config_subscription.yml
 - import_playbook: playbooks/loadbalancer.yml
 - import_playbook: playbooks/config_ntp.yml
 - import_playbook: playbooks/config_storage_driver.yml
