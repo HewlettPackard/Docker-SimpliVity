@@ -26,20 +26,52 @@
   environment: "{{ env }}"
 
   tasks:
-    - name: Clean Any Subscription Data
+    - name: Check the status of subscription-manager
       shell:
-        cmd: subscription-manager clean
+        cmd: subscription-manager status
+      register: res
+      ignore_errors: yes
+      no_log: true
 
-    - name: Register system using Red Hat Org ID and Activation Key
-      shell:
-        cmd: subscription-manager register --org="{{rhn_orgid}}" --activationkey="{{rhn_key}}"
-      when:
-        - rhn_orgid is defined and rhn_orgid != ''
-        - rhn_key is defined and rhn_key != ''
+    - block:
 
-    - name: Register system using Red Hat Username and Password
+      - name: Clean Any Subscription Data
+        shell:
+          cmd: subscription-manager clean
+
+      - name: Register system using Red Hat Org ID and Activation Key
+        redhat_subscription:
+          state: present
+          activationkey: "{{rhn_key}}"
+          org_id: "{{rhn_orgid}}"
+          auto_attach: true
+        when:
+          - rhn_orgid is defined and rhn_orgid != ''
+          - rhn_key is defined and rhn_key != ''
+
+      - name: Register system using Red Hat Username and Password
+        redhat_subscription:
+          state: present
+          username: "{{redhat_user}}"
+          password: "{{redhat_pass}}"
+          auto_attach: true
+        when:
+          - redhat_user is defined and redhat_user != ''
+          - redhat_pass is defined and redhat_pass != ''
+
+      when: '"Overall Status: Current" not in res.stdout_lines'
+
+    - name: Determine Enabled Repositories
       shell:
-        cmd: subscription-manager register --username="{{redhat_user}}" --password="{{redhat_pass}}" --auto-attach
-      when:
-        - redhat_user is defined and redhat_user != ''
-        - redhat_pass is defined and redhat_pass != ''
+        cmd: subscription-manager repos --list-enabled
+      register: enabled_repos
+
+    - name: Enable Red Hat Enterprise Linux 7 Server (RPMs) Repository
+      shell:
+        cmd: subscription-manager repos --enable=rhel-7-server-rpms
+      when: '"Repo ID:   rhel-7-server-rpms" not in enabled_repos.stdout_lines'
+
+    - name: Enable Red Hat Enterprise Linux 7 Server - Extras (RPMs) Repository
+      shell:
+        cmd: subscription-manager repos --enable=rhel-7-server-extras-rpms
+      when: '"Repo ID:   rhel-7-server-extras-rpms" not in enabled_repos.stdout_lines'
