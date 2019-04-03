@@ -80,6 +80,8 @@ You must ensure that the UCP admin credentials in your current `group_vars/vars`
 
 Your inventory must reflect the environment that was present when the backup files were created. You can find a copy of the inventory as it was when the backup was taken in the `*.vars.tgz` files.
 
+**Step 7:** Run `eval "$(<env.sh)"` against your certificate bundle that matches the backup.
+
 ## Restore UCP and DTR
 
 **Warning:** This procedure is aimed at restoring a cluster after a disaster. It assumes you have lost all the VMs in your cluster and want to redeploy using data that you backed up earlier. The solution follows Docker best practice, which means the swarm artifacts are not restored. You will need to restore your Docker volumes and your applications (stacks and services) when this procedure is complete.
@@ -99,7 +101,9 @@ Your inventory must reflect the environment that was present when the backup fil
 
     If not, you will get an error saying that Splunk components could not be restored when you run the playbook.
 
-3.  If you are using the image scanning functionality in DTR, you will need to re-download the vulnerability database. For more information, see the Docker documentation [here](https://docs.docker.com/datacenter/dtr/2.5/guides/admin/configure/set-up-vulnerability-scans/#get-the-security-scanning-license).
+3. Reload you Docker licence, using the Docker UCP UI under `Admin Settings -> Licence`  or directly by using the route `/manage/settings/license`.
+
+4.  If you are using the image scanning functionality in DTR, you will need to re-download the vulnerability database. For more information, see the Docker documentation [here](https://docs.docker.com/datacenter/dtr/2.5/guides/admin/configure/set-up-vulnerability-scans/#get-the-security-scanning-license).
 
 You are now ready to restore your Docker volumes and your applications.
 

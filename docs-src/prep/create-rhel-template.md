@@ -19,6 +19,26 @@ Install Red Hat Enterprise 7:
 4.  Specify a password for the root account and optionally created an admin user.
 5.  Wait for the installation to finish and for the VM to reboot.
 
+
+## Update packages
+
+Use `yum update` to install the latest packages, configuring a proxy if required.
+
+```
+# subscription-manager config --server.proxy_hostname=<proxy IP> --server.proxy_port=<proxy port>
+
+# subscription-manager register  --auto-attach
+
+# subscription-manager repos \
+--enable=rhel-7-server-rpms \
+--enable=rhel-7-server-extras-rpms
+
+# yum update
+
+# subscription-manager unregister
+```
+
+
 ## Finalize the template
 
 Log in to the `root` account on the Ansible box and copy the SSH public key to the VM Template. This will allow your Ansible node to SSH to all the Virtual Machines created from the VM Template without the need for a password.

@@ -17,7 +17,7 @@ It is a wrapper for a number of separate playbooks outlined below.
 - `playbooks/kube-prometheus/prometheus.yml`
 - `playbooks/kube-prometheus/grafana.yml`
 
-You can choose not to install certain components by commenting out the appropriate line in the wrapper playbook. 
+You can choose not to install certain components, such as `node-exporter` or `kube-state-metrics`,  by commenting out the appropriate line in the wrapper playbook. 
 
 ## Prometheus Operator
 The Prometheus Operator makes running Prometheus on top of Kubernetes as easy as possible, while preserving Kubernetes-native configuration options. For more information on Prometheus Operator, see https://coreos.com/operators/prometheus/docs/latest/user-guides/getting-started.html.
@@ -50,7 +50,7 @@ Because Docker EE provides a hosted version of Kubernetes, it is not possible to
 
 ## Prometheus
 
-For convenience, the playbook sets up a NodePort so that the Prometheus UI can be accessed on port `33090`.
+For convenience, the playbook sets up a NodePort so that the Prometheus UI can be accessed on port `33090`, as shown in the following code extract:
 
 ```
 # kubectl -n monitoring patch svc prometheus-k8s --type='json' -p '[{"op":"replace","path":"/spec/type","value":"NodePort"}]'
@@ -59,7 +59,7 @@ For convenience, the playbook sets up a NodePort so that the Prometheus UI can b
 ```
 
 On a production system, it is likely that you will want to remove this NodePort. The following code segment 
-shows how to use the `patch` command to remove the NodePort.
+shows how you can use the `patch` command to remove the NodePort.
 
 
 ```
@@ -72,7 +72,7 @@ shows how to use the `patch` command to remove the NodePort.
 
 ## Grafana
 
-For convenience, the playbook sets up a NodePort so that the Grafana UI can be access on the port `33030`.
+For convenience, the playbook sets up a NodePort so that the Grafana UI can be access on the port `33030`, as shown in the following code extract:
 
 ```
 # kubectl -n monitoring patch svc grafana --type='json' -p '[{"op":"replace","path":"/spec/type", "value":"NodePort"}]'
@@ -80,7 +80,8 @@ For convenience, the playbook sets up a NodePort so that the Grafana UI can be a
 # kubectl -n monitoring patch svc grafana --type='json' -p '[{"op": "add", "path":"/spec/ports/0/nodePort", "value":33030}]'
 ```
 
-On a production system, it is likely that you will want to remove this NodePort. The following code segment shows how to use the `patch` command to remove the NodePort.
+On a production system, it is likely that you will want to remove this NodePort. The following code segment shows how 
+you can use the `patch` command to remove the NodePort.
 
 ```
 # kubectl -n monitoring patch svc grafana --type='json' -p '[{"op": "remove", "path":"/spec/ports/0/nodePort"}]'

@@ -14,7 +14,7 @@ The following table shows the variables related to backing up UCP and DTR. All t
 |backup_server|**group_vars/backups**|Currently, the playbooks only support the use of the Ansible box as the backup server.|
 |backup_dest|**group_vars/backups**|This variable should point to an existing folder on your Ansible box where the `root` user has write access. All the backups will be stored in this folder. For example, `/root/backup`|
 |backup_passphrase|**group_vars/vault**|This variable is used to encrypt the tar file with a passphrase that must be at least 12 characters long.|
-|\#swarm_offline_backups|**group_vars/backups**|This variable is commented out by default. More information on this variable is provided below.|
+|swarm_offline_backups|**group_vars/backups**|This variable is commented out by default. More information on this variable is provided below.|
 
 ## Backing up the Swarm
 

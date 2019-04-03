@@ -3,7 +3,8 @@
 
 ## Express Containers 2.1
 
-This release of the Docker-SimpliVity playbooks deploys Docker EE 2.1, featuring Kubernetes 1.11.
+This release of the Docker-SimpliVity playbooks deploys Docker EE 2.1, featuring Kubernetes 1.11. It is recommended that 
+you set the DTR version to `2.6.4` (released 2019-3-28) to avoid a known issue restoring after backup.
 
 - **Prometheus/Grafana on Kubernetes:** The playbooks now set up  a full monitoring stack for the deployed  Kubernetes infrastructure using Prometheus Operator. They install `kube-state-metrics` and `node-exporter` components, as well as supporting Kubelet and Apiserver metrics. Sample dashboards for Grafana are installed to help you monitor your Kubernetes infrastructure.
 
