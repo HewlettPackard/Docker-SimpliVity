@@ -19,7 +19,7 @@ For example, based on the default values in the scripts, the VM name would be `h
 
 ## Create a Docker volume
 
-To see any existing Docker volumes created using the vSphere driver, use the `docker volume ls` command and limit the results to those volumes created using the vSphere driver. If you have already used the playbooks to install Prometheus for example, you may see a listing as follows:
+To see any existing Docker volumes created using the vSphere driver, use the `docker volume ls` command on one of the Docker nodes and limit the results to those volumes created using the vSphere driver. If you have already used the playbooks to install Prometheus for example, you may see a listing as follows:
 
 ```
 

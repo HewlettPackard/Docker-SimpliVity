@@ -64,5 +64,5 @@ The different variables you can use are described in the table below. They are a
 |esxi_host|Node|ESXi host where the node will be deployed. If the cluster is configured with DRS, this option will be overridden|
 |cpus|Node/Group|Number of CPUs to assign to a VM or a group of VMs|
 |ram|Node/Group|Amount of RAM in MB to assign to a VM or a group of VMs|
-|disk2_usage|Node/Group|Size of the second disk in GB to attach to a VM or a group of VMs. This variable is only mandatory on Docker nodes (UCP, DTR, worker) and NFS node. It is not required for the logger node or the load balancers.|
+|disk2_size|Node/Group|Size of the second disk in GB to attach to a VM or a group of VMs. This variable is only mandatory on Docker nodes (UCP, DTR, worker) and NFS node. It is not required for the logger node or the load balancers.|
 |node_policy|Node/Group|HPE SimpliVity backup policy to assign to a VM or a group of VMs. The name has to match one of the backup policies defined in the `group_vars/vars` file described in the section `HPE SimpliVity backup configuration`.|

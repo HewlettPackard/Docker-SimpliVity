@@ -1,7 +1,7 @@
 # Installing the client bundle
 
 
-A convenience playbook is provided to install and apply the client bundle. To run the playbook:
+A convenience playbook is provided to install and apply the client bundle on the Ansible controller. To run the playbook:
 
 ```
 # cd ~/Docker-SimpliVity
