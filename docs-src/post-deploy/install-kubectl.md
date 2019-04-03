@@ -1,14 +1,24 @@
 # Installing kubectl
 
+A convenience playbook is provided to make it easy to install `kubectl` on the Ansible controller. 
+This playbook uses variables in `group_vars/vars` to determine which version to download. 
+The default version specified by the variable `kubectl_version` in the sample variables file is `1.11.5`. 
+Details of the `1.11` release are available at https://github.com/kubernetes/kubernetes/blob/master/CHANGELOG-1.11.md. 
+In particular, the playbook requires a checksum to be present in the variable `kubectl_checksum`. 
+The appropriate value can be found in the details for the specific version of `kubectl` to be downloaded, 
+in this case for version `1.11.5` of `kubernetes-client-linux-amd64.tar.gz`, available at https://github.com/kubernetes/kubernetes/blob/master/CHANGELOG-1.11.md#downloads-for-v1115.
 
-A convenience playbook is provided to make it easy to install `kubectl`. This playbook uses variables in `group_vars/vars` to determine which version to download. The default version specified by the variable `kubectl_version` in the sample variables file is `1.11.5`. 
-
+The `vars.sample` file that ships with this release has the following values:
+```
+kubectl_version: "1.11.5"
+kubectl_checksum: "sha512:7028d357f65603398c35b7578793a153248e17c2ad631541a587f4ae13ef93f058db130390eea4820c2fd7707509ed0eb581cb129790b12680e869829a6fc241"
+```
 
 To run the playbook:
 
 ```
 # cd ~/Docker-SimpliVity
-# ansible-playbook -i vm_hosts playbooks/install_kubectl.yml --vault-password-file .vault_pass
+# ansible-playbook -i vm_hosts playbooks/install_kubectl.yml 
 ```
 
 

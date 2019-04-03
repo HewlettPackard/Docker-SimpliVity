@@ -10,9 +10,21 @@
 
 ## Playbook
 
+To run the playbook on your Ansible controller:
+
 ```
 # cd ~/Docker-SimpliVity
 # ansible-playbook -i vm_hosts playbooks/install_helm.yml --vault-password-file .vault_pass
+```
+
+The playbook relies on the variable helm_version to determine the version of Helm to download. The playbooks have been tested using version `2.12.3`. 
+You must also specify the appropriate checksum for the download in the variable `helm_checksum`. 
+This value can be obtained from the downloads page at https://github.com/helm/helm/releases. 
+The `vars.sample` file that ships with this release contains the following values:
+
+```
+helm_version: "2.12.3"
+helm_checksum: "sha256:3425a1b37954dabdf2ba37d5d8a0bd24a225bb8454a06f12b115c55907809107"
 ```
 
 ## Install sample charts

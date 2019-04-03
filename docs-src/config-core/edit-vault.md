@@ -9,19 +9,22 @@ A sample vault file is provided named `group_vars/vault.sample` that you can use
 docker_ee_url: 'your_url_here'
 vcenter_password: 'xxxx'
 vm_password: 'xxxx'
-
-simplivity_password: 'xxx'
+simplivity_password: 'xxxx'
 ucp_password: 'zzzz'
 win_password: 'yourpass'
 sysdig_access_key: 'enter_sysdig_access_key'
-rhn_orgid: "YourOrgId"
-rhn_key: "YourActivationKey"
-#password for the splunk universal forwarder. Must meet password complexity requirement (see splunk doc)
+rhn_orgid: 'YourOrgId'
+rhn_key: 'YourActivationKey'
+redhat_user: 'YourUserName'
+redhat_pass: 'YourPassword'
+#password for the splunk universal forwarder. Must meet password complexity requirements (see splunk documentation)
 splunk_uf_password: 'YourPa$$word12'
-
+backup_passphrase: 'Enteryourpassphrase'
 ```
 
-`rhn_orgid` and `rhn_key` are the credentials needed to subscribe the virtual machines with Red Hat Customer Portal. For more information regarding activation keys, see the following URL: [https://access.redhat.com/articles/1378093](https://access.redhat.com/articles/1378093)
+`rhn_orgid` and `rhn_key` are the credentials needed to subscribe the virtual machines with Red Hat Customer Portal. 
+If these are not supplied, the playbooks will fallback to using the `redhat_user`/`redhat_pass` combination instead. 
+For more information regarding activation keys, see the following URL: [https://access.redhat.com/articles/1378093](https://access.redhat.com/articles/1378093)
 
 To encrypt the vault you need to run the following command:
 

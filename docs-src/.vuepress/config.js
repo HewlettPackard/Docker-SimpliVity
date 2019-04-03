@@ -70,7 +70,8 @@ module.exports = {
           'prep/verify-prereqs',
           'prep/vsphere-ha',
           'prep/install-vdvs',
-          'prep/create-ansible-node'
+          'prep/create-ansible-node',
+          'prep/create-rhel-template'
         ]
       },
       {
@@ -137,7 +138,6 @@ module.exports = {
           'deploy-win/create-template-win',
           'deploy-win/add-windows-workers',
           'deploy-win/windows-config',
-          'deploy-win/windows-proxy',
           'deploy-win/lifecycle-windows'
         ]
       },
