@@ -99,7 +99,7 @@ Now click on the `v3` edge:
 
 The number of requests to the `v1` service should be roughly equal to that for the `v3` service.
 
-[media-kiali-v1-only-png]:<media/kiali-v1-only.png> "Figure: Kiali graph for v1 only"
-[media-kiali-v1-v3-50-png]:<media/kiali-v1-v3-50.png> "Figure: Kiali graph with 50/50 split between v1 and v3"
-[media-kiali-v1-50-png]:<media/kiali-v1-50.png> "Figure: Kiali graph showing details of v1 traffic"
-[media-kiali-v3-50-png]:<media/kiali-v3-50.png> "Figure: Kiali graph showing details of v3 traffic"
+[media-kiali-v1-only-png]:<./media/kiali-v1-only.png> "Figure: Kiali graph for v1 only"
+[media-kiali-v1-v3-50-png]:<./media/kiali-v1-v3-50.png> "Figure: Kiali graph with 50/50 split between v1 and v3"
+[media-kiali-v1-50-png]:<./media/kiali-v1-50.png> "Figure: Kiali graph showing details of v1 traffic"
+[media-kiali-v3-50-png]:<./media/kiali-v3-50.png> "Figure: Kiali graph showing details of v3 traffic"

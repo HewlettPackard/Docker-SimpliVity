@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Getting started with Istio Service Mesh - Part 2 Deploying the Bookinfo application | HPE Express Containers</title>
+    <meta name="description" content="Istio Service Mesh - Part 2 Deploying the Bookinfo application">
+    
+    
+    <link rel="preload" href="/Docker-SimpliVity/assets/css/styles.1e09661f.css" as="style"><link rel="preload" href="/Docker-SimpliVity/assets/js/app.1e09661f.js" as="script"><link rel="preload" href="/Docker-SimpliVity/assets/js/6.c80f761b.js" as="script"><link rel="prefetch" href="/Docker-SimpliVity/assets/css/24.styles.3f1a8cd4.css"><link rel="prefetch" href="/Docker-SimpliVity/assets/css/9.styles.d80f99dc.css"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/1.1ee0df0d.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/10.0519dfb7.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/100.7e7c797a.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/101.ceb496f3.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/102.ef4cd22f.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/103.04bb1d8f.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/104.bdbf87f6.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/105.8ddc2675.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/106.5eb7369f.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/107.6ee04838.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/108.f6775cf6.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/109.0bae7c07.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/11.e2bfaf3a.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/110.f8a83ac8.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/111.2c0a8ae3.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/12.f4645ffc.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/13.270fa099.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/14.ede0b9eb.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/15.9bd2b4e1.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/16.31ccd8d9.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/17.0f752102.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/18.6d3053de.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/19.769c4847.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/2.02d73b64.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/20.dedc9e53.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/21.caf68c74.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/22.66dec517.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/23.5059caa6.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/24.3f1a8cd4.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/25.87a5e54b.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/26.c9034f20.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/27.9d5d8050.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/28.5a3b67ad.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/29.489b60c2.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/3.c135f3df.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/30.01f5a9be.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/31.911bdebc.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/32.f056b105.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/33.9c125410.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/34.6b7aa929.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/35.4200090e.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/36.1478c050.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/37.2e3af121.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/38.5d75c20c.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/39.7bb9cb9e.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/4.8ed2ab3d.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/40.a6c08d31.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/41.cf474b58.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/42.63d764b7.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/43.cdbffe6f.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/44.8d5c070b.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/45.d1c8e105.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/46.7b50d4ff.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/47.6dbd847f.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/48.90427520.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/49.cc6d8b0e.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/5.916c2ac0.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/50.64f641a8.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/51.84466be5.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/52.dee86026.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/53.f35b18c4.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/54.6692960c.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/55.fcec21db.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/56.648b3acc.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/57.0da832fd.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/58.1bc67f8b.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/59.087dcff8.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/60.b64416b9.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/61.90291322.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/62.b3cc64d4.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/63.10a38df4.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/64.50afc39a.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/65.2c9c590d.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/66.c45403f3.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/67.65a32d01.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/68.1f5bc42d.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/69.3b2d57e7.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/7.7584fb60.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/70.13f7d909.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/71.62883c10.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/72.b197fc1c.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/73.a1bec660.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/74.1f803515.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/75.b05f6f42.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/76.8f320b11.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/77.0834e4f3.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/78.2b73a088.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/79.e1885384.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/8.36ebe21b.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/80.205430cd.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/81.49d55050.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/82.2720c2f8.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/83.b025f0cf.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/84.6fb0f73a.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/85.63ca60aa.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/86.c041d43c.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/87.4a29ed14.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/88.16b9d595.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/89.ff3ac337.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/9.d80f99dc.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/90.6fdc6256.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/91.b665001c.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/92.e85caa7d.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/93.9cd2296d.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/94.44c498cf.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/95.e4a9dc4a.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/96.5532531b.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/97.d2248b01.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/98.5979847e.js"><link rel="prefetch" href="/Docker-SimpliVity/assets/js/99.1e13b8e5.js">
+    <link rel="stylesheet" href="/Docker-SimpliVity/assets/css/24.styles.3f1a8cd4.css"><link rel="stylesheet" href="/Docker-SimpliVity/assets/css/9.styles.d80f99dc.css"><link rel="stylesheet" href="/Docker-SimpliVity/assets/css/styles.1e09661f.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/Docker-SimpliVity/" class="home-link router-link-active"><!----> <span class="site-name">HPE Express Containers</span></a> <div class="links" style="max-width:nullpx;"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><a href="/Docker-SimpliVity/" class="nav-link">Home</a></div><div class="nav-item"><a href="/Docker-SimpliVity/blog/" class="nav-link router-link-active">Blog</a></div> <a href="https://github.com/HewlettPackard/Docker-Simplivity" target="_blank" rel="noopener noreferrer" class="repo-link">
+    Contribute!
+    <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></nav></div></header> <div class="sidebar-mask"></div> <div class="sidebar"><nav class="nav-links"><div class="nav-item"><a href="/Docker-SimpliVity/" class="nav-link">Home</a></div><div class="nav-item"><a href="/Docker-SimpliVity/blog/" class="nav-link router-link-active">Blog</a></div> <a href="https://github.com/HewlettPackard/Docker-Simplivity" target="_blank" rel="noopener noreferrer" class="repo-link">
+    Contribute!
+    <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></nav>  <ul class="sidebar-links"><li><div class="sidebar-group first collapsable"><p class="sidebar-heading open"><span>Introduction</span> <span class="arrow down"></span></p> <ul class="sidebar-group-items"><li><a href="/Docker-SimpliVity/introduction.html" class="sidebar-link">Executive Summary</a></li></ul></div></li><li><div class="sidebar-group collapsable"><p class="sidebar-heading"><span>Release notes</span> <span class="arrow right"></span></p> <!----></div></li><li><div class="sidebar-group collapsable"><p class="sidebar-heading"><span>Solution overview</span> <span class="arrow right"></span></p> <!----></div></li><li><div class="sidebar-group collapsable"><p class="sidebar-heading"><span>Solution components</span> <span class="arrow right"></span></p> <!----></div></li><li><div class="sidebar-group collapsable"><p class="sidebar-heading"><span>Preparing the environment</span> <span class="arrow right"></span></p> <!----></div></li><li><div class="sidebar-group collapsable"><p class="sidebar-heading"><span>Configuring the core components</span> <span class="arrow right"></span></p> <!----></div></li><li><div class="sidebar-group collapsable"><p class="sidebar-heading"><span>Overview of the playbooks</span> <span class="arrow right"></span></p> <!----></div></li><li><div class="sidebar-group collapsable"><p class="sidebar-heading"><span>Deploying core components</span> <span class="arrow right"></span></p> <!----></div></li><li><div class="sidebar-group collapsable"><p class="sidebar-heading"><span>Post deployment</span> <span class="arrow right"></span></p> <!----></div></li><li><div class="sidebar-group collapsable"><p class="sidebar-heading"><span>Configuring Storage</span> <span class="arrow right"></span></p> <!----></div></li><li><div class="sidebar-group collapsable"><p class="sidebar-heading"><span>Deploying Windows workers</span> <span class="arrow right"></span></p> <!----></div></li><li><div class="sidebar-group collapsable"><p class="sidebar-heading"><span>Deploying Sysdig monitoring</span> <span class="arrow right"></span></p> <!----></div></li><li><div class="sidebar-group collapsable"><p class="sidebar-heading"><span>Deploying Splunk</span> <span class="arrow right"></span></p> <!----></div></li><li><div class="sidebar-group collapsable"><p class="sidebar-heading"><span>Deploying Prometheus and Grafana on Kubernetes</span> <span class="arrow right"></span></p> <!----></div></li><li><div class="sidebar-group collapsable"><p class="sidebar-heading"><span>Deploying Prometheus and Grafana on Docker Swarm</span> <span class="arrow right"></span></p> <!----></div></li><li><div class="sidebar-group collapsable"><p class="sidebar-heading"><span>Backup and restore</span> <span class="arrow right"></span></p> <!----></div></li><li><div class="sidebar-group collapsable"><p class="sidebar-heading"><span>Solution lifecycle management</span> <span class="arrow right"></span></p> <!----></div></li><li><div class="sidebar-group collapsable"><p class="sidebar-heading"><span>Appendices</span> <span class="arrow right"></span></p> <!----></div></li></ul> </div> <div class="page"> <div class="content"><h1 id="deploying-the-bookinfo-application"><a href="#deploying-the-bookinfo-application" aria-hidden="true" class="header-anchor">#</a> Deploying the Bookinfo application</h1> <p>The standard reference application for getting started with Istio is documented at <a href="https://istio.io/docs/examples/bookinfo/" target="_blank" rel="noopener noreferrer">https://istio.io/docs/examples/bookinfo/<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a>.</p> <p>The example deploys a sample application composed of four separate microservices used to demonstrate various Istio features. The application displays information about a book, similar to a single catalog entry of an online book store. Displayed on the page is a description of the book, book details (ISBN, number of pages, and so on), and a few book reviews.</p> <p>The Bookinfo application is broken into four separate microservices:</p> <ul><li><strong>productpage:</strong> The productpage microservice calls the details and reviews microservices to populate the page.</li> <li><strong>details:</strong> The details microservice contains book information.</li> <li><strong>reviews:</strong> The reviews microservice contains book reviews. It also calls the ratings microservice.</li> <li><strong>ratings:</strong> The ratings microservice contains book ranking information that accompanies a book review.</li></ul> <p>There are 3 versions of the reviews microservice:</p> <ul><li>Version <code>v1</code> doesn’t call the ratings service.</li> <li>Version <code>v2</code> calls the ratings service, and displays each rating as 1 to 5 black stars.</li> <li>Version <code>v3</code> calls the ratings service, and displays each rating as 1 to 5 red stars.</li></ul> <p>The end-to-end architecture of the application is shown below.</p> <p><img src="/Docker-SimpliVity/assets/img/bookinfo.92cf7be2.png" alt=" "Bookinfo application"" title="Figure: Bookinfo application"></p> <p><strong>Figure.</strong> Bookinfo application</p> <p>Apply the Bookinfo yaml file:</p> <div class="language- extra-class"><pre class="language-text"><code># cd ~/istio-tutorial
+# kubectl apply -f samples/bookinfo/platform/kube/bookinfo.yaml
+
+service/details created
+deployment.extensions/details-v1 created
+service/ratings created
+deployment.extensions/ratings-v1 created
+service/reviews created
+deployment.extensions/reviews-v1 created
+deployment.extensions/reviews-v2 created
+deployment.extensions/reviews-v3 created
+service/productpage created
+deployment.extensions/productpage-v1 created
+</code></pre></div><p>View the resources deployed:</p> <div class="language- extra-class"><pre class="language-text"><code># kubectl get deployment
+
+NAME             DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
+details-v1       1         1         1            1           1m
+productpage-v1   1         1         1            0           59s
+ratings-v1       1         1         1            0           1m
+reviews-v1       1         1         1            0           1m
+reviews-v2       1         1         1            0           1m
+reviews-v3       1         1         1            0           59s
+
+
+# kubectl get svc
+
+NAME          TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)    AGE
+details       ClusterIP   10.96.238.55   &lt;none&gt;        9080/TCP   1m
+kubernetes    ClusterIP   10.96.0.1      &lt;none&gt;        443/TCP    2d
+productpage   ClusterIP   10.96.239.77   &lt;none&gt;        9080/TCP   1m
+ratings       ClusterIP   10.96.171.64   &lt;none&gt;        9080/TCP   1m
+reviews       ClusterIP   10.96.161.13   &lt;none&gt;        9080/TCP   1m
+
+Wait for all the pods to have a status of `running`:
+
+# kubectl get pods
+NAME                              READY     STATUS    RESTARTS   AGE
+details-v1-67566c8cd-9v7xq        2/2       Running   0          9m
+productpage-v1-549ccbd868-n4v9d   2/2       Running   0          9m
+ratings-v1-69554c6fd6-b75pz       2/2       Running   0          9m
+reviews-v1-7df8c546cc-hn9dr       2/2       Running   0          9m
+reviews-v2-69cbd88965-bcljd       2/2       Running   0          9m
+reviews-v3-645cb56f49-clk8c       2/2       Running   0          9m
+
+</code></pre></div><p>View the details for the <code>productpage</code> pod and note that there are two containers in the pod - the <code>productpage</code> itself and the <code>istio-proxy</code> side-car:</p> <div class="language- extra-class"><pre class="language-text"><code># kubectl describe pod productpage-v1-549ccbd868-n4v9d
+
+Name:               productpage-v1-549ccbd868-n4v9d
+Namespace:          default
+Priority:           0
+PriorityClassName:  &lt;none&gt;
+Node:               hpe-worker02.am2.cloudra.local/10.15.140.242
+Start Time:         Wed, 08 May 2019 12:50:22 +0000
+Labels:             app=productpage
+                    pod-template-hash=1057768424
+                    version=v1
+...
+Containers:
+  productpage:
+    Container ID:   docker://e1de7bb5b816d54db8e92a0542e07989950466856570681bc60f362b956067a2
+    Image:          istio/examples-bookinfo-productpage-v1:1.10.1
+    Image ID:       docker-pullable://istio/examples-bookinfo-productpage-v1@sha256:a427e10277a814b27c066d9ea5f2605b656fc1948714ed09e55c97342c5a721d
+    Port:           9080/TCP
+...
+   istio-proxy:
+    Container ID:  docker://f9960295d0f6ef967e1f7c037af4bfa22c5111a05ed85fdff0e1e2645857b9c2
+    Image:         docker.io/istio/proxyv2:1.1.5
+    Image ID:      docker-pullable://istio/proxyv2@sha256:1f00a1bfd3f5b9cd8d3088fa254ec8cd95c72711d77999e4da656e4b36a78931
+    Port:          15090/TCP
+...
+</code></pre></div><p>To confirm that the Bookinfo application is running, send a request to it using a <code>curl</code> command from a container
+in some pod, for example from the <code>ratings</code> container in the <code>ratings</code> pod:</p> <div class="language- extra-class"><pre class="language-text"><code># kubectl exec -it $(kubectl get pod -l app=ratings -o jsonpath='{.items[0].metadata.name}') -c ratings -- curl productpage:9080/productpage | grep -o &quot;&lt;title&gt;.*&lt;/title&gt;&quot;
+
+&lt;title&gt;Simple Bookstore App&lt;/title&gt;
+</code></pre></div><h1 id="expose-bookinfo-application-through-istio-ingress-gateway"><a href="#expose-bookinfo-application-through-istio-ingress-gateway" aria-hidden="true" class="header-anchor">#</a> Expose Bookinfo application through Istio Ingress Gateway</h1> <h2 id="inspect-the-ingress-gateway"><a href="#inspect-the-ingress-gateway" aria-hidden="true" class="header-anchor">#</a> Inspect the Ingress Gateway</h2> <p>The ingress gateway is deployed as a normal LoadBalancer:</p> <div class="language- extra-class"><pre class="language-text"><code># kubectl get svc istio-ingressgateway -n istio-system -o yaml
+
+apiVersion: v1
+kind: Service
+...
+spec:
+  clusterIP: 10.96.109.164
+  externalTrafficPolicy: Cluster
+  ports:
+  - name: status-port
+    nodePort: 33976
+    port: 15020
+    protocol: TCP
+    targetPort: 15020
+  - name: http2
+    nodePort: 33380
+    port: 80
+    protocol: TCP
+    targetPort: 80
+  - name: https
+    nodePort: 33390
+    port: 443
+    protocol: TCP
+    targetPort: 443
+  - name: tcp
+    nodePort: 33400
+    port: 33400
+    protocol: TCP
+    targetPort: 33400
+  - name: https-kiali
+    nodePort: 33405
+    port: 15029
+    protocol: TCP
+    targetPort: 15029
+  - name: https-prometheus
+    nodePort: 34030
+    port: 15030
+    protocol: TCP
+    targetPort: 15030
+  - name: https-grafana
+    nodePort: 33224
+    port: 15031
+    protocol: TCP
+    targetPort: 15031
+  - name: https-tracing
+    nodePort: 34847
+    port: 15032
+    protocol: TCP
+    targetPort: 15032
+  - name: tls
+    nodePort: 34091
+    port: 15443
+    protocol: TCP
+    targetPort: 15443
+  selector:
+    app: istio-ingressgateway
+    istio: ingressgateway
+    release: istio
+  sessionAffinity: None
+  type: LoadBalancer
+status:
+  loadBalancer: {}
+...
+</code></pre></div><p>To view the logs, identify the <code>ingressgateway</code> pod:</p> <div class="language- extra-class"><pre class="language-text"><code># kubectl get pods -n istio-system
+
+NAME                                      READY     STATUS      RESTARTS   AGE
+grafana-65fd5ddc8b-pwp6z                  1/1       Running     0          22h
+istio-citadel-76d9fcfb85-z5rwn            1/1       Running     0          22h
+istio-cleanup-secrets-1.1.5-wtbwd         0/1       Completed   0          22h
+istio-egressgateway-7675bcf567-rhg6t      1/1       Running     0          22h
+istio-galley-55c748f9df-rcf8r             1/1       Running     0          22h
+istio-grafana-post-install-1.1.5-kckln    0/1       Completed   0          22h
+istio-ingressgateway-65f97ff4b6-mscrg     1/1       Running     0          22h
+istio-pilot-54dcd4d8d-lvf9x               2/2       Running     0          22h
+...
+
+Use `kubectl logs` for the relevant pod:
+
+# kubectl -n istio-system logs istio-ingressgateway-65f97ff4b6-mscrg
+
+2019-05-08T12:25:21.207858Z     info    FLAG: --applicationPorts=&quot;[]&quot;
+2019-05-08T12:25:21.207905Z     info    FLAG: --binaryPath=&quot;/usr/local/bin/envoy&quot;
+2019-05-08T12:25:21.207909Z     info    FLAG: --concurrency=&quot;0&quot;
+2019-05-08T12:25:21.207912Z     info    FLAG: --configPath=&quot;/etc/istio/proxy&quot;
+2019-05-08T12:25:21.207916Z     info    FLAG: --connectTimeout=&quot;10s&quot;
+2019-05-08T12:25:21.207919Z     info    FLAG: --controlPlaneAuthPolicy=&quot;MUTUAL_TLS&quot;
+2019-05-08T12:25:21.207923Z     info    FLAG: --controlPlaneBootstrap=&quot;true&quot;
+2019-05-08T12:25:21.207928Z     info    FLAG: --customConfigFile=&quot;&quot;
+...
+[2019-05-08T13:07:35.186Z] &quot;GET /productpage HTTP/1.1&quot; 200 - &quot;-&quot; 0 4415 497 497 &quot;192.168.70.64&quot; &quot;Mozilla/5.0 (Windows NT 6.2; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.103 Safari/537.36&quot; &quot;8ded16c5-36b1-9590-84e0-21557cd605c1&quot; &quot;hpe-ucp01.am2.cloudra.local:33380&quot; &quot;192.168.70.5:9080&quot; outbound|9080||productpage.default.svc.cluster.local - 192.168.70.75:80 192.168.70.64:51443 -
+...
+
+</code></pre></div><h2 id="configure-the-ingress-gateway-for-the-bookinfo-application"><a href="#configure-the-ingress-gateway-for-the-bookinfo-application" aria-hidden="true" class="header-anchor">#</a> Configure the Ingress Gateway for the Bookinfo application</h2> <p>Now that the Bookinfo services are up and running, you need to make the application accessible from outside of your Kubernetes cluster, e.g., from a browser. An Istio Gateway is used for this purpose.</p> <div class="language- extra-class"><pre class="language-text"><code># kubectl apply -f samples/bookinfo/networking/bookinfo-gateway.yaml
+
+gateway.networking.istio.io/bookinfo-gateway created
+virtualservice.networking.istio.io/bookinfo created
+</code></pre></div><h2 id="view-the-bookinfo-application"><a href="#view-the-bookinfo-application" aria-hidden="true" class="header-anchor">#</a> View the Bookinfo application</h2> <p>View the service details to determine the port where the application is available (here, port 80 is mapped to 33380)</p> <div class="language- extra-class"><pre class="language-text"><code># kubectl get service istio-ingressgateway -n istio-system
+
+NAME                   TYPE           CLUSTER-IP      EXTERNAL-IP   PORT(S)
+istio-ingressgateway   LoadBalancer   10.96.109.164   &lt;pending&gt;     15020:33976/TCP,80:33380/TCP,443:33390/TCP,33400:33400/TCP,15029:33405/TCP,15030:34030/TCP,15031:33224/TCP,15032:34847/TCP,15443:34091/TCP
+</code></pre></div><p>View the <code>productpage</code> route using the port on any node in your cluster. In this instance,
+accessing <code>http://hpe-ucp01.cloudra.local:33380/productpage</code>  displays version 1 of the reviews (no stars):</p> <p><img src="/Docker-SimpliVity/assets/img/productpage1st.f314c570.png" alt=" "Product page - first time"" title="Figure: Product page - first time"></p> <p><strong>Figure.</strong> Product page - first time</p> <p>Refresh the browser - in this instance, we see version 3 of the review (red stars):</p> <p><img src="/Docker-SimpliVity/assets/img/productpage2nd.ee2a9bc5.png" alt=" "Product page - second time"" title="Figure: Product page - second time"></p> <p><strong>Figure.</strong> Product page - second time</p> <p>Refresh the browser again - now we see version 2 of the reviews (black stars):</p> <p><img src="/Docker-SimpliVity/assets/img/productpage3rd.edf93bd0.png" alt=" "Product page - third time"" title="Figure: Product page - third time"></p> <p><strong>Figure.</strong> Product page - third time</p> <h1 id="apply-default-destination-rules"><a href="#apply-default-destination-rules" aria-hidden="true" class="header-anchor">#</a> Apply default destination rules</h1> <p>Before you can use Istio to control the Bookinfo version routing, you need to define the available versions, called subsets, in destination rules. Because we enforced mutual TLS authentication between all clients and
+servers when setting up the demo (using the file <code>install/kubernetes/istio-demo-auth.yaml</code>), you need to use
+the corresponding version of the destination rules file <code>destination-rule-all-mtls.yaml</code>. If you did not enforce
+mutual TLS, then use the file <code>destination-rule-all.yaml</code>.</p> <div class="language- extra-class"><pre class="language-text"><code># kubectl apply -f samples/bookinfo/networking/destination-rule-all-mtls.yaml
+</code></pre></div><p>This file sets up default routing rules for all the services in the application, for example, <code>productpage</code>:</p> <div class="language- extra-class"><pre class="language-text"><code>apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: productpage
+spec:
+  host: productpage
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL
+  subsets:
+  - name: v1
+    labels:
+      version: v1
+</code></pre></div><p>You can see the results of applying the rules with the following commands:</p> <div class="language- extra-class"><pre class="language-text"><code># kubectl get destinationrules
+
+# kubectl get destinationrules -o yaml
+</code></pre></div><p>You are now ready to start configuring routing requests.</p></div> <div class="page-edit"><div class="edit-link"><a href="https://github.com/HewlettPackard/Docker-Simplivity/edit/devel/docs-src/blog/istio-getting-started-2.md" target="_blank" rel="noopener noreferrer">Help us improve this page!</a> <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></div> <!----></div> <!----> </div> <!----></div></div>
+    <script src="/Docker-SimpliVity/assets/js/6.c80f761b.js" defer></script><script src="/Docker-SimpliVity/assets/js/app.1e09661f.js" defer></script>
+  </body>
+</html>

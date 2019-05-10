@@ -172,18 +172,18 @@ an equal amount of traffic will have gone to each of the three versions of the r
 kubectl run stress --image=progrium/stress --cpu 2 --io 1 --vm 2 --vm-bytes 128M --timeout 1000s
 ```
 
-[media-prom-load-png]:<media/prom-load.png> "Figure: Prometheus load"
-[media-istio-performance-png]:<media/istio-performance.png> "Figure: Istio Performance Dashboard"
-[media-istio-service-png]:<media/istio-service.png> "Figure: Istio Service Dashboard"
-[media-istio-workload-png]:<media/istio-workload.png> "Figure: Istio Workload Dashboard"
-[media-istio-mesh-png]:<media/istio-mesh.png> "Figure: Istio Mesh Dashboard"
-[media-istio-mixer-png]:<media/istio-mixer.png> "Figure: Istio Mixer Dashboard"
-[media-istio-galley-png]:<media/istio-galley.png> "Figure: Istio Galley Dashboard"
-[media-istio-pilot-png]:<media/istio-pilot.png> "Figure: Istio Pilot Dashboard"
+[media-prom-load-png]:<./media/prom-load.png> "Figure: Prometheus load"
+[media-istio-performance-png]:<./media/istio-performance.png> "Figure: Istio Performance Dashboard"
+[media-istio-service-png]:<./media/istio-service.png> "Figure: Istio Service Dashboard"
+[media-istio-workload-png]:<./media/istio-workload.png> "Figure: Istio Workload Dashboard"
+[media-istio-mesh-png]:<./media/istio-mesh.png> "Figure: Istio Mesh Dashboard"
+[media-istio-mixer-png]:<./media/istio-mixer.png> "Figure: Istio Mixer Dashboard"
+[media-istio-galley-png]:<./media/istio-galley.png> "Figure: Istio Galley Dashboard"
+[media-istio-pilot-png]:<./media/istio-pilot.png> "Figure: Istio Pilot Dashboard"
 
 
-[media-jaeger-search-png]:<media/jaeger-search.png> "Figure: Jaeger search"
-[media-jaeger-traces-png]:<media/jaeger-traces.png> "Figure: Jaeger traces"
-[media-jaeger-drill-down-png]:<media/jaeger-drill-down.png> "Figure: Jaeger drill down"
+[media-jaeger-search-png]:<./media/jaeger-search.png> "Figure: Jaeger search"
+[media-jaeger-traces-png]:<./media/jaeger-traces.png> "Figure: Jaeger traces"
+[media-jaeger-drill-down-png]:<./media/jaeger-drill-down.png> "Figure: Jaeger drill down"
 
-[media-kiali-all-png]:<media/kiali-all.png> "Figure: Kiali graph"
+[media-kiali-all-png]:<./media/kiali-all.png> "Figure: Kiali graph"

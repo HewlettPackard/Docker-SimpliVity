@@ -318,7 +318,7 @@ You can see the results of applying the rules with the following commands:
 You are now ready to start configuring routing requests.
 
 
-[media-bookinfo-png]:<media/bookinfo.png> "Figure: Bookinfo application"
-[media-productpage1st-png]:<media/productpage1st.png> "Figure: Product page - first time"
-[media-productpage2nd-png]:<media/productpage2nd.png> "Figure: Product page - second time"
-[media-productpage3rd-png]:<media/productpage3rd.png> "Figure: Product page - third time"
+[media-bookinfo-png]:<./media/bookinfo.png> "Figure: Bookinfo application"
+[media-productpage1st-png]:<./media/productpage1st.png> "Figure: Product page - first time"
+[media-productpage2nd-png]:<./media/productpage2nd.png> "Figure: Product page - second time"
+[media-productpage3rd-png]:<./media/productpage3rd.png> "Figure: Product page - third time"
